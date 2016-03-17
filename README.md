@@ -1,2 +1,3 @@
-# SQL-Server-In-Memory
-SQL Server GitHub Repository
+# SQL-Server-Samples
+
+Coming Soon...
