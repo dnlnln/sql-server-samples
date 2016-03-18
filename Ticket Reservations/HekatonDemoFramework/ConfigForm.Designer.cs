@@ -46,7 +46,6 @@
             this.lblThreadCnt = new System.Windows.Forms.Label();
             this.ThreadCount = new System.Windows.Forms.NumericUpDown();
             this.btnSave = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.ReadsPerWrite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RowCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RequestCount)).BeginInit();
@@ -68,7 +67,7 @@
             // ReadsPerWrite
             // 
             this.ReadsPerWrite.Location = new System.Drawing.Point(203, 90);
-            this.ReadsPerWrite.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ReadsPerWrite.Margin = new System.Windows.Forms.Padding(4);
             this.ReadsPerWrite.Name = "ReadsPerWrite";
             this.ReadsPerWrite.Size = new System.Drawing.Size(132, 22);
             this.ReadsPerWrite.TabIndex = 47;
@@ -92,7 +91,7 @@
             // RowCount
             // 
             this.RowCount.Location = new System.Drawing.Point(201, 218);
-            this.RowCount.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.RowCount.Margin = new System.Windows.Forms.Padding(4);
             this.RowCount.Maximum = new decimal(new int[] {
             5000000,
             0,
@@ -126,7 +125,7 @@
             // RequestCount
             // 
             this.RequestCount.Location = new System.Drawing.Point(203, 122);
-            this.RequestCount.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.RequestCount.Margin = new System.Windows.Forms.Padding(4);
             this.RequestCount.Maximum = new decimal(new int[] {
             5000000,
             0,
@@ -160,7 +159,7 @@
             // tbConnectionString
             // 
             this.tbConnectionString.Location = new System.Drawing.Point(22, 299);
-            this.tbConnectionString.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbConnectionString.Margin = new System.Windows.Forms.Padding(4);
             this.tbConnectionString.Name = "tbConnectionString";
             this.tbConnectionString.Size = new System.Drawing.Size(360, 22);
             this.tbConnectionString.TabIndex = 40;
@@ -180,7 +179,7 @@
             // txtMaxTPS
             // 
             this.txtMaxTPS.Location = new System.Drawing.Point(203, 27);
-            this.txtMaxTPS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtMaxTPS.Margin = new System.Windows.Forms.Padding(4);
             this.txtMaxTPS.Name = "txtMaxTPS";
             this.txtMaxTPS.Size = new System.Drawing.Size(131, 22);
             this.txtMaxTPS.TabIndex = 37;
@@ -201,7 +200,7 @@
             // txtMaxLatch
             // 
             this.txtMaxLatch.Location = new System.Drawing.Point(203, 58);
-            this.txtMaxLatch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtMaxLatch.Margin = new System.Windows.Forms.Padding(4);
             this.txtMaxLatch.Name = "txtMaxLatch";
             this.txtMaxLatch.Size = new System.Drawing.Size(131, 22);
             this.txtMaxLatch.TabIndex = 35;
@@ -222,7 +221,7 @@
             // TransactionCount
             // 
             this.TransactionCount.Location = new System.Drawing.Point(203, 186);
-            this.TransactionCount.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.TransactionCount.Margin = new System.Windows.Forms.Padding(4);
             this.TransactionCount.Maximum = new decimal(new int[] {
             5000000,
             0,
@@ -256,7 +255,7 @@
             // ThreadCount
             // 
             this.ThreadCount.Location = new System.Drawing.Point(203, 154);
-            this.ThreadCount.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ThreadCount.Margin = new System.Windows.Forms.Padding(4);
             this.ThreadCount.Maximum = new decimal(new int[] {
             200,
             0,
@@ -279,7 +278,7 @@
             // btnSave
             // 
             this.btnSave.Location = new System.Drawing.Point(22, 361);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(199, 28);
             this.btnSave.TabIndex = 49;
@@ -287,23 +286,11 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Location = new System.Drawing.Point(19, 408);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(253, 17);
-            this.label1.TabIndex = 50;
-            this.label1.Text = "Note: config changes are not persisted";
-            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(413, 449);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(413, 409);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.LabelReadsPerWrite);
             this.Controls.Add(this.ReadsPerWrite);
@@ -322,7 +309,7 @@
             this.Controls.Add(this.lblThreadCnt);
             this.Controls.Add(this.ThreadCount);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ConfigForm";
             this.Text = "ConfigForm";
             this.Load += new System.EventHandler(this.ConfigForm_Load);
@@ -355,6 +342,5 @@
         private System.Windows.Forms.Label lblThreadCnt;
         private System.Windows.Forms.NumericUpDown ThreadCount;
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.Label label1;
     }
 }

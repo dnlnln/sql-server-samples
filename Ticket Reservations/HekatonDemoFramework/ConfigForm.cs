@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace DemoWorkload
 {
@@ -39,10 +40,33 @@ namespace DemoWorkload
             Program.CONN_STR = this.tbConnectionString.Text;
             Program.MAX_TPS = Convert.ToInt32(this.txtMaxTPS.Text);
             Program.MAX_LATCH_WAIT = Convert.ToInt32(this.txtMaxLatch.Text);
-            // Program.CONN_STR = string.Format("Server={0};Initial Catalog={1};Integrated Security=True", ".\\" + Program.INSTANCE_NAME, Program.DB_NAME);
+
+            // also persist changes in app config
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            KeyValueConfigurationCollection settings = config.AppSettings.Settings;
+            ConnectionStringSettingsCollection connStrs = config.ConnectionStrings.ConnectionStrings;
+
+            // update SaveBeforeExit
+            settings["ThreadCount"].Value = Program.THREAD_COUNT.ToString();
+            settings["ReadsPerWrite"].Value = Program.READS_PER_WRITE.ToString();
+            settings["RequestCount"].Value = Program.REQUEST_COUNT.ToString();
+            settings["RowCount"].Value = Program.ROW_COUNT.ToString();
+            settings["TransactionCount"].Value = Program.TRANSACTION_COUNT.ToString();
+            settings["MaxTps"].Value = Program.MAX_TPS.ToString();
+            settings["MaxLatchWaits"].Value = Program.MAX_LATCH_WAIT.ToString();
+            connStrs["TicketReservations"].ConnectionString = Program.CONN_STR;
+
+            //save the file
+            config.Save(ConfigurationSaveMode.Modified);
+
         }
 
         private void tbInstance_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }
