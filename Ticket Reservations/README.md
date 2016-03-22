@@ -1,6 +1,6 @@
 # Ticket Reservations Sample
 
-Ticket Reservations is a Windows Forms sample that demonstrates the new SQL In-memory OLTP features.   
+Ticket Reservations is a Windows Forms sample application built on .NET Framework 4.6 that demonstrates the performance benefits of using SQL Server memory optimized tables and native compiled stored procedures. You can compare the performance before and after enabling In-Memory OLTP by observing the transactions/sec as well as the current CPU Usage and latches/sec.
 
 ![Alt text](Screenshots/1.png "Ticket Reservations")
 
