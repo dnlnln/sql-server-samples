@@ -17,8 +17,6 @@ Ticket Reservations is a Windows Forms sample that demonstrates the new SQL In-m
 
 5. In the **App.config** file, located in the project root, find the **TicketReservations** app setting and edit the connectionString if needed. Currently it is configured to connect to the local default SQL Server Instance using Integrated Security.
 
-<add name="TicketReservations" connectionString="Server=.;Database=TicketReservations;Integrated Security=True" providerName="System.Data.SqlClient" />
-
 6. Publish the TicketReservations Database
   - Right click on the TicketReservations SQL Server Database Project and Select **Publish**
   - Click Edit... to choose your connection string
