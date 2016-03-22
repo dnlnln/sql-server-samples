@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWorkload", "HekatonDemoFramework\DemoWorkload.csproj", "{2881A3C4-9153-46F2-8196-9929ED9C17D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWorkload", "DemoWorkload\DemoWorkload.csproj", "{2881A3C4-9153-46F2-8196-9929ED9C17D6}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "TicketReservations", "TicketReservations\TicketReservations.sqlproj", "{38641248-77EA-479B-B496-3EDA463ACEAD}"
 EndProject
