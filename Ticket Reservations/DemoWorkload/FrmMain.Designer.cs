@@ -1,6 +1,6 @@
 ﻿namespace DemoWorkload
 {
-    partial class Form1
+    partial class FrmMain
     {
         /// <summary>
         /// Required designer variable.
@@ -38,7 +38,7 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint3 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 1D);
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.btnRun = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.lbResults = new System.Windows.Forms.Label();
@@ -100,7 +100,7 @@
             this.btnStop.Tag = "Data";
             this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = false;
-            this.btnStop.Click += new System.EventHandler(this.button1_Click);
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // lbResults
             // 
@@ -316,7 +316,7 @@
             this.btnToggle.TabIndex = 39;
             this.btnToggle.Text = "Show diagnostics ";
             this.btnToggle.UseVisualStyleBackColor = false;
-            this.btnToggle.Click += new System.EventHandler(this.button1_Click_1);
+            this.btnToggle.Click += new System.EventHandler(this.btnToggle_Click);
             // 
             // chtLatches
             // 
@@ -413,8 +413,8 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Blue Yonder Ticket Reservation Simulator";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
+            this.Load += new System.EventHandler(this.FrmMain_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chtTPS)).EndInit();
