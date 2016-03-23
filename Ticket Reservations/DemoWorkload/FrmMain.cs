@@ -91,8 +91,7 @@ namespace DemoWorkload
         /// </summary> 
         private void UpdateElapsed(string Elapsed)
         {
-            try { this.lblTime.Text = Elapsed.ToString(); }
-            catch (Exception ex) { ShowThreadExceptionDialog("UpdateElapsed", ex); }
+            this.lblTime.Text = Elapsed.ToString(); 
         }
 
         /// <summary> 
