@@ -1,14 +1,15 @@
 ﻿CREATE TABLE [dbo].[TicketReservationDetail] (
-    [iteration] INT             NOT NULL,
-    [lineId]    INT             NOT NULL,
-    [col3]      NVARCHAR (1000) NOT NULL,
-    [ThreadID]  INT             NOT NULL,
+    TicketReservationID BIGINT	NOT NULL,
+    TicketReservationDetailID BIGINT IDENTITY	NOT NULL,
+    Quantity    INT             NOT NULL,
+    FlightID	INT             NOT NULL,
+    Comment      NVARCHAR (1000),
 -- disk-based table:
-    CONSTRAINT [sql_ts_th] PRIMARY KEY CLUSTERED ([iteration] ASC, [lineId] ASC)
+    CONSTRAINT [PK_TicketReservationDetail] PRIMARY KEY CLUSTERED (TicketReservationDetailID)
 );
 
 -- for memory-optimized, replace the last two lines with the following:
---    CONSTRAINT [sql_ts_th] PRIMARY KEY NONCLUSTERED ([iteration] ASC, [lineId] ASC)
+--    CONSTRAINT [PK_TicketReservationDetail] PRIMARY KEY NONCLUSTERED (TicketReservationDetailID)
 --) WITH (MEMORY_OPTIMIZED=ON);
 --GO
 

@@ -1,6 +1,6 @@
-﻿create proc ReadMultipleReservations(@ServerTransactions int, @RowsPerTransaction int, @ThreadID int)
+﻿CREATE PROCEDURE ReadMultipleReservations(@ServerTransactions int, @RowsPerTransaction int, @ThreadID int)
 AS
-begin 
+BEGIN 
 	DECLARE @tranCount int = 0;
 	DECLARE @CurrentSeq int = 0;
 	DECLARE @Sum int = 0;
@@ -8,18 +8,20 @@ begin
 	WHILE (@tranCount < @ServerTransactions)	
 	BEGIN
 		BEGIN TRY
-			BEGIN TRAN
-			select @CurrentSeq = convert(int, current_value) from sys.sequences where name = 'TicketReservationSequence'
+			SELECT @CurrentSeq = RAND() * IDENT_CURRENT(N'dbo.TicketReservationDetail')
 			SET @loop = 0
-			while (@loop < @RowsPerTransaction)
+			BEGIN TRAN
+			WHILE (@loop < @RowsPerTransaction)
 			BEGIN
-				SELECT @Sum += ThreadID from dbo.TicketReservationDetail where iteration = @CurrentSeq and lineId = @loop;
+				SELECT @Sum += FlightID from dbo.TicketReservationDetail where TicketReservationDetailID = @CurrentSeq - @loop;
 				SET @loop += 1;
 			END
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
-			ROLLBACK TRAN
+			IF XACT_STATE() = -1
+				ROLLBACK TRAN
+			;THROW
 		END CATCH
 		SET @tranCount += 1;
 	END

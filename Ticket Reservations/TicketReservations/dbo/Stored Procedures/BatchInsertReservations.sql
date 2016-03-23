@@ -1,12 +1,14 @@
-﻿create proc BatchInsertReservations(@ServerTransactions int, @RowsPerTransaction int, @ThreadID int)
+﻿-- helper stored procedure to 
+
+CREATE PROCEDURE BatchInsertReservations(@ServerTransactions int, @RowsPerTransaction int, @ThreadID int)
 AS
-begin 
+BEGIN
 	DECLARE @tranCount int = 0;
 	DECLARE @TS Datetime2;
 	DECLARE @Char_TS NVARCHAR(23);
 	DECLARE @CurrentSeq int = 0;
 
-	SET @TS = CURRENT_TIMESTAMP;
+	SET @TS = SYSDATETIME();
 	SET @Char_TS = CAST(@TS AS NVARCHAR(23));
 	WHILE (@tranCount < @ServerTransactions)	
 	BEGIN
@@ -17,7 +19,9 @@ begin
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
-			ROLLBACK TRAN
+			IF XACT_STATE() = -1
+				ROLLBACK TRAN
+			;THROW
 		END CATCH
 		SET @tranCount += 1;
 	END
