@@ -36,6 +36,18 @@ Ticket Reservations is a Windows Forms sample application built on .NET Framewor
 
 11. Go back to the app and run the workload again. No need to recompile or restart the application.
 
+The perf gains from In-Memory OLTP as shown by the load generation app depend on two factors:
+-	Hardware
+  -	more cores => higher perf gain
+  -	slower log IO => lower perf gain
+-	Configuration settings in the load generator
+  -	more rows per transaction => higher perf gain
+  -	more reads per write => lower perf gain
+  -	default setting is 10 rows per transaction and 1 read per write
+
+With default settings on one machine with 24 logical cores and relatively slow SSD for the log the app shows around performance 40X gain, and in this case the bottleneck was log IO.
+
+
 ## About the code
 The code included in this sample is not intended to be a set of best practices on how to build scalable enterprise grade web applications. This is beyond the scope of this quick start sample.
 
