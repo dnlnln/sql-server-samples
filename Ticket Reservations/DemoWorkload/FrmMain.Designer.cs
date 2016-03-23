@@ -79,9 +79,10 @@
             this.btnRun.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRun.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.btnRun.Location = new System.Drawing.Point(601, 16);
+            this.btnRun.Location = new System.Drawing.Point(801, 20);
+            this.btnRun.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnRun.Name = "btnRun";
-            this.btnRun.Size = new System.Drawing.Size(84, 30);
+            this.btnRun.Size = new System.Drawing.Size(112, 37);
             this.btnRun.TabIndex = 3;
             this.btnRun.Text = "Start";
             this.btnRun.UseVisualStyleBackColor = false;
@@ -93,9 +94,10 @@
             this.btnStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStop.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.btnStop.Location = new System.Drawing.Point(692, 16);
+            this.btnStop.Location = new System.Drawing.Point(923, 20);
+            this.btnStop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(82, 30);
+            this.btnStop.Size = new System.Drawing.Size(109, 37);
             this.btnStop.TabIndex = 25;
             this.btnStop.Tag = "Data";
             this.btnStop.Text = "Stop";
@@ -107,9 +109,10 @@
             this.lbResults.BackColor = System.Drawing.Color.Transparent;
             this.lbResults.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbResults.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(166)))));
-            this.lbResults.Location = new System.Drawing.Point(1, 3);
+            this.lbResults.Location = new System.Drawing.Point(-47, 4);
+            this.lbResults.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbResults.Name = "lbResults";
-            this.lbResults.Size = new System.Drawing.Size(174, 53);
+            this.lbResults.Size = new System.Drawing.Size(313, 65);
             this.lbResults.TabIndex = 31;
             this.lbResults.Text = "Baseline";
             this.lbResults.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -121,8 +124,8 @@
             this.optionsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(6, 1, 0, 1);
-            this.menuStrip1.Size = new System.Drawing.Size(815, 24);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 1, 0, 1);
+            this.menuStrip1.Size = new System.Drawing.Size(1087, 26);
             this.menuStrip1.TabIndex = 32;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -132,31 +135,32 @@
             this.configurationToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
             this.optionsToolStripMenuItem.Text = "Options";
             // 
             // configurationToolStripMenuItem
             // 
             this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
-            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(175, 26);
             this.configurationToolStripMenuItem.Text = "Configuration";
             this.configurationToolStripMenuItem.Click += new System.EventHandler(this.configurationToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(175, 26);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // ErrorMessages
             // 
-            this.ErrorMessages.Location = new System.Drawing.Point(846, 79);
+            this.ErrorMessages.Location = new System.Drawing.Point(1128, 97);
+            this.ErrorMessages.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ErrorMessages.Multiline = true;
             this.ErrorMessages.Name = "ErrorMessages";
             this.ErrorMessages.ReadOnly = true;
             this.ErrorMessages.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.ErrorMessages.Size = new System.Drawing.Size(360, 272);
+            this.ErrorMessages.Size = new System.Drawing.Size(479, 334);
             this.ErrorMessages.TabIndex = 5;
             this.ErrorMessages.TabStop = false;
             // 
@@ -180,7 +184,8 @@
             legend1.Enabled = false;
             legend1.Name = "Legend1";
             this.chtTPS.Legends.Add(legend1);
-            this.chtTPS.Location = new System.Drawing.Point(337, 89);
+            this.chtTPS.Location = new System.Drawing.Point(449, 110);
+            this.chtTPS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chtTPS.Name = "chtTPS";
             this.chtTPS.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
             series1.ChartArea = "ChartArea1";
@@ -191,7 +196,7 @@
             series1.Name = "TPS";
             series1.Points.Add(dataPoint1);
             this.chtTPS.Series.Add(series1);
-            this.chtTPS.Size = new System.Drawing.Size(348, 268);
+            this.chtTPS.Size = new System.Drawing.Size(464, 330);
             this.chtTPS.TabIndex = 33;
             this.chtTPS.Text = "chart1";
             // 
@@ -203,40 +208,42 @@
             this.lblTime,
             this.toolStripStatusLabel3,
             this.lblThreads});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 645);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 796);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(815, 22);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(1087, 25);
             this.statusStrip1.TabIndex = 35;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(80, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(101, 20);
             this.toolStripStatusLabel1.Text = "Elapsed Time:";
             // 
             // lblTime
             // 
             this.lblTime.Name = "lblTime";
-            this.lblTime.Size = new System.Drawing.Size(13, 17);
+            this.lblTime.Size = new System.Drawing.Size(17, 20);
             this.lblTime.Text = "0";
             // 
             // toolStripStatusLabel3
             // 
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(100, 17);
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(122, 20);
             this.toolStripStatusLabel3.Text = "Running Threads:";
             // 
             // lblThreads
             // 
             this.lblThreads.Name = "lblThreads";
-            this.lblThreads.Size = new System.Drawing.Size(13, 17);
+            this.lblThreads.Size = new System.Drawing.Size(17, 20);
             this.lblThreads.Text = "0";
             // 
             // splitContainer1
             // 
             this.splitContainer1.BackColor = System.Drawing.Color.Transparent;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 25);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 31);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -257,8 +264,9 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.chtLatches);
             this.splitContainer1.Panel2.Controls.Add(this.chtCPU);
-            this.splitContainer1.Size = new System.Drawing.Size(786, 655);
-            this.splitContainer1.SplitterDistance = 399;
+            this.splitContainer1.Size = new System.Drawing.Size(1048, 806);
+            this.splitContainer1.SplitterDistance = 490;
+            this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 39;
             // 
             // label4
@@ -267,18 +275,19 @@
             this.label4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label4.Location = new System.Drawing.Point(117, 325);
+            this.label4.Location = new System.Drawing.Point(156, 400);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(122, 13);
+            this.label4.Size = new System.Drawing.Size(158, 17);
             this.label4.TabIndex = 45;
             this.label4.Text = "Transactions/sec x1000";
             // 
             // speedDialPanel
             // 
-            this.speedDialPanel.Location = new System.Drawing.Point(21, 86);
-            this.speedDialPanel.Margin = new System.Windows.Forms.Padding(2);
+            this.speedDialPanel.Location = new System.Drawing.Point(28, 106);
+            this.speedDialPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.speedDialPanel.Name = "speedDialPanel";
-            this.speedDialPanel.Size = new System.Drawing.Size(319, 260);
+            this.speedDialPanel.Size = new System.Drawing.Size(425, 320);
             this.speedDialPanel.TabIndex = 43;
             // 
             // label2
@@ -287,9 +296,10 @@
             this.label2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label2.Location = new System.Drawing.Point(354, 69);
+            this.label2.Location = new System.Drawing.Point(472, 85);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(124, 17);
+            this.label2.Size = new System.Drawing.Size(148, 20);
             this.label2.TabIndex = 42;
             this.label2.Text = "Transactions / sec";
             // 
@@ -298,9 +308,10 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label1.Location = new System.Drawing.Point(20, 68);
+            this.label1.Location = new System.Drawing.Point(27, 84);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(260, 17);
+            this.label1.Size = new System.Drawing.Size(310, 20);
             this.label1.TabIndex = 41;
             this.label1.Text = "Increase in performance since last reset";
             // 
@@ -310,9 +321,10 @@
             this.btnToggle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnToggle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnToggle.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.btnToggle.Location = new System.Drawing.Point(18, 362);
+            this.btnToggle.Location = new System.Drawing.Point(24, 446);
+            this.btnToggle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnToggle.Name = "btnToggle";
-            this.btnToggle.Size = new System.Drawing.Size(149, 30);
+            this.btnToggle.Size = new System.Drawing.Size(199, 37);
             this.btnToggle.TabIndex = 39;
             this.btnToggle.Text = "Show diagnostics ";
             this.btnToggle.UseVisualStyleBackColor = false;
@@ -338,7 +350,8 @@
             chartArea2.BorderWidth = 0;
             chartArea2.Name = "ChartArea1";
             this.chtLatches.ChartAreas.Add(chartArea2);
-            this.chtLatches.Location = new System.Drawing.Point(0, 120);
+            this.chtLatches.Location = new System.Drawing.Point(0, 148);
+            this.chtLatches.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chtLatches.Name = "chtLatches";
             series2.ChartArea = "ChartArea1";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bar;
@@ -346,7 +359,7 @@
             series2.Name = "Latches";
             series2.Points.Add(dataPoint2);
             this.chtLatches.Series.Add(series2);
-            this.chtLatches.Size = new System.Drawing.Size(685, 84);
+            this.chtLatches.Size = new System.Drawing.Size(913, 103);
             this.chtLatches.TabIndex = 42;
             this.chtLatches.Text = "chart1";
             // 
@@ -376,6 +389,7 @@
             this.chtCPU.ChartAreas.Add(chartArea3);
             this.chtCPU.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chtCPU.Location = new System.Drawing.Point(0, 0);
+            this.chtCPU.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chtCPU.Name = "chtCPU";
             this.chtCPU.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
             series3.ChartArea = "ChartArea1";
@@ -384,26 +398,27 @@
             series3.Name = "CPUUsage";
             series3.Points.Add(dataPoint3);
             this.chtCPU.Series.Add(series3);
-            this.chtCPU.Size = new System.Drawing.Size(786, 252);
+            this.chtCPU.Size = new System.Drawing.Size(1048, 311);
             this.chtCPU.TabIndex = 41;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Location = new System.Drawing.Point(843, 40);
+            this.label3.Location = new System.Drawing.Point(1124, 49);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(83, 13);
+            this.label3.Size = new System.Drawing.Size(112, 17);
             this.label3.TabIndex = 11;
             this.label3.Text = "Error Messages:";
             // 
-            // Form1
+            // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(815, 667);
+            this.ClientSize = new System.Drawing.Size(1087, 821);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.label3);
@@ -411,7 +426,8 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Name = "FrmMain";
             this.Text = "Blue Yonder Ticket Reservation Simulator";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
             this.Load += new System.EventHandler(this.FrmMain_Load);
