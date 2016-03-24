@@ -1,3 +1,3 @@
-# SQL-Server-Samples
+# sql-server-samples
 
 Coming Soon...
