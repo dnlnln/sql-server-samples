@@ -53,6 +53,7 @@ namespace DemoWorkload
         public FrmMain()
         {
             InitializeComponent();
+            uiControls.speedDial.MaxValue = Program.MAX_TPS;
         }
         
         delegate void SetInt64Callback(Int64 value);
