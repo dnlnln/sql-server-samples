@@ -174,7 +174,7 @@
             this.txtMaxTPS.Size = new System.Drawing.Size(99, 20);
             this.txtMaxTPS.TabIndex = 37;
             this.txtMaxTPS.TabStop = false;
-            this.txtMaxTPS.Text = "70";
+            this.txtMaxTPS.Text = Program.MAX_TPS.ToString();
             // 
             // lblRunningThread
             // 
