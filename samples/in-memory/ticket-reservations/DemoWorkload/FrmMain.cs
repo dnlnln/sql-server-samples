@@ -1,4 +1,4 @@
-﻿//---------------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------------- 
 // Copyright (c) Microsoft Corporation. All rights reserved. 
 // 
 // THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,  
@@ -92,8 +92,7 @@ namespace DemoWorkload
         /// </summary> 
         private void UpdateElapsed(string Elapsed)
         {
-            try { this.lblTime.Text = Elapsed.ToString(); }
-            catch (Exception ex) { ShowThreadExceptionDialog("UpdateElapsed", ex); }
+            this.lblTime.Text = Elapsed.ToString();
         }
 
         /// <summary> 
