@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------------- 
+﻿//---------------------------------------------------------------------------------- 
 // Copyright (c) Microsoft Corporation. All rights reserved. 
 // 
 // THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,  
@@ -53,7 +53,6 @@ namespace DemoWorkload
         public FrmMain()
         {
             InitializeComponent();
-            uiControls.speedDial.MaxValue = Program.MAX_TPS;
         }
         
         delegate void SetInt64Callback(Int64 value);
@@ -92,7 +91,7 @@ namespace DemoWorkload
         /// </summary> 
         private void UpdateElapsed(string Elapsed)
         {
-            this.lblTime.Text = Elapsed.ToString();
+            this.lblTime.Text = Elapsed.ToString(); 
         }
 
         /// <summary> 
