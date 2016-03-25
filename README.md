@@ -16,7 +16,7 @@ This GitHub repository contains code samples that demonstrate how to use SQL Ser
 ## Adding Samples
 To add a sample create a subdirectory under ./samples. Start the sample name with the SQL Server feature you are showcasing. Use all lower case and separate the words with hyphens (e.g., in-memory-ticket-reservations).
 
-Include a README.txt file at the root of the sample that explains how to run the sample. Use the README_samples_template.txt as your template.
+Include a README.md file at the root of the sample that explains how to run the sample. Use the README_samples_template.md as your template.
 
 
 ## Working in GitHub
