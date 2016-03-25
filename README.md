@@ -17,11 +17,14 @@ Read the following resources for mroe information.
 - [Columnstore Indexes Guide] (https://msdn.microsoft.com/en-us/library/gg492088.aspx)
 
 **Master Data Services**
-  - Samples coming soon
+
+Master Data Services (MDS) is the SQL Server solution for master data management. Master data management (MDM) enables you organization to discover and define non-transactional lists of data, and compile maintainable, reliable master lists. This article briefly describe the MDS components and provides links to additional information. 
+
+For information about the new features in SQL Server 2016, see [What's New in Master Data Services (MDS)] (https://msdn.microsoft.com/en-us/library/ff929136.aspx).
 
 **R Services**
-  - Samples coming soon
 
+[SQL Server 2016 R Services] (http://blogs.microsoft.com/firehose/tag/sql-server-2016-r-services/) 
 
 ## Adding Samples
 To add a sample create a subdirectory under ./samples. Start the sample name with the SQL Server feature you are showcasing. Use all lower case and separate the words with hyphens (e.g., in-memory-ticket-reservations).
