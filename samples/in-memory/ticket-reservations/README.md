@@ -49,7 +49,7 @@ With default settings on one machine with 24 logical cores and relatively slow S
 When deploying to Azure SQL Database, make sure to run the app in an Azure VM in the same region as the database.
 
 ## About the code
-The code included in this sample is not intended to be a set of best practices on how to build scalable enterprise grade web applications. This is beyond the scope of this quick start sample.
+The code included in this sample is not intended to be a set of best practices on how to build scalable enterprise grade applications. This is beyond the scope of this quick start sample.
 
 ## More information
 - [In-Memory OLTP (In-Memory Optimization)] (https://msdn.microsoft.com/en-us/library/dn133186.aspx)
