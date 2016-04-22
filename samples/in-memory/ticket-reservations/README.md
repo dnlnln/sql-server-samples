@@ -23,7 +23,7 @@ Ticket Reservations is a Windows Forms sample application built on .NET Framewor
   - Click Publish
   - Note: For publishing to Azure SQL you need to change the DB project target platform to **Microsoft Azure SQL Database V12**
 
-7. You can now run and debug the application locally by pressing **F5** in Visual Studio.
+7. Build the app for release and run it. Do not use the debugger, as that will slow down the app.
 
 8. Start the workload with the **Start** button, and run for a while to show perf profile. Then press stop to stop the workload.
 
@@ -46,7 +46,7 @@ The perf gains from In-Memory OLTP as shown by the load generation app depend on
   -	default setting is 10 rows per transaction and 1 read per write
 
 With default settings on one machine with 24 logical cores and relatively slow SSD for the log the app shows around performance 40X gain, and in this case the bottleneck was log IO.
-
+When deploying to Azure SQL Database, make sure to run the app in an Azure VM in the same region as the database.
 
 ## About the code
 The code included in this sample is not intended to be a set of best practices on how to build scalable enterprise grade web applications. This is beyond the scope of this quick start sample.
