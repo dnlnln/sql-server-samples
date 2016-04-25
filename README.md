@@ -8,4 +8,4 @@ To work in GitHub, go to https://github.com/microsoft/sql-server-samples and for
 These samples and templates are all licensed under the MIT license. See the license.txt file in the root.
 
 ## Questions
-Email questions to: sqlserversamples@micrososft.com.
+Email questions to: sqlserversamples@microsoft.com.
