@@ -1,6 +1,6 @@
-# Ticket Reservations Sample
+# In-Memory OLTP Performance Improvement Sample
 
-Ticket Reservations is a Windows Forms sample application built on .NET Framework 4.6 that demonstrates the performance benefits of using SQL Server memory optimized tables and native compiled stored procedures. You can compare the performance before and after enabling In-Memory OLTP by observing the transactions/sec as well as the current CPU Usage and latches/sec.
+This Windows Forms sample application built on .NET Framework 4.6  demonstrates the performance benefits of using SQL Server memory optimized tables and native compiled stored procedures. You can compare the performance before and after enabling In-Memory OLTP by observing the transactions/sec as well as the current CPU Usage and latches/sec.
 
 ![Alt text](Screenshots/1.png "Ticket Reservations")
 
@@ -32,7 +32,7 @@ Ticket Reservations is a Windows Forms sample application built on .NET Framewor
 	- Change InsertTicketReservations.sql to natively compiled (instructions in the same file)
 
 10. Publish the database project to the same database – the tool will take care of making the necessary changes.
-		Note that, as part of publication, the data is copied from the old disk-based table to the new memory-optimized table, so the longer you run the initial workload, the longer this publication takes.
+		Note that, as part of publication, the data is copied from the old disk-based table to the new memory-optimized table, so the longer you run the initial workload, the longer this publication takes. To speed up the process you can run `TRUNCATE TABLE dbo.TicketReservationDetail` in the database.
 
 11. Go back to the app and run the workload again. No need to recompile or restart the application.
 
@@ -45,6 +45,9 @@ The perf gains from In-Memory OLTP as shown by the load generation app depend on
   -	more reads per write => lower perf gain
   -	default setting is 10 rows per transaction and 1 read per write
 
+If the performance profile after migration to In-Memory OLTP looks choppy, it is likely that log IO is the bottleneck. This can be mitigated by using [delayed durability] (https://msdn.microsoft.com/en-us/library/dn449490.aspx). This is enabled by running the following statement in the database:
+	`ALTER DATABASE CURRENT SET DELAYED_DURABILITY = FORCED`
+
 With default settings on one machine with 24 logical cores and relatively slow SSD for the log the app shows around performance 40X gain, and in this case the bottleneck was log IO.
 When deploying to Azure SQL Database, make sure to run the app in an Azure VM in the same region as the database.
 
@@ -52,5 +55,5 @@ When deploying to Azure SQL Database, make sure to run the app in an Azure VM in
 The code included in this sample is not intended to be a set of best practices on how to build scalable enterprise grade applications. This is beyond the scope of this quick start sample.
 
 ## More information
-- [In-Memory OLTP (In-Memory Optimization)] (https://msdn.microsoft.com/en-us/library/dn133186.aspx)
+- [In-Memory OLTP (In-Memory Optimization)] (https://msdn.microsoft.com/library/dn133186.aspx)
 - [OLTP and database management] (https://www.microsoft.com/en-us/server-cloud/solutions/oltp-database-management.aspx)
