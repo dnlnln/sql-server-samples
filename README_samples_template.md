@@ -4,6 +4,26 @@ Ticket Reservations is a Windows Forms sample application built on .NET Framewor
 
 ![Alt text](samples/in-memory/ticket-reservations/Screenshots/1.png "Ticket Reservations")
 
+## Applies to
+
+**Platforms:**
+- SQL Server (starting with 2016)
+- Azure SQL Database
+
+<!--
+- Azure SQL Data Warehouse
+- Analytics Platform System 
+-->
+
+**Features:**
+- In-memory OLTP
+
+**Languages:**
+
+- TSQL
+- C#
+
+
 ## Running this sample
 1. Before you can run this sample, you must have the following perquisites:
 	- SQL Server 2016 CTP3 (or higher)
