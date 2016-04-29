@@ -11,8 +11,8 @@ Ticket Reservations is a Windows Forms sample application built on .NET Framewor
 - Azure SQL Database
 
 <!--
-- Azure SQL Data Warehouse
-- Analytics Platform System 
+Azure SQL Data Warehouse
+Analytics Platform System 
 -->
 
 **Features:**
