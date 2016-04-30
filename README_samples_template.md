@@ -1,4 +1,4 @@
-# <Sample name>
+# Sample name
 
 Briefly describe what the sample does. Describe the benefit of running this sample.
 
