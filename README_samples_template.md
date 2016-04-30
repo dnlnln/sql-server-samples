@@ -9,29 +9,40 @@ Briefly describe what the sample does. Describe the benefit of running this samp
 
 ### Contents
 
-[About this sample](#about-this-sample) 
-[Before you begin](#before-you-begin)
-[Run this sample](#run-this-sample)
-[Sample details](#sample-details)
-[Disclaimers](#disclaimers)
-[Related links](#related-links)
+[About this sample](#about-this-sample)<br/>
+[Before you begin](#before-you-begin)<br/>
+[Run this sample](#run-this-sample)<br/>
+[Sample details](#sample-details)<br/>
+[Disclaimers](#disclaimers)<br/>
+[Related links](#related-links)<br/>
 
 
 <a name=about-this-sample></a>
 
 ## About this sample
 
-**Applies to:** SQL Server 2016 (or higher), or Azure SQL Database
+Applies to:
 
-**Key features:**
+- SQL Server 2016 (or higher), or Azure SQL Data Warehouse
 
-**Workload:**  
+Key features:
 
-**Languages: **
+- columnstore indexes
 
-**Authors:** 
+Workload:
+- data warehouse
 
-**Last update:**
+Languages:
+
+- T-SQL
+
+Authors:
+
+- github-user1;github-user2
+
+Last update:
+
+- 04/29/2016
 
 <a name=before-you-begin></a>
 
@@ -39,13 +50,13 @@ Briefly describe what the sample does. Describe the benefit of running this samp
 
 To run this sample, you need the following prerequisites.
 
-**Software** prerequisites:
+Software prerequisites:
 
 <!-- Examples -->
 1. SQL Server 2016 (or higher) or an Azure SQL Database
 2. Visual Studio 2015 (or higher) with the latest SSDT installed
 
-**Azure** prerequisites:
+Azure prerequisites:
 
 <!-- Examples -->
 1. Permission to create an Azure SQL Database
