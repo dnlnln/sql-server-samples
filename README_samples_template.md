@@ -21,28 +21,13 @@ Briefly describe what the sample does. Describe the benefit of running this samp
 
 ## About this sample
 
-Applies to:
-
-- SQL Server 2016 (or higher), or Azure SQL Data Warehouse
-
-Key features:
-
-- columnstore indexes
-
-Workload:
-- data warehouse
-
-Languages:
-
-- T-SQL
-
-Authors:
-
-- github-user1;github-user2
-
-Last update:
-
-- 04/29/2016
+<!-- Delete the ones that don't apply -->
+1. **Applies to:** SQL Server 2016 (or higher), Azure SQL Database, Azure SQL Data Warehouse, Parallel Data Warehouse
+1. **Key features: **
+1. **Workload:**
+1. **Programming Language:**
+1. **Authors:**
+1. **Update history:**
 
 <a name=before-you-begin></a>
 
@@ -50,13 +35,13 @@ Last update:
 
 To run this sample, you need the following prerequisites.
 
-Software prerequisites:
+**Software prerequisites:**
 
 <!-- Examples -->
 1. SQL Server 2016 (or higher) or an Azure SQL Database
 2. Visual Studio 2015 (or higher) with the latest SSDT installed
 
-Azure prerequisites:
+**Azure prerequisites:**
 
 <!-- Examples -->
 1. Permission to create an Azure SQL Database
