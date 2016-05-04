@@ -25,7 +25,7 @@ This Windows Forms sample application built on .NET Framework 4.6  demonstrates 
 
 7. Build the app for release and run it. Do not use the debugger, as that will slow down the app.
 
-8. Start the workload with the **Start** button, and run for a while to show perf profile. Then press stop to stop the workload.
+8. Start the workload with the **Start** button, and run for a while to show perf profile. Then press stop to stop the workload. You can tweak aspects of the workload (e.g., rows per transaction) through the configuration form accessed using the "Options" menue.
 
 9. In the database project,
 	- Change TicketReservations.sql to a memory-optimized table (instructions commented in the file itself)
