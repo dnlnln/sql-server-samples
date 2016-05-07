@@ -15,7 +15,12 @@ This code sample demonstrates how a SQL Server 2016 (or higher) memory optimized
 ## About this sample
 
 1. **Applies to:** SQL Server 2016 (or higher) Enterprise / Developer / Evaluation Edition, Azure SQL Database
-2. **Key features:** Memory Optimized Tables and Table valued Parameters (TVPs), Natively Compiled Stored Procedures, System-Versioned Temporal Tables, Clustered Columnstore Index, Power BI Report
+2. **Key features:**
+	- Memory Optimized Tables and Table valued Parameters (TVPs)
+	- Natively Compiled Stored Procedures
+	- System-Versioned Temporal Tables
+	- Clustered Columnstore Index (CCI)
+	- Power BI
 3. **Workload:** Data Ingestion for IoT
 4. **Programming Language:** .NET C#, T-SQL
 5. **Authors:** Perry Skountrianos [perrysk-msft]
@@ -68,11 +73,11 @@ To run this sample, you need the following prerequisites.
 6. Publish the Database
   - Right click on the **Db** SQL Server Database Project and Select **Publish**.
   - Click Edit... to choose your connection string.
-	- We recommend choosing **PowerConsumption** as the Database name as this is the default db name the sample is configured to run under.
+		- We recommend choosing **PowerConsumption** as the Database name as this is the default db name the sample is configured to run under.
   - Click Publish.
   - Note: For publishing to Azure SQL you need to
-		1. Change the DB project target platform to **Microsoft Azure SQL Database V12** and
-		2. Comment the T-SQL in the **mod.sql** file in the Db/Storage folder before publishing.
+		- Change the DB project target platform to **Microsoft Azure SQL Database V12** and
+		- Comment the T-SQL in the **mod.sql** file in the Db/Storage folder before publishing.
 
 7. Build the app and run it. Do not use the debugger, as that will slow down the app.
 
@@ -90,7 +95,7 @@ To run this sample, you need the following prerequisites.
 
 ## Sample details
 
-General Description
+**High Level Description**
 
 This code sample simulates an IoT Smart Grid scenario where multiple IoT power meters are sending electricity usage measurements to a SQL Server memory optimized database. The Data Generator, that can be started either from the Console or the Windows Form client, produces a data generated spike to simulate a [shock absorber scenario] (https://blogs.technet.microsoft.com/dataplatforminsider/2013/09/19/in-memory-oltp-common-design-pattern-high-data-input-rateshock-absorber/). Every async task in the Data Generator produces a batch of records with random values in order to simulate the data of an IoT power meter. It then calls a natively compiled stored procedure, that accepts an memory optimized table valued parameter (TVP), to insert the data into an memory optimized SQL Server table. In addition to the in-memory features, the sample is leveraging [System-Versioned Temporal Tables](https://msdn.microsoft.com/en-us/library/dn935015.aspx) for building version history, [Clustered Columnstore Index](https://msdn.microsoft.com/en-us/library/dn817827.aspx) for enabling real time operational analytics, and [Power BI](https://powerbi.microsoft.com/en-us/desktop/) for data visualization.
 
@@ -98,7 +103,7 @@ This code sample simulates an IoT Smart Grid scenario where multiple IoT power m
 ![Alt text](Screenshots/ConsoleClient.png "Console Data Generator")
 ![Alt text](Screenshots/PowerBIDashboard.png "Power BI Dashboard")
 
-Visual Studio Projects:
+**Visual Studio Solution Projects**
 
 1. **ConsoleAppClient**: Console Data Generator client. Uses START | STOP | HELP | REPORT | EXIT commands.
 2. **Data Generator**: Data Generator client library. Uses multiple async tasks to produce a test data workload.  
