@@ -1,4 +1,4 @@
-﻿# ---------------------------------------------------------------------------------- 
+# ---------------------------------------------------------------------------------- 
 # 
 # Copyright Microsoft Corporation 
 # Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -12,12 +12,14 @@
 # limitations under the License. 
 # ---------------------------------------------------------------------------------
 #
-#  Sample script for loading SQL Database telemetry for pools and elastic databases on a single server 
-#  to a user-supplied Azure SQL database.
+#  Sample script for loading SQL Database telemetry for pools and elastic databases 
+#  on a single server into a user-supplied Azure SQL database.  Script will populate
+#  the target schema if not present. 
 #  
 #
-#  See additional comments in PoolTelemetryRunner.ps1, which includes script and instructions for running
-#  this script as a PowerShell job, enabling data gathering for large numbers of servers in the background.
+#  See additional comments in PoolTelemetryRunner.ps1, which includes instructions for 
+#  running this script as a PowerShell job, enabling data gathering for large numbers
+#  of servers in the background.
 #
 #
 function Load-PoolTelemetryForServer {
@@ -32,6 +34,7 @@ function Load-PoolTelemetryForServer {
     [Parameter(Mandatory=$true)][PSCredential]$OutputServerCred,
     [Parameter(Mandatory=$true)][int]$IntervalMinutes, # interval for collection of telemetry  
     [Parameter(Mandatory=$true)][int]$DurationMinutes, # total duration for collection of telemetry
+    [Parameter(Mandatory=$true)][bool]$loadAllAvailablePoolTelemetry, # indicates if all available telemetry should be loaded on th first pass
     [Parameter(Mandatory=$true)][bool]$IncludeDatabases # indicates if telemetry should be gathered for databases as well as pools
     )   
 
@@ -119,7 +122,16 @@ function Load-PoolTelemetryForServer {
 
     while($startTime -lt $finishTime)
     {
-        $poolStartTime = $startTime.AddMinutes(-$poolLagMinutes) # sets the start of query window
+        if ($loadAllAvailablePoolTelemetry)
+        {
+            $poolStartTime = $startTime.AddMinutes(-21600) # looks back 15 days to ensure gets all available older data
+            $loadAllAvailablePoolTelemetry = $false  # switches flag so this is done once only in the loop
+        }
+        else
+        {
+            $poolStartTime = $startTime.AddMinutes(-$poolLagMinutes) # sets the normal start of query window
+        }
+        
         $poolEndTime = $endTime.AddMinutes(-$poolLagMinutes) # sets end of query window
 
         Write-Host "Starting to collect elastic pool telemetry for period" $poolStartTime "to" $poolEndTime "(UTC)"
