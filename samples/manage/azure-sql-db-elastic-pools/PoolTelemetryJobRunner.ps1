@@ -17,8 +17,8 @@
 # should be installed in the same directory.
 #
 # This script should be customized as required (see <<<) to select one or more source 
-# servers, and will then spawn a telemetry gathering job for each server. Each job 
-# will use Load-PoolTelemetryForServer in PoolTelemetry.ps1 to load telemetry for all 
+# servers, and will then spawn a telemetry gathering job for each server based on 
+# Load-PoolTelemetryForServer in PoolTelemetry.ps1, which loads telemetry for all 
 # pools and elastic databases on the server.  Each spawned job will run for an 
 # extended period in the background, waking up periodically to load more telemetry.  
 # The interval between telemetry gathering and the total duration can be controlled 
@@ -58,7 +58,10 @@ $staticServerList = $false  # set to $true if server list will not change during
 $intervalMinutes = 15 # interval between telemetry collections used by spawned server job (15-30 mins suggested) 
 $durationMinutes = 60 # total duration for collection of telemetry and checking servers; 0 for one time execution, or a multiple of the interval. 
 
-# Set to $true to gather 15 sec telemetry for elastic databases. Caution: large volumes of data may be returned. <<< ***
+## Set to $true to include all available pool telemetry (up to 14 days). Be careful if rerunning on the same server as this may load duplicate data <<< ***
+$loadAllAvailablePoolTelemetry = $false 
+
+## Set to $true to gather 15 sec telemetry for elastic databases. Caution: large volumes of data may be returned. <<< ***
 [bool]$includeDatabases = $false # or $False
 
 $now = [DateTime]::UtcNow
@@ -91,7 +94,7 @@ while ($startTime -le $finishTime)
     #$servers.Add($server.ServerName, $server) 
 
     ## Get all servers in a specific resource group
-    #$serverList = Get-AzureRmSqlServer -ResourceGroupName $resourceGroupName
+    #$servers = Get-AzureRmSqlServer -ResourceGroupName $resourceGroupName
 
     ## Get all resources of type server in the subscription
     #$resourceList = Find-AzureRmResource -ResourceType microsoft.sql/servers
@@ -102,7 +105,7 @@ while ($startTime -le $finishTime)
     ## Get all resources of type server with common name pattern
     #$resourceList = Find-AzureRmResource -ResourceType Microsoft.Sql/servers -ResourceNameContains '<common text>'
 
-    # If selecting resources via a $resourceList convert to an equivalent $serverList
+    # If selecting resources by populating $resourceList populate an equivalent $servers list
     foreach ($resource in $resourceList)
     {
         $server = Get-AzureRmSqlServer -ResourceGroupName $resource.ResourceGroupName -ServerName $resource.Name
@@ -120,11 +123,11 @@ while ($startTime -le $finishTime)
         if ($jobs.Contains($server.ServerName) -eq $false)
         {
             $job = Start-Job -Name $server.ServerName -ScriptBlock {
-                    param ($sp, $inc, $sub, $rgn, $sn, $loc, $sc, $osn, $odn, $osc, $im, $dm) 
+                    param ($sp, $all, $inc, $sub, $rgn, $sn, $loc, $sc, $osn, $odn, $osc, $im, $dm) 
                     . $sp
-                    Load-PoolTelemetryForServer -IncludeDatabases $inc `
+                    Load-PoolTelemetryForServer -loadAllAvailablePoolTelemetry $all -IncludeDatabases $inc `
                         -SubscriptionId $sub -ResourceGroupName $rgn -ServerName $sn -Location $loc -ServerCred $sc -OutputServerName $osn -OutputDatabaseName $odn -OutputServerCred $osc -IntervalMinutes $im -DurationMinutes $dm} `
-                -ArgumentList $scriptPath, $includeDatabases, $SubscriptionId,  $server.ResourceGroupName, $server.ServerName, $server.Location, $sourceCred, $outputServerName, $outputDatabaseName, $outputServerCred, $intervalMinutes, $durationMinutes  
+                -ArgumentList $scriptPath, $loadAllAvailablePoolTelemetry, $includeDatabases, $SubscriptionId,  $server.ResourceGroupName, $server.ServerName, $server.Location, $sourceCred, $outputServerName, $outputDatabaseName, $outputServerCred, $intervalMinutes, $durationMinutes  
 
             $jobs.Add($server.ServerName, $job)
             
@@ -132,7 +135,7 @@ while ($startTime -le $finishTime)
 
             # Following is useful for debugging changes to PoolTelemetry.ps1.  Best used with a single server unless you set the duration to 0
             #. $scriptPath
-            #Load-PoolTelemetryForServer -IncludeDatabases $IncludeDatabases -SubscriptionId $SubscriptionId -ResourceGroupName $server.ResourceGroupName `
+            #Load-PoolTelemetryForServer -loadAllAvailablePoolTelemetry $loadAllAvailablePoolTelemetry -IncludeDatabases $IncludeDatabases -SubscriptionId $SubscriptionId -ResourceGroupName $server.ResourceGroupName `
             #    -ServerName $server.ServerName -Location $server.Location -ServerCred $sourceCred -OutputServerName $outputServerName `
             #    -OutputDatabaseName $outputDatabaseName -OutputServerCred $outputServerCred -IntervalMinutes $intervalMinutes -DurationMinutes $durationMinutes            
         }
