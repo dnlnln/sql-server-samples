@@ -13,6 +13,7 @@ This readme applies to the PowerShell scripts: PoolTelemetryJobRunner.ps1 and Po
 [Customizing the PoolTelemetryJobRunner script](#customizing-the-pooltelemetryjobrunner-script)<br/>
 [Executing the runner script](#executing-the-runner-script)<br/>
 [Inspecting the telemetry that is collected](#inspecting-the-telemetry-that-is-collected)<br/>
+[Power BI](#power-bi)<br/>
 [Disclaimers](#disclaimers)<br/>
 [Related links](#related-links)<br/>
 
@@ -162,6 +163,18 @@ For example, once the telemetry is being collected, this TVF can be called with 
 Data can be queried while data collection is in progress.  
 
 > [AZURE.NOTE] If the scripts are stopped and started again within a short period they may add duplicate rows to the telemetry tables.
+
+<a power-bi></a>
+
+## Power BI designer file
+
+A sample Power BI designer (PBIX) file is also provided in this location (which can be opened using PowerBI desktop tool).  It provides a simple dashboard experience over the elastic pool data collected using the scripts described above. To use this PBIX file follow these steps
+
+- Download the file and open it in [Power BI desktop tool](https://powerbi.microsoft.com/en-us/desktop/).  
+- Change the queries to point them to your telemetry database servers and database.
+- Refresh the report to get current data.
+- The report will show the busiest top 5 elastic pools over the last 6 hours, 24 hours and 7 days.
+- This report can also be published as a dashboard to your organization’s PowerBI site for use by others in your organization.  
 
 <a name=disclaimers></a>
 
