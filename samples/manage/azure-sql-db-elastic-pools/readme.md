@@ -164,7 +164,7 @@ Data can be queried while data collection is in progress.
 
 > [AZURE.NOTE] If the scripts are stopped and started again within a short period they may add duplicate rows to the telemetry tables.
 
-<a power-bi></a>
+<a name=power-bi></a>
 
 ## Power BI designer file
 
