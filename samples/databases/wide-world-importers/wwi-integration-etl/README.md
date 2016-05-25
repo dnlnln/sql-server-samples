@@ -39,7 +39,20 @@ To run this sample, you need the following prerequisites.
 
 <a name=run-this-sample></a>
 
-## e
+## Running the sample
+
+## Sample details
+
+The ETL package WWI_Integration is used to migrate data from the WideWorldImporters database to the WideWorldImportersDW database as the data changes. The package is run periodically (most commonly daily).
+The design of the package uses SSIS to orchestrate bulk T-SQL operations (rather than as separate transformations within SSIS) to ensure high performance.
+Dimensions are loaded first, followed by Fact tables. The package can be re-run at any time after a failure.
+The workflow is as follows:
+
+
+
+It starts with an expression task that works out the appropriate cutoff time. This time is the current time less a few seconds. (This is more robust than requesting data right to the current time). It then truncates any milliseconds from the time. 
+The main processing starts by populating the Date dimension table. It ensures that all dates for the current year have been populated in the table.
+After this, a series of data flow tasks loads each dimension, then each fact.
 
 
 
