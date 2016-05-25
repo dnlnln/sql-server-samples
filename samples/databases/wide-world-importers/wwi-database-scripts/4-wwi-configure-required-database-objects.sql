@@ -1,5 +1,4 @@
 ﻿-- Configure required database objects
--- Version 1.3 Dr Greg Low 21 May 2016
 --
 
 USE WideWorldImporters;

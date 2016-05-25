@@ -16,7 +16,7 @@ The scripts in this folder are used to construct the WideWorldImportersDW databa
 ## About this sample
 
 <!-- Delete the ones that don't apply -->
-1. **Applies to:** SQL Server 2016 (or higher), Azure SQL Database
+1. **Applies to:** SQL Server 2016 (or higher), Azure SQL Database [testing and modified instructions are TBD]
 1. **Key features:** Core database features
 1. **Workload:** OLTP
 1. **Programming Language:** T-SQL
