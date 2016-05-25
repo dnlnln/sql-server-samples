@@ -34,26 +34,36 @@ To run this sample, you need the following prerequisites.
 
 <!-- Examples -->
 1. SQL Server 2016 (or higher). 
-2. SQL Server 2016 Integration Services.
-3. Visual Studio 2015.
+2. Visual Studio 2015.
+3. SQL Server 2016 Integration Services. This needs to be installed on the same machine as Visual Studio to be able to build the project.
 
 <a name=run-this-sample></a>
 
 ## Running the sample
 
+1. Open the solution file WWI_Integration.sln in Visual Studio.
+
+2. Build the solution.
+
+3. TBD: running the ETL process
+
 ## Sample details
 
 The ETL package WWI_Integration is used to migrate data from the WideWorldImporters database to the WideWorldImportersDW database as the data changes. The package is run periodically (most commonly daily).
+
 The design of the package uses SSIS to orchestrate bulk T-SQL operations (rather than as separate transformations within SSIS) to ensure high performance.
+
 Dimensions are loaded first, followed by Fact tables. The package can be re-run at any time after a failure.
+
 The workflow is as follows:
 
 
 
 It starts with an expression task that works out the appropriate cutoff time. This time is the current time less a few seconds. (This is more robust than requesting data right to the current time). It then truncates any milliseconds from the time. 
-The main processing starts by populating the Date dimension table. It ensures that all dates for the current year have been populated in the table.
-After this, a series of data flow tasks loads each dimension, then each fact.
 
+The main processing starts by populating the Date dimension table. It ensures that all dates for the current year have been populated in the table.
+
+After this, a series of data flow tasks loads each dimension, then each fact.
 
 
 <a name=disclaimers></a>
