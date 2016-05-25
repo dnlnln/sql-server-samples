@@ -1,5 +1,6 @@
 -- WWI Construct database from metadata tables
--- Version 1.3 Dr Greg Low 21 May 2016
+--
+-- The output of this script is used to create the schema for the actual sample database
 --
 -----------------------------------------------------------------------------------------
 -- Implementation Note:
@@ -14,12 +15,8 @@ USE WWI_Preparation;
 GO
 
 -- Configuration
-DECLARE @SQLDataFolder nvarchar(max) = (SELECT SUBSTRING(mf.physical_name, 1, CHARINDEX(N'master.mdf', mf.physical_name, 1) - 1)
-                                        FROM master.sys.master_files AS mf
-                                        WHERE mf.database_id = 1 AND mf.file_id = 1);
-DECLARE @SQLLogFolder nvarchar(max) = (SELECT SUBSTRING(mf.physical_name, 1, CHARINDEX(N'mastlog.ldf', mf.physical_name, 1) - 1)
-                                       FROM master.sys.master_files AS mf
-                                       WHERE mf.database_id = 1 AND mf.file_id = 2);
+DECLARE @SQLDataFolder nvarchar(max) = CAST(SERVERPROPERTY('InstanceDefaultDataPath') AS nvarchar(max));
+DECLARE @SQLLogFolder nvarchar(max) = CAST(SERVERPROPERTY('InstanceDefaultLogPath') AS nvarchar(max));
 
 DECLARE @LastEditedByColumnName sysname = N'LastEditedBy';
 DECLARE @LastEditedWhenColumnName sysname = N'LastEditedWhen';
