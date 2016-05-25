@@ -56,7 +56,7 @@ The below steps reconstruct the WideWorldImportersDW database. To construct the 
 
 6. Execute the script **6-wwi-dw-enable-full-features.sql**. This script enables features not available in standard edition. Skip this step when creating the sample database targeting standard edition.
 
-7. Execute the **WWI_Integration** SSIS package to perform the ETL to populate the database. For details see [link TBD].
+7. Execute the **WWI_Integration** SSIS package to perform the ETL to populate the database. For details see [wwi-integration-etl] (../wwi-integration-etl/).
 
 8. Execute the script **8-wwi-dw-backup.sql**. This creates a backup of the database. Make sure to adjust the file path of the backup to match your folder structure. (A sample restore script **9-wwi-restore.sql** is also provided).
 
