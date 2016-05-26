@@ -47,7 +47,9 @@ To run this sample, you need the following prerequisites.
 
 2. Build the solution.
 
-3. Run the app.
+3. Connect to the database and 
+
+4. Run the app and follow the instructions on-screen. Compare the time taken for On Disk and In Memory insertion.
 
 ## Sample details
 
@@ -63,6 +65,9 @@ You can control the number of threads performing the insert operations. You can 
 
 The application will periodically (about every second) display the latest execution times for each insert.
 
+If there is no significant performance difference, this could be an indication of a log IO bottleneck, as each insert results in a transaction commit that involves a flush to disk. It is possible to work around using [delayed durability](https://msdn.microsoft.com/library/dn449490.aspx) in the database:
+
+	ALTER DATABASE WideWorldImporters SET DELAYED_DURABILITY=FORCED
 
 <a name=disclaimers></a>
 
