@@ -101,9 +101,9 @@ GO
 TRUNCATE TABLE Purchasing.Supplier_PrivateDetails;
 GO
 
--- 3a. Now execute the .NET app to populate the data
+-- 3. Run the client application PopulateAlwaysEncryptedData.exe to insert sample data
 
--- Note that it has been inserted but is not visible within the database
+-- 4. Verify that, on the server side (which does not have the keys), all the data is encrypted
 
 SELECT * FROM Purchasing.Supplier_PrivateDetails ORDER BY SupplierID;
 GO
@@ -113,9 +113,11 @@ GO
 -- the client happens to be the same machine as the server in our 
 -- case. 
 
--- 4a. Open the second query window for this demonstration and follow the instructions there.
+-- 5a. Open the second query window for this demonstration and follow the instructions there.
 
--- 5a. Clean up afterwards.
+
+
+-- 6. (optional) Clean up afterwards.
 
 -- Remove any existing column keys and/or table
 DROP TABLE IF EXISTS Purchasing.Supplier_PrivateDetails;
