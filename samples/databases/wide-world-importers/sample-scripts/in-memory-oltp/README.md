@@ -36,7 +36,7 @@ To run this sample, you need the following prerequisites.
 
 <!-- Examples -->
 1. SQL Server 2016 (or higher) or Azure SQL Database. 
-2. The WideWorldImporters database.
+2. The WideWorldImporters database (Full version).
 
 <a name=run-this-sample></a>
 
