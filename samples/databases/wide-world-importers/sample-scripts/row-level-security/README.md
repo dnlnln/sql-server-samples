@@ -49,9 +49,11 @@ To run this sample, you need the following prerequisites.
 
 ## Sample details
 
-The sample adds a new table with sensitive data about suppliers. This sensitive data is always encrypted.
+The sample enables row-level security in the database, for the table `Sales.Customers`. Users of the database can only see the customers they are allowed to see. 
 
-As part of the sample you create an encryption key that is saved locally (where you run SSMS). The client application inserts data into the table. With the sample scripts you will see how the data is encrypted in the table and cannot be viewed, even by a sysadmin, unless you have the encryption key.
+The user 'Great Lakes Sales' is allowed to see only the customers in the Great Lakes sales territory.
+
+The Website user, which is used by the Web front-end in this scenario, configures the sales territory, and RLS takes care of the required filtering based on the information provided by the Web app.
 
 <a name=disclaimers></a>
 

@@ -1,6 +1,5 @@
 -- Demonstrate Row Level Security
 
-
 USE master;
 GO
 
@@ -82,6 +81,7 @@ GRANT SELECT ON [Application].Cities TO [Great Lakes Sales];
 GRANT SELECT ON [Application].Countries TO [Great Lakes Sales];
 GO
 
+-- impersonate the user GreatLakesUser
 EXECUTE AS USER = 'GreatLakesUser';
 GO
 
@@ -124,7 +124,7 @@ GO
 -- Open the second RLS demo window and follow the instructions there
 
 -- Finally, tidy up (optional)
-
+/*
 REVOKE SELECT, UPDATE ON Sales.Customers FROM [Great Lakes Sales];
 REVOKE SELECT ON [Application].Cities FROM [Great Lakes Sales];
 REVOKE SELECT ON [Application].Countries FROM [Great Lakes Sales];
@@ -151,6 +151,5 @@ GO
 DROP LOGIN Website;
 GO
 
-USE tempdb;
-GO
 
+*/
