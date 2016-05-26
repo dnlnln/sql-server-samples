@@ -49,7 +49,15 @@ To run this sample, you need the following prerequisites.
 
 ## Sample details
 
-The driver simulates an order insert workload. You can use it to test performance of transaction processing as well as real-time analytics. TBD: ref to analytics queries
+This application is used to provide an intensive order entry workload for the WideWorldImporters database. When started it displays the following:
+
+![Alt text](/media/wide-world-importers-order-insert-app.png "WideWorldImporters Order Insert Workload Simulation")
+
+Ensure that the connection string is set appropriately. It is save when the program is edited. If you ever need to set it back to the default value, open the program, clear the string, and exit the program. When you restart the program, the connection string will have been returned to the default value.
+
+The program uses the selected number of threads to concurrently call the `Website.InsertCustomerOrder` stored procedure. 
+
+When inserts are occurring, click the button to stop but allow time for the system to respond and stop. It may take a few seconds to respond, particularly if a larger number of threads is being used.
 
 
 <a name=disclaimers></a>

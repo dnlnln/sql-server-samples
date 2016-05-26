@@ -51,9 +51,17 @@ To run this sample, you need the following prerequisites.
 
 ## Sample details
 
-The driver simulates an insert workload for vehicle location obtained from sensors in the vehicles of Wide World Importers. You can use it to constrast the performance of disk-based with memory-optimized tables on your system.
+This application is used to compare the insertion of rows into the OnDisk and InMemory tables in Wide World Importers. The required objects must have already been created by following the earlier steps in the demonstration script.
 
-TBD: more guidelines on perf 
+When executed, this application displays the following:
+
+![Alt text](/media/wide-world-importers-vehicle-location-insert-app.png "WideWorldImporters Vehicle Location Workload Simulation")
+
+Ensure that the connection string is set appropriately. It is save when the program is edited. If you ever need to set it back to the default value, open the program, clear the string, and exit the program. When you restart the program, the connection string will have been returned to the default value.
+
+You can control the number of threads performing the insert operations. You can choose whether to insert into an on-disk table or an in-memory equivalent of the same table. 
+
+The application will periodically (about every second) display the latest execution times for each insert.
 
 
 <a name=disclaimers></a>
