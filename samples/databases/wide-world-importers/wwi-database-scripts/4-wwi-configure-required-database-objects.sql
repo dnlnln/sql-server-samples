@@ -3832,10 +3832,6 @@ ON Sales.OrderLines
     UnitPrice,
     PickedQuantity
 )';
-				IF CAST(SERVERPROPERTY(N'EngineEdition') AS int) <> 5   -- Not an Azure SQL DB
-				BEGIN
-					SET @SQL += N' WITH (COMPRESSION_DELAY = 10)';
-				END;
 				SET @SQL += N';';
                 EXECUTE (@SQL);
             END;
@@ -3853,10 +3849,6 @@ ON Sales.InvoiceLines
     LineProfit,
     LastEditedWhen
 )';
-				IF CAST(SERVERPROPERTY(N'EngineEdition') AS int) <> 5   -- Not an Azure SQL DB
-				BEGIN
-					SET @SQL += N' WITH (COMPRESSION_DELAY = 10)';
-				END;
 				SET @SQL += N';';
                 EXECUTE (@SQL);
             END;
