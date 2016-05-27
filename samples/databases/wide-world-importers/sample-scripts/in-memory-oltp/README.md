@@ -35,7 +35,7 @@ To run this sample, you need the following prerequisites.
 **Software prerequisites:**
 
 <!-- Examples -->
-1. SQL Server 2016 (or higher) or Azure SQL Database. 
+1. SQL Server 2016 (or higher) or Azure SQL Database.
 2. The WideWorldImporters database.
 
 <a name=run-this-sample></a>
@@ -55,7 +55,7 @@ It then compares the performance of single-threaded insert of 500,000 row:
  - into a memory-optimized table
  - into a memory-optimized table, with rows generated in a natively compiled stored procedure
 
-The script outputs the time taken for each 
+The script outputs the time taken for each
 
 <a name=disclaimers></a>
 
@@ -66,5 +66,8 @@ The code included in this sample is not intended to be used for production purpo
 
 ## Related Links
 <!-- Links to more articles. Remember to delete "en-us" from the link path. -->
-TBD
-
+For more information, see these articles:
+- [In-Memory OLTP documentation](https://msdn.microsoft.com/library/dn133186.aspx)
+- [In-Memory OLTP quick start](https://msdn.microsoft.com/library/mt694156.aspx)
+- [In-Memory OLTP in SQL Server 2016 (video)](https://channel9.msdn.com/Events/DataDriven/SQLServer2016/InMemoryOLTP)
+- [Get started with In-Memory in SQL Database](https://azure.microsoft.com/documentation/articles/sql-database-in-memory/)

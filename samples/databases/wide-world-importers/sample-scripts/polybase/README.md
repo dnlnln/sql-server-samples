@@ -1,6 +1,6 @@
 # Sample Querying of External Data Source in WideWorldImportersDW
 
-This script demonstrates the use of PolyBase to query an external data source. 
+This script demonstrates the use of PolyBase to query an external data source.
 
 Demographics data is available in Azure blob storage. This data is joined with sales data recorded in the local database to determine which would be good candidates for future expansion of the business.
 
@@ -35,7 +35,7 @@ To run this sample, you need the following prerequisites.
 **Software prerequisites:**
 
 <!-- Examples -->
-1. SQL Server 2016 (or higher) with PolyBase, connected to the internet. 
+1. SQL Server 2016 (or higher) with PolyBase, connected to the internet.
 2. SQL Server Management Studio
 3. The WideWorldImportersDW database (Full version).
 
@@ -70,5 +70,6 @@ The code included in this sample is not intended to be used for production purpo
 
 ## Related Links
 <!-- Links to more articles. Remember to delete "en-us" from the link path. -->
-TBD
-
+For more information, see these articles:
+- [Get started with PolyBase](https://msdn.microsoft.com/library/mt163689.aspx)
+- [PolyBase: Gaining insights from HDFS and relational data in SQL Server 2016 (video)](https://channel9.msdn.com/Events/DataDriven/SQLServer2016/PolyBase)

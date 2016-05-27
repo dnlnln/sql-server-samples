@@ -35,7 +35,7 @@ To run this sample, you need the following prerequisites.
 **Software prerequisites:**
 
 <!-- Examples -->
-1. SQL Server 2016 (or higher) or Azure SQL Database. 
+1. SQL Server 2016 (or higher) or Azure SQL Database.
 2. SQL Server Management Studio
 3. The WideWorldImporters database (Full version).
 
@@ -43,7 +43,7 @@ To run this sample, you need the following prerequisites.
 
 ## Running the sample
 
-1. Run the [Order Insert](../../workload-drivers/vehicle-location-insert/) workload for a while. When starting from the vanilla WideWorldImporters database the recommendation is to run at least 20 minutes, to ensure that enough data is generated and that compression kicks in (the sample has a COMPRESSION_DELAY of 10 minutes for the columnstore indexes). 
+1. Run the [Order Insert](../../workload-drivers/vehicle-location-insert/) workload for a while. When starting from the vanilla WideWorldImporters database the recommendation is to run at least 20 minutes, to ensure that enough data is generated and that compression kicks in (the sample has a COMPRESSION_DELAY of 10 minutes for the columnstore indexes).
 
 2. Execute the sample script.
 
@@ -51,7 +51,7 @@ To run this sample, you need the following prerequisites.
 
 ## Sample details
 
-The [Order Insert](../../workload-drivers/vehicle-location-insert/) workload driver is used to simulate an order processing workload. The queries in the sample script are reporting queries run with and without columnstore index. 
+The [Order Insert](../../workload-drivers/vehicle-location-insert/) workload driver is used to simulate an order processing workload. The queries in the sample script are reporting queries run with and without columnstore index.
 
 <a name=disclaimers></a>
 
@@ -62,5 +62,6 @@ The code included in this sample is not intended to be used for production purpo
 
 ## Related Links
 <!-- Links to more articles. Remember to delete "en-us" from the link path. -->
-TBD
-
+For more information, see these articles:
+- [Get started with Columnstore for real time operational analytics](https://msdn.microsoft.com/library/dn817827.aspx)
+- [Real-Time Operational analytics with SQL Server 2016 (video)](https://channel9.msdn.com/Events/DataDriven/SQLServer2016/Real-Time-Operational-analytics)

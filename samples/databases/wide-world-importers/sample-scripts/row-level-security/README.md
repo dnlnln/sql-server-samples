@@ -1,6 +1,6 @@
 # Sample for use of Row-Level Security in WideWorldImporters
 
-This script demonstrates the use of Row-Level Security to restrict access to certains rows in the table to certain users. 
+This script demonstrates the use of Row-Level Security to restrict access to certains rows in the table to certain users.
 
 
 ### Contents
@@ -34,7 +34,7 @@ To run this sample, you need the following prerequisites.
 **Software prerequisites:**
 
 <!-- Examples -->
-1. SQL Server 2016 (or higher) or Azure SQL Database. 
+1. SQL Server 2016 (or higher) or Azure SQL Database.
  - With SQL Server, make sure SQL authentication is enabled.
 2. SQL Server Management Studio
 3. The WideWorldImporters database.
@@ -49,7 +49,7 @@ To run this sample, you need the following prerequisites.
 
 ## Sample details
 
-The sample enables row-level security in the database, for the table `Sales.Customers`. Users of the database can only see the customers they are allowed to see. 
+The sample enables row-level security in the database, for the table `Sales.Customers`. Users of the database can only see the customers they are allowed to see.
 
 The user 'Great Lakes Sales' is allowed to see only the customers in the Great Lakes sales territory.
 
@@ -64,5 +64,6 @@ The code included in this sample is not intended to be used for production purpo
 
 ## Related Links
 <!-- Links to more articles. Remember to delete "en-us" from the link path. -->
-TBD
-
+For more information, see these articles:
+- [Row-Level Security documentation](https://msdn.microsoft.com/library/dn765131.aspx)
+- [Row-Level Security SQL Server 2016 (video)](https://channel9.msdn.com/Events/DataDriven/SQLServer2016/Row-Level-Security)

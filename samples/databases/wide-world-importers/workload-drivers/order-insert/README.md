@@ -33,7 +33,7 @@ To run this sample, you need the following prerequisites.
 **Software prerequisites:**
 
 <!-- Examples -->
-1. SQL Server 2016 (or higher) or Azure SQL Database. 
+1. SQL Server 2016 (or higher) or Azure SQL Database.
 2. Visual Studio 2015.
 3. The WideWorldImporters database.
 
@@ -55,7 +55,7 @@ This application is used to provide an intensive order entry workload for the Wi
 
 Ensure that the connection string is set appropriately. It is save when the program is edited. If you ever need to set it back to the default value, open the program, clear the string, and exit the program. When you restart the program, the connection string will have been returned to the default value.
 
-The program uses the selected number of threads to concurrently call the `Website.InsertCustomerOrder` stored procedure. 
+The program uses the selected number of threads to concurrently call the `Website.InsertCustomerOrder` stored procedure.
 
 When inserts are occurring, click the button to stop but allow time for the system to respond and stop. It may take a few seconds to respond, particularly if a larger number of threads is being used.
 
@@ -66,8 +66,3 @@ When inserts are occurring, click the button to stop but allow time for the syst
 The code included in this sample is not intended to be used for production purposes.
 
 <a name=related-links></a>
-
-## Related Links
-<!-- Links to more articles. Remember to delete "en-us" from the link path. -->
-TBD
-

@@ -35,7 +35,7 @@ To run this sample, you need the following prerequisites.
 **Software prerequisites:**
 
 <!-- Examples -->
-1. SQL Server 2016 (or higher) or Azure SQL Database. 
+1. SQL Server 2016 (or higher) or Azure SQL Database.
 2. Visual Studio 2015.
 3. The WideWorldImporters database (Full version).
 
@@ -47,7 +47,7 @@ To run this sample, you need the following prerequisites.
 
 2. Build the solution.
 
-3. Connect to the database and 
+3. Connect to the database and
 
 4. Run the app and follow the instructions on-screen. Compare the time taken for On Disk and In Memory insertion.
 
@@ -61,7 +61,7 @@ When executed, this application displays the following:
 
 Ensure that the connection string is set appropriately. It is save when the program is edited. If you ever need to set it back to the default value, open the program, clear the string, and exit the program. When you restart the program, the connection string will have been returned to the default value.
 
-You can control the number of threads performing the insert operations. You can choose whether to insert into an on-disk table or an in-memory equivalent of the same table. 
+You can control the number of threads performing the insert operations. You can choose whether to insert into an on-disk table or an in-memory equivalent of the same table.
 
 The application will periodically (about every second) display the latest execution times for each insert.
 
@@ -78,5 +78,4 @@ The code included in this sample is not intended to be used for production purpo
 
 ## Related Links
 <!-- Links to more articles. Remember to delete "en-us" from the link path. -->
-TBD
-
+- [in-memory/ticket-reservations](/samples/features/in-memory/ticket-reservations)

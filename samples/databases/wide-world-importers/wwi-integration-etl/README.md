@@ -92,5 +92,5 @@ The code included in this sample is not intended to be used for production purpo
 
 ## Related Links
 <!-- Links to more articles. Remember to delete "en-us" from the link path. -->
-TBD
 For more information, see these articles:
+- [SQL Server Integration Services documentation](https://msdn.microsoft.com/library/ms141026.aspx)

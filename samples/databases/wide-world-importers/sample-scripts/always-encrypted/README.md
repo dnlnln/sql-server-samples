@@ -1,6 +1,6 @@
 # Sample for use of Always Encrypted in WideWorldImportersDW
 
-This script demonstrates the use of Always Encrypted to encrypt sensitive data in the database. 
+This script demonstrates the use of Always Encrypted to encrypt sensitive data in the database.
 
 
 ### Contents
@@ -34,7 +34,7 @@ To run this sample, you need the following prerequisites.
 **Software prerequisites:**
 
 <!-- Examples -->
-1. SQL Server 2016 (or higher) or Azure SQL Database. 
+1. SQL Server 2016 (or higher) or Azure SQL Database.
 2. SQL Server Management Studio
 3. Visual Studio 2015
 4. The WideWorldImporters database.
@@ -64,5 +64,6 @@ The code included in this sample is not intended to be used for production purpo
 
 ## Related Links
 <!-- Links to more articles. Remember to delete "en-us" from the link path. -->
-TBD
-
+For more information, see these articles:
+- [Always Encrypted documentation](https://msdn.microsoft.com/library/mt163865.aspx)
+- [Keep Sensitive Data Secure with Always Encrypted](https://channel9.msdn.com/Events/DataDriven/SQLServer2016/AlwaysEncrypted)
