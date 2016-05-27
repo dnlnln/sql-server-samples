@@ -1,4 +1,4 @@
-# Documentation for the WideWorldImporters Sample Database
+# WideWorldImportersDW Installation and Configuration
 
 This folder contains documentation for the sample.
 

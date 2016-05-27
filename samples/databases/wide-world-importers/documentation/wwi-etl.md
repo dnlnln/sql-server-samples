@@ -1,4 +1,4 @@
-# Documentation for the WideWorldImporters Sample Database
+# WideWorldImporters ETL Workflow
 
 This folder contains documentation for the sample.
 

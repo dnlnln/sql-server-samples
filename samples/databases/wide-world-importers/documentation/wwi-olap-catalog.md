@@ -1,4 +1,4 @@
-# Documentation for the WideWorldImporters Sample Database
+# WideWorldImportersDW OLAP Database Catalog
 
 This folder contains documentation for the sample.
 

@@ -1,4 +1,4 @@
-# Documentation for the WideWorldImporters Sample Database
+# WideWorldImporters Use of SQL Server Features and Capabilities
 
 This folder contains documentation for the sample.
 

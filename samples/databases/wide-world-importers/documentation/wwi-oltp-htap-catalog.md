@@ -1,4 +1,4 @@
-# Documentation for the WideWorldImporters Sample Database
+# WideWorldImporters Database Catalog
 
 This folder contains documentation for the sample.
 
