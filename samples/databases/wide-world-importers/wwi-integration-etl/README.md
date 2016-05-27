@@ -32,7 +32,6 @@ To run this sample, you need the following prerequisites.
 
 **Software prerequisites:**
 
-<!-- Examples -->
 1. SQL Server 2016 (or higher) with the databases WideWorldImporters and WideWorldImportersDW. These can be on different instances.
 2. Visual Studio 2015.
 3. SQL Server 2016 Integration Services.
@@ -91,6 +90,5 @@ The code included in this sample is not intended to be used for production purpo
 <a name=related-links></a>
 
 ## Related Links
-<!-- Links to more articles. Remember to delete "en-us" from the link path. -->
 For more information, see these articles:
 - [SQL Server Integration Services documentation](https://msdn.microsoft.com/library/ms141026.aspx)

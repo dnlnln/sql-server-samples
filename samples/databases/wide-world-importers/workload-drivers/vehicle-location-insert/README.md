@@ -18,7 +18,6 @@ The main purpose is to compare the performance of data insertion into traditiona
 
 ## About this sample
 
-<!-- Delete the ones that don't apply -->
 1. **Applies to:** SQL Server 2016 (or higher), Azure SQL Database
 1. **Key features:** Core database features
 1. **Workload:** OLTP
@@ -34,7 +33,6 @@ To run this sample, you need the following prerequisites.
 
 **Software prerequisites:**
 
-<!-- Examples -->
 1. SQL Server 2016 (or higher) or Azure SQL Database.
 2. Visual Studio 2015.
 3. The WideWorldImporters database (Full version).
@@ -47,7 +45,7 @@ To run this sample, you need the following prerequisites.
 
 2. Build the solution.
 
-3. Connect to the database and
+3. Connect to the database and run the script VehicleLocation.sql to create the memory-optimized and disk-based tables used for the comparison.
 
 4. Run the app and follow the instructions on-screen. Compare the time taken for On Disk and In Memory insertion.
 
@@ -77,5 +75,5 @@ The code included in this sample is not intended to be used for production purpo
 <a name=related-links></a>
 
 ## Related Links
-<!-- Links to more articles. Remember to delete "en-us" from the link path. -->
+
 - [in-memory/ticket-reservations](/samples/features/in-memory/ticket-reservations)
