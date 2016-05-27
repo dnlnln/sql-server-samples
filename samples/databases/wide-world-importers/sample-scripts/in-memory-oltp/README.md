@@ -36,7 +36,7 @@ To run this sample, you need the following prerequisites.
 
 <!-- Examples -->
 1. SQL Server 2016 (or higher) or Azure SQL Database. 
-2. The WideWorldImporters database (Full version).
+2. The WideWorldImporters database.
 
 <a name=run-this-sample></a>
 
@@ -48,7 +48,14 @@ To run this sample, you need the following prerequisites.
 
 ## Sample details
 
+This script creates comparable disk-based and memory-optimized tables, as well as corresponding stored procedures, for vehicle location insertion.
 
+It then compares the performance of single-threaded insert of 500,000 row:
+ - into a disk-based table
+ - into a memory-optimized table
+ - into a memory-optimized table, with rows generated in a natively compiled stored procedure
+
+The script outputs the time taken for each 
 
 <a name=disclaimers></a>
 
