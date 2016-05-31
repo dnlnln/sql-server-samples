@@ -11,7 +11,7 @@ The latest release of the sample:
 
 [wide-world-importers-v0.1](https://github.com/Microsoft/sql-server-samples/releases/tag/wide-world-importers-v0.1)
 
-Download the sample database backup/bacpac that corresponds to your edition of SQL Server or Azure SQL Database.
+Download the sample WideWorldImporters database backup/bacpac that corresponds to your edition of SQL Server or Azure SQL Database.
 
 Source code to recreate the sample database is available from the following location. Note that recreating the sample will result in slight differences in the data, since there is a random factor in the data generation:
 

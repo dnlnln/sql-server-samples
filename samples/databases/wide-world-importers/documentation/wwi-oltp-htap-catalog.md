@@ -1,6 +1,6 @@
 # WideWorldImporters Database Catalog
 
-The WideWorldImporters database contains all the transaction information and daily data for sales and purchases.
+The WideWorldImporters database contains all the transaction information and daily data for sales and purchases, as well as sensor data for vehicles and cold rooms.
 
 ## Schemas
 

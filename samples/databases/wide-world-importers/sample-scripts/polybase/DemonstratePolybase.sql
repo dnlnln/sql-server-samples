@@ -4,8 +4,8 @@
 USE WideWorldImportersDW;
 GO
 
--- WideWorldImporters have customers in a variety of cities but feel they are likely missing 
--- other important cities. They have decided to try to find other cities have a growth rate of more 
+-- WideWorldImporters have customers in a variety of cities but feel they are likely missing
+-- other important cities. They have decided to try to find other cities have a growth rate of more
 -- than 20% over the last 3 years, and where they do not have existing customers.
 -- They have obtained census data (a CSV file) and have loaded it into an Azure storage account.
 -- They want to combine that data with other data in their main OLTP database to work out where
@@ -22,28 +22,28 @@ GO
 -- Expand the dbo.CityPopulationStatistics table, expand the list of columns and note the
 -- values that are contained. Let's look at the data:
 
-SELECT * FROM dbo.CityPopulationStatistics;
+SELECT CityID, StateProvinceCode, CityName, YearNumber, LatestRecordedPopulation FROM dbo.CityPopulationStatistics;
 GO
 
 -- How did that work? First the procedure created an external data source like this:
 /*
 
-CREATE EXTERNAL DATA SOURCE AzureStorage 
-WITH 
+CREATE EXTERNAL DATA SOURCE AzureStorage
+WITH
 (
 	TYPE=HADOOP, LOCATION = 'wasbs://data@sqldwdatasets.blob.core.windows.net'
 );
 
 */
--- This shows how to connect to AzureStorage. Next the procedure created an 
+-- This shows how to connect to AzureStorage. Next the procedure created an
 -- external file format to describe the layout of the CSV file:
 /*
 
-CREATE EXTERNAL FILE FORMAT CommaDelimitedTextFileFormat 
-WITH 
+CREATE EXTERNAL FILE FORMAT CommaDelimitedTextFileFormat
+WITH
 (
-	FORMAT_TYPE = DELIMITEDTEXT, 
-	FORMAT_OPTIONS 
+	FORMAT_TYPE = DELIMITEDTEXT,
+	FORMAT_OPTIONS
 	(
 		FIELD_TERMINATOR = ','
 	)
@@ -61,9 +61,9 @@ CREATE EXTERNAL TABLE dbo.CityPopulationStatistics
 	YearNumber int NOT NULL,
 	LatestRecordedPopulation bigint NULL
 )
-WITH 
-(	
-	LOCATION = '/', 
+WITH
+(
+	LOCATION = '/',
 	DATA_SOURCE = AzureStorage,
 	FILE_FORMAT = CommaDelimitedTextFileFormat,
 	REJECT_TYPE = VALUE,
@@ -71,7 +71,7 @@ WITH
 );
 
 */
--- From that point onwards, the external table can be used like a local table. Let's run that 
+-- From that point onwards, the external table can be used like a local table. Let's run that
 -- query that they wanted to use to find out which cities they should be finding new customers
 -- in. We'll start building the query by grouping the cities from the external table
 -- and finding those with more than a 20% growth rate for the period:
@@ -79,17 +79,17 @@ WITH
 WITH PotentialCities
 AS
 (
-	SELECT cps.CityName, 
+	SELECT cps.CityName,
 	       cps.StateProvinceCode,
 		   MAX(cps.LatestRecordedPopulation) AS PopulationIn2016,
-		   (MAX(cps.LatestRecordedPopulation) - MIN(cps.LatestRecordedPopulation)) * 100.0 
+		   (MAX(cps.LatestRecordedPopulation) - MIN(cps.LatestRecordedPopulation)) * 100.0
 		       / MIN(cps.LatestRecordedPopulation) AS GrowthRate
 	FROM dbo.CityPopulationStatistics AS cps
 	WHERE cps.LatestRecordedPopulation IS NOT NULL
-	AND cps.LatestRecordedPopulation <> 0 
+	AND cps.LatestRecordedPopulation <> 0
 	GROUP BY cps.CityName, cps.StateProvinceCode
 )
-SELECT * 
+SELECT CityName, StateProvinceCode, PopulationIn2016, GrowthRate
 FROM PotentialCities
 WHERE GrowthRate > 2.0;
 GO
@@ -100,31 +100,31 @@ GO
 WITH PotentialCities
 AS
 (
-	SELECT cps.CityName, 
+	SELECT cps.CityName,
 	       cps.StateProvinceCode,
 		   MAX(cps.LatestRecordedPopulation) AS PopulationIn2016,
-		   (MAX(cps.LatestRecordedPopulation) - MIN(cps.LatestRecordedPopulation)) * 100.0 
+		   (MAX(cps.LatestRecordedPopulation) - MIN(cps.LatestRecordedPopulation)) * 100.0
 		       / MIN(cps.LatestRecordedPopulation) AS GrowthRate
 	FROM dbo.CityPopulationStatistics AS cps
 	WHERE cps.LatestRecordedPopulation IS NOT NULL
-	AND cps.LatestRecordedPopulation <> 0 
+	AND cps.LatestRecordedPopulation <> 0
 	GROUP BY cps.CityName, cps.StateProvinceCode
 ),
 InterestingCities
 AS
 (
-	SELECT DISTINCT pc.CityName, 
-					pc.StateProvinceCode, 
+	SELECT DISTINCT pc.CityName,
+					pc.StateProvinceCode,
 				    pc.PopulationIn2016,
 					FLOOR(pc.GrowthRate) AS GrowthRate
 	FROM PotentialCities AS pc
 	INNER JOIN Dimension.City AS c
-	ON pc.CityName = c.City 
+	ON pc.CityName = c.City
 	WHERE GrowthRate > 2.0
 	AND NOT EXISTS (SELECT 1 FROM Fact.Sale AS s WHERE s.[City Key] = c.[City Key])
 )
-SELECT TOP(100) *
-FROM InterestingCities 
+SELECT TOP(100) CityName, StateProvinceCode, PopulationIn2016, GrowthRate
+FROM InterestingCities
 ORDER BY PopulationIn2016 DESC;
 GO
 
