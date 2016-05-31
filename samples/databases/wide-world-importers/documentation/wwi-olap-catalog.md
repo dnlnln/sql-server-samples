@@ -2,7 +2,7 @@
 
 The WideWorldImportersDW database is used for data warehousing and analytical processing. The transactional data about sales and purchases is generated in the WideWorldImporters database, and loaded into the WideWorldImportersDW database using a [daily ETL process](wwi-etl.md).
 
-The data in WideWorldImportersDW thus mirrors the data in WideWorldImporters, but the tables are organized differently. WideWorldImportersDW uses the [star schema](https://wikipedia.org/wiki/Star_schema) approach for its table design. Besides the fact and dimension tables, the database includes a number of staging tables that are used in the ETL process.
+The data in WideWorldImportersDW thus mirrors the data in WideWorldImporters, but the tables are organized differently. While WideWorldImporters has a traditional normalized schema, WideWorldImportersDW uses the [star schema](https://wikipedia.org/wiki/Star_schema) approach for its table design. Besides the fact and dimension tables, the database includes a number of staging tables that are used in the ETL process.
 
 ## Schemas
 

@@ -27,6 +27,8 @@ These schemas are used for external applications that are not allowed to access 
 |Reports|All access to the database from Reporting Services reports is through this schema.|
 |PowerBI|All access to the database from the Power BI dashboards via the Enterprise Gateway is through this schema.|
 
+Note that the Reports and PowerBI schemas are not used in the initial release of the sample database. However, all Reporting Services and Power BI samples built on top of this database are encouraged to use these schemas.
+
 ### Development schemas
 
 Special-purpose schemas
