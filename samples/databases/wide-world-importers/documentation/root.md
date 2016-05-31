@@ -12,9 +12,13 @@ The latest released version of the sample:
 
 The documentation for the sample is organized as follows:
 
+## Overview
+
 __[Wide World Importers Overview](wwi-overview.md)__
 
 Overview of the sample company Wide World Importers, and the workflows addressed by the sample.
+
+## Main OLTP Database WideWorldImporters
 
 __[WideWorldImporters Installation and Configuration](wwi-oltp-htap-installation.md)__
 
@@ -31,6 +35,8 @@ Describes how WideWorldImporters leverages core SQL Server features.
 __[WideWorldImporters Sample Queries](wwi-oltp-htap-sample-queries.md)__
 
 Sample queries for the WideWorldImporters database.
+
+## Data Warehousing and Analytics Database WideWorldImportersDW
 
 __[WideWorldImportersDW Installation and Configuration](wwi-olap-installation.md)__
 
@@ -51,3 +57,9 @@ Describes how the WideWorldImportersDW leverages SQL Server features for analyti
 __[WideWorldImportersDW OLAP Sample Queries](wwi-olap-sample-queries.md)__
 
 Sample analytics queries leveraging the WideWorldImportersDW database.
+
+## Data generation
+
+__[WideWorldImporters Data Generation](wwi-data-generation.md)__
+
+Describes how additional data can be generated in the sample database, for example inserting sales and purchase data up to the current date.
