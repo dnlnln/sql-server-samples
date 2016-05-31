@@ -22,12 +22,12 @@ Briefly describe what the sample does. Describe the benefit of running this samp
 ## About this sample
 
 <!-- Delete the ones that don't apply -->
-1. **Applies to:** SQL Server 2016 (or higher), Azure SQL Database, Azure SQL Data Warehouse, Parallel Data Warehouse
-1. **Key features:**
-1. **Workload:**
-1. **Programming Language:**
-1. **Authors:**
-1. **Update history:**
+- **Applies to:** SQL Server 2016 (or higher), Azure SQL Database, Azure SQL Data Warehouse, Parallel Data Warehouse
+- **Key features:**
+- **Workload:**
+- **Programming Language:**
+- **Authors:**
+- **Update history:**
 
 <a name=before-you-begin></a>
 
