@@ -1,6 +1,8 @@
 # Wide World Importers Sample for SQL Server and Azure SQL Database
 
-Wide World Importers is a comprehensive database sample that both illustrates best practices in database design, and illustrates how SQL Server features can be leveraged in an application.
+Wide World Importers is a comprehensive database sample that both illustrates database design, and illustrates how SQL Server features can be leveraged in an application.
+
+Note that the sample is meant to be representative of a typical database. It does not include every feature of SQL Server. The design of the database follows one common set of standards, but there are many ways one might build a database.
 
 The source code for the sample can be found on the SQL Server Samples GitHub repository:
 [wide-world-importers](https://github.com/Microsoft/sql-server-samples/tree/master/samples/databases/wide-world-importers).
