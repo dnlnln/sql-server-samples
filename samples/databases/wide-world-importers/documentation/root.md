@@ -24,7 +24,7 @@ __[WideWorldImporters Database Catalog](wwi-oltp-htap-catalog.md)__
 
 Description of the schemas and tables used in the WideWorldImporters database.
 
-__[WideWorldImporters Use of SQL Server Features and Capabilities](wwi-oltp-htap-catalog.md)__   
+__[WideWorldImporters Use of SQL Server Features and Capabilities](wwi-oltp-htap-sql-features.md)__   
 
 Describes how WideWorldImporters leverages core SQL Server features.
 
