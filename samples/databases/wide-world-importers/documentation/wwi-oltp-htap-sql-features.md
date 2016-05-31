@@ -3,6 +3,7 @@
 WideWorldImporters is designed to showcase many of the key features of SQL Server, including the latest features introduced in SQL Server 2016. The following is a list of SQL Server features and capabilities, and a description of how they are used in WideWorldImporters.
 
 |SQL Server feature or capability|Use in WideWorldImporters|
+|-----------------------------|---------------------|
 |Temporal tables|There are many temporal tables, including all look-up style reference tables and main entities such as StockItems, Customers, and Suppliers. Using temporal tables allows to conveniently keep track of the history of these entities.|
 |AJAX calls for JSON|The application frequently uses AJAX calls to query these tables: Persons, Customers, Suppliers, and StockItems. The calls return JSON payloads (i.e. the data that is returned is formatted as JSON data). See, for example, the stored procedure `Website.SearchForCustomers`.|
 |Row-level security (RLS)|Row Level Security (RLS) is used to limit access to the Customers table, based on role membership. Each sales territory has a role and a user. To see this in action, a script to demonstrate it has been provided.|
