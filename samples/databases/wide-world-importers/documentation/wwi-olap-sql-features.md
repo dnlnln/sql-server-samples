@@ -85,3 +85,11 @@ Data size in a Data Warehouse can grow very large. Therefore it is best practice
 All of the larger fact tables are partitioned by year. The only exception is `Fact.Stock Holdings`, which is not date-based and has limited data size compared with the other fact tables.
 
 The partition function used for all partitioned tables is `PF_Date`, and the partition scheme being used is `PS_Date`.
+
+## In-Memory OLTP
+
+(Full version of the sample)
+
+WideWorldImportersDW uses SCHEMA_ONLY memory-optimized tables for the staging tables. All `Integration.`\*`_Staging` tables are SCHEMA_ONLY memory-optimized tables.
+
+The advantage of SCHEMA_ONLY tables is that they are not logged, and do not require any disk access. This improves the performance of the ETL process. Since these tables are not logged, their contents are lost if there is a failure. However, the data source is still available, so the ETL process can simply be restarted if a failure occurs.

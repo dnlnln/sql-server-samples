@@ -22,7 +22,7 @@ Overview of the sample company Wide World Importers, and the workflows addressed
 
 __[WideWorldImporters Installation and Configuration](wwi-oltp-htap-installation.md)__
 
-Instructions for the installation and configuration of the core database WideWorldImporters that is used for transaction processing (OLTP - Online Transaction Processing) and operational analytics (HTAP - Hybrid Transaction and Analytics Processing).
+Instructions for the installation and configuration of the core database WideWorldImporters that is used for transaction processing (OLTP - OnLine Transaction Processing) and operational analytics (HTAP - Hybrid Transactional/Analytical Processing).
 
 __[WideWorldImporters Database Catalog](wwi-oltp-htap-catalog.md)__
 
