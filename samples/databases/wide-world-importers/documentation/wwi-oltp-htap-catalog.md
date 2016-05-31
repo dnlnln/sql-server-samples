@@ -80,7 +80,7 @@ Details of customers, salespeople, and of stock item sales.
 |CustomerTransactions|All financial transactions that are customer-related (invoices, payments)|
 |SpecialDeals|Special pricing. This can include fixed prices, discount in dollars or discount percent.|
 |Orders|Detail of customer orders|
-|OrderLines	Detail lines from customer orders|
+|OrderLines|Detail lines from customer orders|
 |Invoices|Details of customer invoices|
 |InvoiceLines|Detail lines from customer invoices|
 
