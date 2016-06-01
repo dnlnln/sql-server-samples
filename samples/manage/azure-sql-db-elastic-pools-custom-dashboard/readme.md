@@ -11,6 +11,15 @@ This readme applies to:
 - Visual Studio 2015 Update 1 or later
 - Azure Subscription 
 
+## About this sample
+
+***Applies to:*** Azure SQL Database
+*** Key features:*** Elastic Pools
+***Workload:*** SaaS workload generator
+***Programming Language:*** ADO.NET, XML, C#, Transact-SQL
+***Authors:*** Zoiner Tejada, Carl Rabeler, Srini Acharya
+***Update history:*** n/a
+
 ## Solution Quick Start
 
 The Solution Quick Start consists of a single Visual Studio 2015 solution with two projects, as follows:
