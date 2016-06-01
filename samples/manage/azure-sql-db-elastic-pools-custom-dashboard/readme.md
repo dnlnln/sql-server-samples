@@ -13,20 +13,36 @@ This readme applies to:
 
 ## About this sample
 
-***Applies to:*** Azure SQL Database
-*** Key features:*** Elastic Pools
-***Workload:*** SaaS workload generator
-***Programming Language:*** ADO.NET, XML, C#, Transact-SQL
-***Authors:*** Zoiner Tejada, Carl Rabeler, Srini Acharya
-***Update history:*** n/a
+- ***Applies to:*** Azure SQL Database
+- *** Key features:*** Elastic Pools
+- ***Workload:*** SaaS workload generator
+- ***Programming Language:*** ADO.NET, XML, C#, Transact-SQL
+- ***Authors:*** Zoiner Tejada, Carl Rabeler, Srini Acharya
+- ***Update history:*** n/a
 
-## Solution Quick Start
+## Solution Quick Start Overview
 
 The Solution Quick Start consists of a single Visual Studio 2015 solution with two projects, as follows:
 
 - LoadGeneratorConsole: A console application that creates a configurable load against a specified set of databases. 
 - MonitoringWeb: A Web App that shows gathering and reporting on telemetry collected from Elastic Pools and Database instances.
 
+### Contents
+
+[Scenario](#scenario)<br/>
+[Solution Overview](#solution-overview)<br/>
+[Scenario Guidance](#scenario-guidance)<br/>
+[Performing Schema Maintenance on Pooled Databases](#schema-maintenance)<br/>
+[Monitoring & Alerting](#monitoring-alerting)<br/>
+[Database Recovery](#database-recovery)<br/>
+[Summary](#summary)<br/>
+[Learn More](#learn-more)<br/>
+
+
+
+
+
+<a name=scenario></a>
 
 ## Scenario
 
@@ -35,6 +51,8 @@ Contoso Shopkeeper provides business small and mid-size an easy to use, cost-eff
 The fundamentals behind the architecture of ShopKeeper are resource sharing amongst tenants (which helps keep costs down for both Contoso and its merchant customers), and isolation between tenants (which aims to guarantee that one merchants code or data is never mixed in with another’s). Take the example below, where a customer is using her Web Browser to shop Fabrikam Fabrics. In the process of placing an order she would be interacting with a Web App that only contains Fabrikam Fabric’s code, and the Web App would interact with the database instance that only contains Fabrikam Fabric’s data- this is the isolation aspect. The fact that various Web Apps share the resources from an App Service Plan or that multiple SQL Databases instances share resources from an Elastic Pool demonstrates the resource sharing aspect.  
 
 <! [Architecture1](./media/azure-sql-db-elastic-pools-custom-dashboard-architecture-1.png)
+
+<a name=solution-overview></a>
 
 ## Solution Overview
 
@@ -52,6 +70,8 @@ In this Solution Quick Start, we will walk you thru the implementation of a web 
 After that, we will introduce how you would apply a schema change to all the databases in the pool, while the load is running, using an Elastic Job via the Azure Portal.
 
 <! [Architecture3](./media/azure-sql-db-elastic-pools-custom-dashboard-architecture-3.png)
+
+<a name=scenario-guidance></a>
 
 ## Scenario Guidance
 
@@ -92,6 +112,8 @@ The provisioning of new Pools, adjusting the eDTU’s assigned to a Pool or the 
 
 > [AZURE.NOTE] Examples of Pool Management: For examples of management with the above options, see https://azure.microsoft.com/en-us/documentation/articles/sql-database-elastic-pool-manage-portal/
 
+<a name=schema-maintenance></a>
+
 ## Performing Schema Maintenance on Pooled Databases
 
 The Contoso ShopKeeper solution demonstrates an example of the challenge faces by SaaS solutions with regards to managing schemas. In this Solution Quick Start, it deploys an instance of the AdventureWorks database for each tenant. Therefore, Contoso would have many copies of a database with the same schema, albeit different data. This raises the question, how should Contoso roll out schema updates when required (e.g., because of application updates), without affecting the per tenant data?
@@ -100,6 +122,8 @@ Using the Azure Portal, as illustrated in this Solution Quick Start, Contoso can
 
 Besides using the Portal, Contoso may consider using PowerShell to control the execution of Elastics Database Jobs. In addition to the automation opportunities this allows for the deployment of updates, using PowerShell has one characteristic that is not present in the Portal: custom groups. With custom groups Contoso can target its T-SQL script to execute on a specific set of databases, instead of all the databases within the Pool.
 NOTE: For examples of using PowerShell to create and manage Elastic Database jobs, see https://azure.microsoft.com/en-us/documentation/articles/sql-database-elastic-jobs-overview/ 
+
+<a name=monitoring-alerting></a>
 
 ## Monitoring & Alerting
 
@@ -113,15 +137,21 @@ For both Pool alerts and per Database alerts, Contoso can configure Web Hooks th
 
 When it comes to monitoring the Pool and the databases Contoso can choose to use the Azure Portal as well as T-SQL, as we show in this Solution Quick Start with the Monitoring Web App.  They can use the T-SQL options to collect the telemetry from Azure and store it in their own log analytics solution. This would enable them to perform analysis on the telemetry that spans much longer periods of time than that permitted by the retention policy of the data when it is managed by Azure—for example, enabling them to review pool usage over the course of months instead of the 14 days that is maintained by Azure. 
 
+<a name=database-recovery></a>
+
 ## Database Recovery 
 
 By utilizing Elastic Pools, Contoso gets an improved ability to juggle cost versus tenant performance, but does not lose any of the features supporting availability and disaster recovery that are available to SQL Databases outside of a Pool. For example, they can use Point in Time Restore to recover from user error, such as a DBA accidentally dropping the customers table in a tenant’s database. To accomplish this with minimal down-time, they would ensure Pool to which they will restore has capacity for another database instance, rename the original Database to a temporary name and then restore to new database with same name as original. In this fashion, they could restore the database without having to make any application level changes, such as altering connection strings, because the restored database name would be unchanged. 
 
 They also get to benefit from the restore deleted database feature to provide a window of time during which their system could actually delete the database when a merchant cancels, but be able to restore that database should the customer re-join within the retention window. This retention window is controlled by the service tier of the pool:  7 days for Basic, 14 days for Standard and 35 days for Premium.
 
+<a name=summary></a>
+
 ## Summary
 
  This Solution Quick Start provides guidance on how to leverage Elastic Pools to support the backend of a SaaS application. In addition, this Solution Quick Start provides a tool to simulate load on elastic databases so that you can understand how the effects of load on a database affect the Elastic Pool. Finally, this solution Quick Start demonstrates how you can build collect your Elastic Pool and database telemetry programmatically so that you can implement a monitoring solution that suites the needs of your application. 
+
+<a name=learn-more></a>
 
 ## Learn More
 

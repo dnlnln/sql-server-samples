@@ -6,6 +6,15 @@ This Solution Quick Start sample provides a set of PowerShell scripts for off-lo
 
 This readme applies to the PowerShell scripts: PoolTelemetryJobRunner.ps1 and PoolTelemetry.ps1.
 
+## About this sample
+
+- ***Applies to:*** Azure SQL Database
+- *** Key features:*** Elastic Pools
+- ***Workload:*** n/a
+- ***Programming Language:*** PowerShell, Transact-SQL, DAX
+- ***Authors:*** Carl Rabeler, Srini Acharya
+- ***Update history:*** n/a
+
 ### Contents
 
 [What do the PowerShell scripts do?](#what-do-the-powershell-scripts-do?)<br/>
