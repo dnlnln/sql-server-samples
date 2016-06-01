@@ -1,10 +1,19 @@
-# Elastic Pool Telemetry using PowerShell
+# Solution Quick Start: Elastic Pool Telemetry using PowerShell
 
-This sample provides a set of PowerShell scripts for off-loading elastic pool and elastic database telemetry data into a separate telemetry database.
+This Solution Quick Start sample provides a set of PowerShell scripts for off-loading elastic pool and elastic database telemetry data into a separate telemetry database.
 
 <!-- Add a diagram if you have it -->
 
 This readme applies to the PowerShell scripts: PoolTelemetryJobRunner.ps1 and PoolTelemetry.ps1.
+
+## About this sample
+
+***Applies to:*** Azure SQL Database<br/>
+***Key features:*** Elastic Pools<br/>
+***Workload:*** n/a<br/>
+***Programming Language:*** PowerShell, Transact-SQL, DAX<br/>
+***Authors:*** Carl Rabeler, Srini Acharya<br/>
+***Update history:*** n/a<br/>
 
 ### Contents
 
