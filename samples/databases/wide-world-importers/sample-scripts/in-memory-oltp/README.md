@@ -50,7 +50,7 @@ To run this sample, you need the following prerequisites.
 
 This script creates comparable disk-based and memory-optimized tables, as well as corresponding stored procedures, for vehicle location insertion.
 
-It then compares the performance of single-threaded insert of 500,000 row:
+It then compares the performance of single-threaded insert of 500,000 rows:
  - into a disk-based table
  - into a memory-optimized table
  - into a memory-optimized table, with rows generated in a natively compiled stored procedure
