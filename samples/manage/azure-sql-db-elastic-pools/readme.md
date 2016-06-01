@@ -8,12 +8,12 @@ This readme applies to the PowerShell scripts: PoolTelemetryJobRunner.ps1 and Po
 
 ## About this sample
 
-- ***Applies to:*** Azure SQL Database
-- *** Key features:*** Elastic Pools
-- ***Workload:*** n/a
-- ***Programming Language:*** PowerShell, Transact-SQL, DAX
-- ***Authors:*** Carl Rabeler, Srini Acharya
-- ***Update history:*** n/a
+***Applies to:*** Azure SQL Database<br/>
+***Key features:*** Elastic Pools<br/>
+***Workload:*** n/a<br/>
+***Programming Language:*** PowerShell, Transact-SQL, DAX<br/>
+***Authors:*** Carl Rabeler, Srini Acharya<br/>
+***Update history:*** n/a<br/>
 
 ### Contents
 

@@ -13,12 +13,12 @@ This readme applies to:
 
 ## About this sample
 
-- ***Applies to:*** Azure SQL Database
-- *** Key features:*** Elastic Pools
-- ***Workload:*** SaaS workload generator
-- ***Programming Language:*** ADO.NET, XML, C#, Transact-SQL
-- ***Authors:*** Zoiner Tejada, Carl Rabeler, Srini Acharya
-- ***Update history:*** n/a
+***Applies to:*** Azure SQL Database<br/>
+*** Key features:*** Elastic Pools<br/>
+***Workload:*** SaaS workload generator<br/>
+***Programming Language:*** ADO.NET, XML, C#, Transact-SQL<br/>
+***Authors:*** Zoiner Tejada, Carl Rabeler, Srini Acharya<br/>
+***Update history:*** n/a<br/>
 
 ## Solution Quick Start Overview
 
@@ -50,7 +50,7 @@ Contoso Shopkeeper provides business small and mid-size an easy to use, cost-eff
 
 The fundamentals behind the architecture of ShopKeeper are resource sharing amongst tenants (which helps keep costs down for both Contoso and its merchant customers), and isolation between tenants (which aims to guarantee that one merchants code or data is never mixed in with another’s). Take the example below, where a customer is using her Web Browser to shop Fabrikam Fabrics. In the process of placing an order she would be interacting with a Web App that only contains Fabrikam Fabric’s code, and the Web App would interact with the database instance that only contains Fabrikam Fabric’s data- this is the isolation aspect. The fact that various Web Apps share the resources from an App Service Plan or that multiple SQL Databases instances share resources from an Elastic Pool demonstrates the resource sharing aspect.  
 
-<! [Architecture1](./media/azure-sql-db-elastic-pools-custom-dashboard-architecture-1.png)
+<![Architecture1](/media/azure-sql-db-elastic-pools-custom-dashboard-architecture-1.png "1")
 
 <a name=solution-overview></a>
 
@@ -60,16 +60,16 @@ The focus of this Solution Quick Start is on leveraging Elastic Pools and unders
 
 Since the best way to understand the behavior of Elastic Pools is to experience using them under load, we provide a load generator. The load generator is a console application that targets one or more elastic database instances in an Elastic Pool with a specific write load. You can run multiple instances of the load generator with different settings if you want to create a blended load, e.g., a mix of heavy a light load. In addition, you do not need to target all databases in the pool by the load generator, so you can leave databases you choose without any load. 
 
-<! [Architecture2](./media/azure-sql-db-elastic-pools-custom-dashboard-architecture-2.png)
+<![Architecture2](/media/azure-sql-db-elastic-pools-custom-dashboard-architecture-2.png "2")
 
 In this Solution Quick Start, we will walk you thru the implementation of a web app that lets you visualize the load created on the Elastic Pool and the elastic databases in near-real time, which when complete will look similar to the following:
 
-<! [Custom Control](./media/azure-sql-db-elastic-pools-custom-dashboard-custom-control-1.png)
+<![Custom Control](/media/azure-sql-db-elastic-pools-custom-dashboard-custom-control-1.png "3")
 
 
 After that, we will introduce how you would apply a schema change to all the databases in the pool, while the load is running, using an Elastic Job via the Azure Portal.
 
-<! [Architecture3](./media/azure-sql-db-elastic-pools-custom-dashboard-architecture-3.png)
+<![Architecture3](/media/azure-sql-db-elastic-pools-custom-dashboard-architecture-3.png "4")
 
 <a name=scenario-guidance></a>
 
@@ -88,7 +88,7 @@ In the ShopKeeper scenario, for example, assume Contoso has a Free Subscription 
 
 So how does this map to how Contoso might leverage Elastic Pools? The database cost per tenant is effectively the cost of the pool divided by the number of tenant databases in the pool. The number of databases that can be added to any given pool is limited by the pricing tier of the pool. For example, a Standard 200 pool supports up to 400 databases. Currently this tier is priced at $446 USD per month. If Contoso were to fully utilize the pool by adding 400 databases, the cost per tenant would near $1.12 per tenant per month. Similarly, if they used the Basic 200 tier (which currently is priced at $298 USD per month), then the cost per tenant- month would near $0.75. 
 
-<! [Architecture3](./media/azure-sql-db-elastic-pools-custom-dashboard-pricing.png)
+<![Architecture3](/media/azure-sql-db-elastic-pools-custom-dashboard-pricing.png "5")
 
 Naturally, they might consider using Pools in the Basic Tier for their Free Tier merchants in order to realize the lowest cost per tenant-month for that set of tenants. They might then consider reserving Pools in the Standard Tier for their Paid Tier merchants. Alternately, they may choose to use standardize on just one Pool service tier for both Free and Paid Subscriptions. The goal of getting the lowest cost per tenant month would remain the same.
 
