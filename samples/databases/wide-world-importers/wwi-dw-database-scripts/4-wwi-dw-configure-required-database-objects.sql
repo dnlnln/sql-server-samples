@@ -18,20 +18,20 @@ RETURN SELECT @Date AS [Date],
               CAST(N'CY' + CAST(YEAR(@Date) AS nvarchar(4)) + N'-' + SUBSTRING(DATENAME(month, @Date), 1, 3) AS nvarchar(10)) AS [Calendar Month Label],
               YEAR(@Date) AS [Calendar Year],
               CAST(N'CY' + CAST(YEAR(@Date) AS nvarchar(4)) AS nvarchar(10)) AS [Calendar Year Label],
-              CASE WHEN MONTH(@Date) IN (11, 12) 
-                   THEN MONTH(@Date) - 10 
+              CASE WHEN MONTH(@Date) IN (11, 12)
+                   THEN MONTH(@Date) - 10
                    ELSE MONTH(@Date) + 2
               END AS [Fiscal Month Number],
               CAST(N'FY' + CAST(CASE WHEN MONTH(@Date) IN (11, 12)
-                                     THEN YEAR(@Date) + 1 
+                                     THEN YEAR(@Date) + 1
                                      ELSE YEAR(@Date)
                                 END AS nvarchar(4)) + N'-' + SUBSTRING(DATENAME(month, @Date), 1, 3) AS nvarchar(20)) AS [Fiscal Month Label],
               CASE WHEN MONTH(@Date) IN (11, 12)
-                   THEN YEAR(@Date) + 1 
+                   THEN YEAR(@Date) + 1
                    ELSE YEAR(@Date)
               END AS [Fiscal Year],
               CAST(N'FY' + CAST(CASE WHEN MONTH(@Date) IN (11, 12)
-                                     THEN YEAR(@Date) + 1 
+                                     THEN YEAR(@Date) + 1
                                      ELSE YEAR(@Date)
                                 END AS nvarchar(4)) AS nvarchar(10)) AS [Fiscal Year Label],
               DATEPART(ISO_WEEK, @Date) AS [ISO Week Number];
@@ -54,19 +54,19 @@ BEGIN
 
         BEGIN TRAN;
 
-        WHILE YEAR(@DateCounter) = @YearNumber 
+        WHILE YEAR(@DateCounter) = @YearNumber
         BEGIN
             IF NOT EXISTS (SELECT 1 FROM Dimension.[Date] WHERE [Date] = @DateCounter)
             BEGIN
-                INSERT Dimension.[Date] 
-                    ([Date], [Day Number], [Day], [Month], [Short Month], 
-                     [Calendar Month Number], [Calendar Month Label], [Calendar Year], [Calendar Year Label], 
-                     [Fiscal Month Number], [Fiscal Month Label], [Fiscal Year], [Fiscal Year Label], 
+                INSERT Dimension.[Date]
+                    ([Date], [Day Number], [Day], [Month], [Short Month],
+                     [Calendar Month Number], [Calendar Month Label], [Calendar Year], [Calendar Year Label],
+                     [Fiscal Month Number], [Fiscal Month Label], [Fiscal Year], [Fiscal Year Label],
                      [ISO Week Number])
-                SELECT [Date], [Day Number], [Day], [Month], [Short Month], 
-                       [Calendar Month Number], [Calendar Month Label], [Calendar Year], [Calendar Year Label], 
-                       [Fiscal Month Number], [Fiscal Month Label], [Fiscal Year], [Fiscal Year Label], 
-                       [ISO Week Number]        
+                SELECT [Date], [Day Number], [Day], [Month], [Short Month],
+                       [Calendar Month Number], [Calendar Month Label], [Calendar Year], [Calendar Year Label],
+                       [Fiscal Month Number], [Fiscal Month Label], [Fiscal Year], [Fiscal Year Label],
+                       [ISO Week Number]
                 FROM Integration.GenerateDateDimensionColumns(@DateCounter);
             END;
             SET @DateCounter = DATEADD(day, 1, @DateCounter);
@@ -125,16 +125,16 @@ BEGIN
 
     DECLARE @DataLoadStartedWhen datetime2(7) = SYSDATETIME();
 
-    INSERT Integration.Lineage 
-        ([Data Load Started], [Table Name], [Data Load Completed], 
+    INSERT Integration.Lineage
+        ([Data Load Started], [Table Name], [Data Load Completed],
          [Was Successful], [Source System Cutoff Time])
-    VALUES 
+    VALUES
         (@DataLoadStartedWhen, @TableName, NULL,
          0, @NewCutoffTime);
 
-    SELECT TOP(1) [Lineage Key] AS LineageKey 
-    FROM Integration.Lineage 
-    WHERE [Table Name] = @TableName 
+    SELECT TOP(1) [Lineage Key] AS LineageKey
+    FROM Integration.Lineage
+    WHERE [Table Name] = @TableName
     AND [Data Load Started] = @DataLoadStartedWhen
     ORDER BY LineageKey DESC;
 
@@ -157,9 +157,9 @@ BEGIN
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
-                               FROM Integration.Lineage 
-                               WHERE [Table Name] = N'City' 
-                               AND [Data Load Completed] IS NULL 
+                               FROM Integration.Lineage
+                               WHERE [Table Name] = N'City'
+                               AND [Data Load Completed] IS NULL
                                ORDER BY [Lineage Key] DESC);
 
     WITH RowsToCloseOff
@@ -169,32 +169,32 @@ BEGIN
         FROM Integration.City_Staging AS c
         GROUP BY c.[WWI City ID]
     )
-    UPDATE c 
+    UPDATE c
         SET c.[Valid To] = rtco.[Valid From]
     FROM Dimension.City AS c
     INNER JOIN RowsToCloseOff AS rtco
     ON c.[WWI City ID] = rtco.[WWI City ID]
     WHERE c.[Valid To] = @EndOfTime;
 
-    INSERT Dimension.City 
-        ([WWI City ID], City, [State Province], Country, Continent, 
-         [Sales Territory], Region, Subregion, [Location], 
-         [Latest Recorded Population], [Valid From], [Valid To], 
+    INSERT Dimension.City
+        ([WWI City ID], City, [State Province], Country, Continent,
+         [Sales Territory], Region, Subregion, [Location],
+         [Latest Recorded Population], [Valid From], [Valid To],
          [Lineage Key])
-    SELECT [WWI City ID], City, [State Province], Country, Continent, 
-           [Sales Territory], Region, Subregion, [Location], 
-           [Latest Recorded Population], [Valid From], [Valid To], 
+    SELECT [WWI City ID], City, [State Province], Country, Continent,
+           [Sales Territory], Region, Subregion, [Location],
+           [Latest Recorded Population], [Valid From], [Valid To],
            @LineageKey
     FROM Integration.City_Staging;
 
-    UPDATE Integration.Lineage 
+    UPDATE Integration.Lineage
         SET [Data Load Completed] = SYSDATETIME(),
             [Was Successful] = 1
     WHERE [Lineage Key] = @LineageKey;
 
     UPDATE Integration.[ETL Cutoff]
-        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]  
-                             FROM Integration.Lineage 
+        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]
+                             FROM Integration.Lineage
                              WHERE [Lineage Key] = @LineageKey)
     FROM Integration.[ETL Cutoff]
     WHERE [Table Name] = N'City';
@@ -220,9 +220,9 @@ BEGIN
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
-                               FROM Integration.Lineage 
-                               WHERE [Table Name] = N'Customer' 
-                               AND [Data Load Completed] IS NULL 
+                               FROM Integration.Lineage
+                               WHERE [Table Name] = N'Customer'
+                               AND [Data Load Completed] IS NULL
                                ORDER BY [Lineage Key] DESC);
 
     WITH RowsToCloseOff
@@ -232,7 +232,7 @@ BEGIN
         FROM Integration.Customer_Staging AS c
         GROUP BY c.[WWI Customer ID]
     )
-    UPDATE c 
+    UPDATE c
         SET c.[Valid To] = rtco.[Valid From]
     FROM Dimension.Customer AS c
     INNER JOIN RowsToCloseOff AS rtco
@@ -240,22 +240,22 @@ BEGIN
     WHERE c.[Valid To] = @EndOfTime;
 
     INSERT Dimension.Customer
-        ([WWI Customer ID], Customer, [Bill To Customer], Category, 
-         [Buying Group], [Primary Contact], [Postal Code], [Valid From], [Valid To], 
+        ([WWI Customer ID], Customer, [Bill To Customer], Category,
+         [Buying Group], [Primary Contact], [Postal Code], [Valid From], [Valid To],
          [Lineage Key])
-    SELECT [WWI Customer ID], Customer, [Bill To Customer], Category, 
-           [Buying Group], [Primary Contact], [Postal Code], [Valid From], [Valid To], 
+    SELECT [WWI Customer ID], Customer, [Bill To Customer], Category,
+           [Buying Group], [Primary Contact], [Postal Code], [Valid From], [Valid To],
            @LineageKey
     FROM Integration.Customer_Staging;
 
-    UPDATE Integration.Lineage 
+    UPDATE Integration.Lineage
         SET [Data Load Completed] = SYSDATETIME(),
             [Was Successful] = 1
     WHERE [Lineage Key] = @LineageKey;
 
     UPDATE Integration.[ETL Cutoff]
-        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]  
-                             FROM Integration.Lineage 
+        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]
+                             FROM Integration.Lineage
                              WHERE [Lineage Key] = @LineageKey)
     FROM Integration.[ETL Cutoff]
     WHERE [Table Name] = N'Customer';
@@ -281,9 +281,9 @@ BEGIN
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
-                               FROM Integration.Lineage 
-                               WHERE [Table Name] = N'Employee' 
-                               AND [Data Load Completed] IS NULL 
+                               FROM Integration.Lineage
+                               WHERE [Table Name] = N'Employee'
+                               AND [Data Load Completed] IS NULL
                                ORDER BY [Lineage Key] DESC);
 
     WITH RowsToCloseOff
@@ -293,7 +293,7 @@ BEGIN
         FROM Integration.Employee_Staging AS e
         GROUP BY e.[WWI Employee ID]
     )
-    UPDATE e 
+    UPDATE e
         SET e.[Valid To] = rtco.[Valid From]
     FROM Dimension.Employee AS e
     INNER JOIN RowsToCloseOff AS rtco
@@ -302,18 +302,18 @@ BEGIN
 
     INSERT Dimension.Employee
         ([WWI Employee ID], Employee, [Preferred Name], [Is Salesperson], Photo, [Valid From], [Valid To], [Lineage Key])
-    SELECT [WWI Employee ID], Employee, [Preferred Name], [Is Salesperson], Photo, [Valid From], [Valid To], 
+    SELECT [WWI Employee ID], Employee, [Preferred Name], [Is Salesperson], Photo, [Valid From], [Valid To],
            @LineageKey
     FROM Integration.Employee_Staging;
 
-    UPDATE Integration.Lineage 
+    UPDATE Integration.Lineage
         SET [Data Load Completed] = SYSDATETIME(),
             [Was Successful] = 1
     WHERE [Lineage Key] = @LineageKey;
 
     UPDATE Integration.[ETL Cutoff]
-        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]  
-                             FROM Integration.Lineage 
+        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]
+                             FROM Integration.Lineage
                              WHERE [Lineage Key] = @LineageKey)
     FROM Integration.[ETL Cutoff]
     WHERE [Table Name] = N'Employee';
@@ -339,9 +339,9 @@ BEGIN
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
-                               FROM Integration.Lineage 
-                               WHERE [Table Name] = N'Payment Method' 
-                               AND [Data Load Completed] IS NULL 
+                               FROM Integration.Lineage
+                               WHERE [Table Name] = N'Payment Method'
+                               AND [Data Load Completed] IS NULL
                                ORDER BY [Lineage Key] DESC);
 
     WITH RowsToCloseOff
@@ -351,7 +351,7 @@ BEGIN
         FROM Integration.PaymentMethod_Staging AS pm
         GROUP BY pm.[WWI Payment Method ID]
     )
-    UPDATE pm 
+    UPDATE pm
         SET pm.[Valid To] = rtco.[Valid From]
     FROM Dimension.[Payment Method] AS pm
     INNER JOIN RowsToCloseOff AS rtco
@@ -364,14 +364,14 @@ BEGIN
            @LineageKey
     FROM Integration.PaymentMethod_Staging;
 
-    UPDATE Integration.Lineage 
+    UPDATE Integration.Lineage
         SET [Data Load Completed] = SYSDATETIME(),
             [Was Successful] = 1
     WHERE [Lineage Key] = @LineageKey;
 
     UPDATE Integration.[ETL Cutoff]
-        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]  
-                             FROM Integration.Lineage 
+        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]
+                             FROM Integration.Lineage
                              WHERE [Lineage Key] = @LineageKey)
     FROM Integration.[ETL Cutoff]
     WHERE [Table Name] = N'Payment Method';
@@ -397,9 +397,9 @@ BEGIN
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
-                               FROM Integration.Lineage 
-                               WHERE [Table Name] = N'Stock Item' 
-                               AND [Data Load Completed] IS NULL 
+                               FROM Integration.Lineage
+                               WHERE [Table Name] = N'Stock Item'
+                               AND [Data Load Completed] IS NULL
                                ORDER BY [Lineage Key] DESC);
 
     WITH RowsToCloseOff
@@ -409,7 +409,7 @@ BEGIN
         FROM Integration.StockItem_Staging AS s
         GROUP BY s.[WWI Stock Item ID]
     )
-    UPDATE s 
+    UPDATE s
         SET s.[Valid To] = rtco.[Valid From]
     FROM Dimension.[Stock Item] AS s
     INNER JOIN RowsToCloseOff AS rtco
@@ -417,25 +417,25 @@ BEGIN
     WHERE s.[Valid To] = @EndOfTime;
 
     INSERT Dimension.[Stock Item]
-        ([WWI Stock Item ID], [Stock Item], Color, [Selling Package], [Buying Package], 
-         Brand, Size, [Lead Time Days], [Quantity Per Outer], [Is Chiller Stock], 
-         Barcode, [Tax Rate], [Unit Price], [Recommended Retail Price], [Typical Weight Per Unit], 
+        ([WWI Stock Item ID], [Stock Item], Color, [Selling Package], [Buying Package],
+         Brand, Size, [Lead Time Days], [Quantity Per Outer], [Is Chiller Stock],
+         Barcode, [Tax Rate], [Unit Price], [Recommended Retail Price], [Typical Weight Per Unit],
          Photo, [Valid From], [Valid To], [Lineage Key])
-    SELECT [WWI Stock Item ID], [Stock Item], Color, [Selling Package], [Buying Package], 
-           Brand, Size, [Lead Time Days], [Quantity Per Outer], [Is Chiller Stock], 
-           Barcode, [Tax Rate], [Unit Price], [Recommended Retail Price], [Typical Weight Per Unit], 
+    SELECT [WWI Stock Item ID], [Stock Item], Color, [Selling Package], [Buying Package],
+           Brand, Size, [Lead Time Days], [Quantity Per Outer], [Is Chiller Stock],
+           Barcode, [Tax Rate], [Unit Price], [Recommended Retail Price], [Typical Weight Per Unit],
            Photo, [Valid From], [Valid To],
            @LineageKey
     FROM Integration.StockItem_Staging;
 
-    UPDATE Integration.Lineage 
+    UPDATE Integration.Lineage
         SET [Data Load Completed] = SYSDATETIME(),
             [Was Successful] = 1
     WHERE [Lineage Key] = @LineageKey;
 
     UPDATE Integration.[ETL Cutoff]
-        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]  
-                             FROM Integration.Lineage 
+        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]
+                             FROM Integration.Lineage
                              WHERE [Lineage Key] = @LineageKey)
     FROM Integration.[ETL Cutoff]
     WHERE [Table Name] = N'Stock Item';
@@ -461,9 +461,9 @@ BEGIN
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
-                               FROM Integration.Lineage 
-                               WHERE [Table Name] = N'Supplier' 
-                               AND [Data Load Completed] IS NULL 
+                               FROM Integration.Lineage
+                               WHERE [Table Name] = N'Supplier'
+                               AND [Data Load Completed] IS NULL
                                ORDER BY [Lineage Key] DESC);
 
     WITH RowsToCloseOff
@@ -473,7 +473,7 @@ BEGIN
         FROM Integration.Supplier_Staging AS s
         GROUP BY s.[WWI Supplier ID]
     )
-    UPDATE s 
+    UPDATE s
         SET s.[Valid To] = rtco.[Valid From]
     FROM Dimension.[Supplier] AS s
     INNER JOIN RowsToCloseOff AS rtco
@@ -481,21 +481,21 @@ BEGIN
     WHERE s.[Valid To] = @EndOfTime;
 
     INSERT Dimension.[Supplier]
-        ([WWI Supplier ID], Supplier, Category, [Primary Contact], [Supplier Reference], 
+        ([WWI Supplier ID], Supplier, Category, [Primary Contact], [Supplier Reference],
          [Payment Days], [Postal Code], [Valid From], [Valid To], [Lineage Key])
-    SELECT [WWI Supplier ID], Supplier, Category, [Primary Contact], [Supplier Reference], 
+    SELECT [WWI Supplier ID], Supplier, Category, [Primary Contact], [Supplier Reference],
            [Payment Days], [Postal Code], [Valid From], [Valid To],
            @LineageKey
     FROM Integration.Supplier_Staging;
 
-    UPDATE Integration.Lineage 
+    UPDATE Integration.Lineage
         SET [Data Load Completed] = SYSDATETIME(),
             [Was Successful] = 1
     WHERE [Lineage Key] = @LineageKey;
 
     UPDATE Integration.[ETL Cutoff]
-        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]  
-                             FROM Integration.Lineage 
+        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]
+                             FROM Integration.Lineage
                              WHERE [Lineage Key] = @LineageKey)
     FROM Integration.[ETL Cutoff]
     WHERE [Table Name] = N'Supplier';
@@ -521,9 +521,9 @@ BEGIN
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
-                               FROM Integration.Lineage 
-                               WHERE [Table Name] = N'Transaction Type' 
-                               AND [Data Load Completed] IS NULL 
+                               FROM Integration.Lineage
+                               WHERE [Table Name] = N'Transaction Type'
+                               AND [Data Load Completed] IS NULL
                                ORDER BY [Lineage Key] DESC);
 
     WITH RowsToCloseOff
@@ -533,7 +533,7 @@ BEGIN
         FROM Integration.TransactionType_Staging AS pm
         GROUP BY pm.[WWI Transaction Type ID]
     )
-    UPDATE pm 
+    UPDATE pm
         SET pm.[Valid To] = rtco.[Valid From]
     FROM Dimension.[Transaction Type] AS pm
     INNER JOIN RowsToCloseOff AS rtco
@@ -546,14 +546,14 @@ BEGIN
            @LineageKey
     FROM Integration.TransactionType_Staging;
 
-    UPDATE Integration.Lineage 
+    UPDATE Integration.Lineage
         SET [Data Load Completed] = SYSDATETIME(),
             [Was Successful] = 1
     WHERE [Lineage Key] = @LineageKey;
 
     UPDATE Integration.[ETL Cutoff]
-        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]  
-                             FROM Integration.Lineage 
+        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]
+                             FROM Integration.Lineage
                              WHERE [Lineage Key] = @LineageKey)
     FROM Integration.[ETL Cutoff]
     WHERE [Table Name] = N'Transaction Type';
@@ -579,9 +579,9 @@ BEGIN
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
-                               FROM Integration.Lineage 
-                               WHERE [Table Name] = N'Movement' 
-                               AND [Data Load Completed] IS NULL 
+                               FROM Integration.Lineage
+                               WHERE [Table Name] = N'Movement'
+                               AND [Data Load Completed] IS NULL
                                ORDER BY [Lineage Key] DESC);
 
     -- Find the dimension keys required
@@ -608,9 +608,9 @@ BEGIN
                                                  AND m.[Last Modifed When] > tt.[Valid From]
                                                  AND m.[Last Modifed When] <= tt.[Valid To]), 0)
     FROM Integration.Movement_Staging AS m;
-    
+
     -- Merge the data into the fact table
-    
+
     MERGE Fact.Movement AS m
     USING Integration.Movement_Staging AS ms
     ON m.[WWI Stock Item Transaction ID] = ms.[WWI Stock Item Transaction ID]
@@ -625,19 +625,19 @@ BEGIN
                    m.Quantity = ms.Quantity,
                    m.[Lineage Key] = @LineageKey
     WHEN NOT MATCHED THEN
-        INSERT ([Date Key], [Stock Item Key], [Customer Key], [Supplier Key], [Transaction Type Key], 
+        INSERT ([Date Key], [Stock Item Key], [Customer Key], [Supplier Key], [Transaction Type Key],
                 [WWI Stock Item Transaction ID], [WWI Invoice ID], [WWI Purchase Order ID], Quantity, [Lineage Key])
         VALUES (ms.[Date Key], ms.[Stock Item Key], ms.[Customer Key], ms.[Supplier Key], ms.[Transaction Type Key],
                 ms.[WWI Stock Item Transaction ID], ms.[WWI Invoice ID], ms.[WWI Purchase Order ID], ms.Quantity, @LineageKey);
 
-    UPDATE Integration.Lineage 
+    UPDATE Integration.Lineage
         SET [Data Load Completed] = SYSDATETIME(),
             [Was Successful] = 1
     WHERE [Lineage Key] = @LineageKey;
 
     UPDATE Integration.[ETL Cutoff]
-        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]  
-                             FROM Integration.Lineage 
+        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]
+                             FROM Integration.Lineage
                              WHERE [Lineage Key] = @LineageKey)
     FROM Integration.[ETL Cutoff]
     WHERE [Table Name] = N'Movement';
@@ -663,18 +663,18 @@ BEGIN
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
-                               FROM Integration.Lineage 
-                               WHERE [Table Name] = N'Order' 
-                               AND [Data Load Completed] IS NULL 
+                               FROM Integration.Lineage
+                               WHERE [Table Name] = N'Order'
+                               AND [Data Load Completed] IS NULL
                                ORDER BY [Lineage Key] DESC);
 
     -- Find the dimension keys required
 
     UPDATE o
-        SET o.[City Key] = COALESCE((SELECT TOP(1) c.[City Key] 
+        SET o.[City Key] = COALESCE((SELECT TOP(1) c.[City Key]
                                      FROM Dimension.City AS c
-                                     WHERE c.[WWI City ID] = o.[WWI City ID] 
-                                     AND o.[Last Modified When] > c.[Valid From] 
+                                     WHERE c.[WWI City ID] = o.[WWI City ID]
+                                     AND o.[Last Modified When] > c.[Valid From]
                                      AND o.[Last Modified When] <= c.[Valid To]), 0),
             o.[Customer Key] = COALESCE((SELECT TOP(1) c.[Customer Key]
                                          FROM Dimension.Customer AS c
@@ -697,7 +697,7 @@ BEGIN
                                        AND o.[Last Modified When] > e.[Valid From]
                                        AND o.[Last Modified When] <= e.[Valid To]), 0)
     FROM Integration.Order_Staging AS o;
-    
+
     -- Remove any existing entries for any of these orders
 
     DELETE o
@@ -706,25 +706,25 @@ BEGIN
 
     -- Insert all current details for these orders
 
-    INSERT Fact.[Order] 
-        ([City Key], [Customer Key], [Stock Item Key], [Order Date Key], [Picked Date Key], 
-         [Salesperson Key], [Picker Key], [WWI Order ID], [WWI Backorder ID], [Description], 
-         Package, Quantity, [Unit Price], [Tax Rate], [Total Excluding Tax], [Tax Amount], 
+    INSERT Fact.[Order]
+        ([City Key], [Customer Key], [Stock Item Key], [Order Date Key], [Picked Date Key],
+         [Salesperson Key], [Picker Key], [WWI Order ID], [WWI Backorder ID], [Description],
+         Package, Quantity, [Unit Price], [Tax Rate], [Total Excluding Tax], [Tax Amount],
          [Total Including Tax], [Lineage Key])
-    SELECT [City Key], [Customer Key], [Stock Item Key], [Order Date Key], [Picked Date Key], 
-           [Salesperson Key], [Picker Key], [WWI Order ID], [WWI Backorder ID], [Description], 
-           Package, Quantity, [Unit Price], [Tax Rate], [Total Excluding Tax], [Tax Amount], 
+    SELECT [City Key], [Customer Key], [Stock Item Key], [Order Date Key], [Picked Date Key],
+           [Salesperson Key], [Picker Key], [WWI Order ID], [WWI Backorder ID], [Description],
+           Package, Quantity, [Unit Price], [Tax Rate], [Total Excluding Tax], [Tax Amount],
            [Total Including Tax], @LineageKey
     FROM Integration.Order_Staging;
-    
-    UPDATE Integration.Lineage 
+
+    UPDATE Integration.Lineage
         SET [Data Load Completed] = SYSDATETIME(),
             [Was Successful] = 1
     WHERE [Lineage Key] = @LineageKey;
 
     UPDATE Integration.[ETL Cutoff]
-        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]  
-                             FROM Integration.Lineage 
+        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]
+                             FROM Integration.Lineage
                              WHERE [Lineage Key] = @LineageKey)
     FROM Integration.[ETL Cutoff]
     WHERE [Table Name] = N'Order';
@@ -750,18 +750,18 @@ BEGIN
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
-                               FROM Integration.Lineage 
-                               WHERE [Table Name] = N'Purchase' 
-                               AND [Data Load Completed] IS NULL 
+                               FROM Integration.Lineage
+                               WHERE [Table Name] = N'Purchase'
+                               AND [Data Load Completed] IS NULL
                                ORDER BY [Lineage Key] DESC);
 
     -- Find the dimension keys required
 
     UPDATE p
-        SET p.[Supplier Key] = COALESCE((SELECT TOP(1) s.[Supplier Key] 
+        SET p.[Supplier Key] = COALESCE((SELECT TOP(1) s.[Supplier Key]
                                      FROM Dimension.Supplier AS s
-                                     WHERE s.[WWI Supplier ID] = p.[WWI Supplier ID] 
-                                     AND p.[Last Modified When] > s.[Valid From] 
+                                     WHERE s.[WWI Supplier ID] = p.[WWI Supplier ID]
+                                     AND p.[Last Modified When] > s.[Valid From]
                                      AND p.[Last Modified When] <= s.[Valid To]), 0),
             p.[Stock Item Key] = COALESCE((SELECT TOP(1) si.[Stock Item Key]
                                            FROM Dimension.[Stock Item] AS si
@@ -769,7 +769,7 @@ BEGIN
                                            AND p.[Last Modified When] > si.[Valid From]
                                            AND p.[Last Modified When] <= si.[Valid To]), 0)
     FROM Integration.Purchase_Staging AS p;
-    
+
     -- Remove any existing entries for any of these purchase orders
 
     DELETE p
@@ -779,20 +779,20 @@ BEGIN
     -- Insert all current details for these purchase orders
 
     INSERT Fact.Purchase
-        ([Date Key], [Supplier Key], [Stock Item Key], [WWI Purchase Order ID], [Ordered Outers], [Ordered Quantity], 
+        ([Date Key], [Supplier Key], [Stock Item Key], [WWI Purchase Order ID], [Ordered Outers], [Ordered Quantity],
          [Received Outers], Package, [Is Order Finalized], [Lineage Key])
-    SELECT [Date Key], [Supplier Key], [Stock Item Key], [WWI Purchase Order ID], [Ordered Outers], [Ordered Quantity], 
+    SELECT [Date Key], [Supplier Key], [Stock Item Key], [WWI Purchase Order ID], [Ordered Outers], [Ordered Quantity],
            [Received Outers], Package, [Is Order Finalized], @LineageKey
     FROM Integration.Purchase_Staging;
-    
-    UPDATE Integration.Lineage 
+
+    UPDATE Integration.Lineage
         SET [Data Load Completed] = SYSDATETIME(),
             [Was Successful] = 1
     WHERE [Lineage Key] = @LineageKey;
 
     UPDATE Integration.[ETL Cutoff]
-        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]  
-                             FROM Integration.Lineage 
+        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]
+                             FROM Integration.Lineage
                              WHERE [Lineage Key] = @LineageKey)
     FROM Integration.[ETL Cutoff]
     WHERE [Table Name] = N'Purchase';
@@ -818,18 +818,18 @@ BEGIN
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
-                               FROM Integration.Lineage 
-                               WHERE [Table Name] = N'Sale' 
-                               AND [Data Load Completed] IS NULL 
+                               FROM Integration.Lineage
+                               WHERE [Table Name] = N'Sale'
+                               AND [Data Load Completed] IS NULL
                                ORDER BY [Lineage Key] DESC);
 
     -- Find the dimension keys required
 
     UPDATE s
-        SET s.[City Key] = COALESCE((SELECT TOP(1) c.[City Key] 
+        SET s.[City Key] = COALESCE((SELECT TOP(1) c.[City Key]
                                      FROM Dimension.City AS c
-                                     WHERE c.[WWI City ID] = s.[WWI City ID] 
-                                     AND s.[Last Modified When] > c.[Valid From] 
+                                     WHERE c.[WWI City ID] = s.[WWI City ID]
+                                     AND s.[Last Modified When] > c.[Valid From]
                                      AND s.[Last Modified When] <= c.[Valid To]), 0),
             s.[Customer Key] = COALESCE((SELECT TOP(1) c.[Customer Key]
                                            FROM Dimension.Customer AS c
@@ -852,7 +852,7 @@ BEGIN
                                             AND s.[Last Modified When] > e.[Valid From]
                                             AND s.[Last Modified When] <= e.[Valid To]), 0)
     FROM Integration.Sale_Staging AS s;
-    
+
     -- Remove any existing entries for any of these invoices
 
     DELETE s
@@ -862,22 +862,22 @@ BEGIN
     -- Insert all current details for these invoices
 
     INSERT Fact.Sale
-        ([City Key], [Customer Key], [Bill To Customer Key], [Stock Item Key], [Invoice Date Key], [Delivery Date Key], 
-         [Salesperson Key], [WWI Invoice ID], [Description], Package, Quantity, [Unit Price], [Tax Rate], 
+        ([City Key], [Customer Key], [Bill To Customer Key], [Stock Item Key], [Invoice Date Key], [Delivery Date Key],
+         [Salesperson Key], [WWI Invoice ID], [Description], Package, Quantity, [Unit Price], [Tax Rate],
          [Total Excluding Tax], [Tax Amount], Profit, [Total Including Tax], [Total Dry Items], [Total Chiller Items], [Lineage Key])
-    SELECT [City Key], [Customer Key], [Bill To Customer Key], [Stock Item Key], [Invoice Date Key], [Delivery Date Key], 
-           [Salesperson Key], [WWI Invoice ID], [Description], Package, Quantity, [Unit Price], [Tax Rate], 
+    SELECT [City Key], [Customer Key], [Bill To Customer Key], [Stock Item Key], [Invoice Date Key], [Delivery Date Key],
+           [Salesperson Key], [WWI Invoice ID], [Description], Package, Quantity, [Unit Price], [Tax Rate],
            [Total Excluding Tax], [Tax Amount], Profit, [Total Including Tax], [Total Dry Items], [Total Chiller Items], @LineageKey
     FROM Integration.Sale_Staging;
-    
-    UPDATE Integration.Lineage 
+
+    UPDATE Integration.Lineage
         SET [Data Load Completed] = SYSDATETIME(),
             [Was Successful] = 1
     WHERE [Lineage Key] = @LineageKey;
 
     UPDATE Integration.[ETL Cutoff]
-        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]  
-                             FROM Integration.Lineage 
+        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]
+                             FROM Integration.Lineage
                              WHERE [Lineage Key] = @LineageKey)
     FROM Integration.[ETL Cutoff]
     WHERE [Table Name] = N'Sale';
@@ -901,9 +901,9 @@ BEGIN
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
-                               FROM Integration.Lineage 
-                               WHERE [Table Name] = N'Stock Holding' 
-                               AND [Data Load Completed] IS NULL 
+                               FROM Integration.Lineage
+                               WHERE [Table Name] = N'Stock Holding'
+                               AND [Data Load Completed] IS NULL
                                ORDER BY [Lineage Key] DESC);
 
     -- Find the dimension keys required
@@ -914,28 +914,28 @@ BEGIN
                                            WHERE si.[WWI Stock Item ID] = s.[WWI Stock Item ID]
                                            ORDER BY si.[Valid To] DESC), 0)
     FROM Integration.StockHolding_Staging AS s;
-    
+
     -- Remove all existing holdings
 
     TRUNCATE TABLE Fact.[Stock Holding];
 
     -- Insert all current stock holdings
 
-    INSERT Fact.[Stock Holding] 
-        ([Stock Item Key], [Quantity On Hand], [Bin Location], [Last Stocktake Quantity], 
+    INSERT Fact.[Stock Holding]
+        ([Stock Item Key], [Quantity On Hand], [Bin Location], [Last Stocktake Quantity],
          [Last Cost Price], [Reorder Level], [Target Stock Level], [Lineage Key])
-    SELECT [Stock Item Key], [Quantity On Hand], [Bin Location], [Last Stocktake Quantity], 
+    SELECT [Stock Item Key], [Quantity On Hand], [Bin Location], [Last Stocktake Quantity],
            [Last Cost Price], [Reorder Level], [Target Stock Level], @LineageKey
     FROM Integration.StockHolding_Staging;
-    
-    UPDATE Integration.Lineage 
+
+    UPDATE Integration.Lineage
         SET [Data Load Completed] = SYSDATETIME(),
             [Was Successful] = 1
     WHERE [Lineage Key] = @LineageKey;
 
     UPDATE Integration.[ETL Cutoff]
-        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]  
-                             FROM Integration.Lineage 
+        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]
+                             FROM Integration.Lineage
                              WHERE [Lineage Key] = @LineageKey)
     FROM Integration.[ETL Cutoff]
     WHERE [Table Name] = N'Stock Holding';
@@ -961,9 +961,9 @@ BEGIN
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
-                               FROM Integration.Lineage 
-                               WHERE [Table Name] = N'Transaction' 
-                               AND [Data Load Completed] IS NULL 
+                               FROM Integration.Lineage
+                               WHERE [Table Name] = N'Transaction'
+                               AND [Data Load Completed] IS NULL
                                ORDER BY [Lineage Key] DESC);
 
     -- Find the dimension keys required
@@ -995,28 +995,28 @@ BEGIN
                                                  AND t.[Last Modified When] > pm.[Valid From]
                                                  AND t.[Last Modified When] <= pm.[Valid To]), 0)
     FROM Integration.Transaction_Staging AS t;
-    
+
     -- Insert all the transactions
 
-    INSERT Fact.[Transaction]   
-        ([Date Key], [Customer Key], [Bill To Customer Key], [Supplier Key], [Transaction Type Key], 
-         [Payment Method Key], [WWI Customer Transaction ID], [WWI Supplier Transaction ID], 
-         [WWI Invoice ID], [WWI Purchase Order ID], [Supplier Invoice Number], [Total Excluding Tax], 
+    INSERT Fact.[Transaction]
+        ([Date Key], [Customer Key], [Bill To Customer Key], [Supplier Key], [Transaction Type Key],
+         [Payment Method Key], [WWI Customer Transaction ID], [WWI Supplier Transaction ID],
+         [WWI Invoice ID], [WWI Purchase Order ID], [Supplier Invoice Number], [Total Excluding Tax],
          [Tax Amount], [Total Including Tax], [Outstanding Balance], [Is Finalized], [Lineage Key])
-    SELECT [Date Key], [Customer Key], [Bill To Customer Key], [Supplier Key], [Transaction Type Key], 
-         [Payment Method Key], [WWI Customer Transaction ID], [WWI Supplier Transaction ID], 
-         [WWI Invoice ID], [WWI Purchase Order ID], [Supplier Invoice Number], [Total Excluding Tax], 
+    SELECT [Date Key], [Customer Key], [Bill To Customer Key], [Supplier Key], [Transaction Type Key],
+         [Payment Method Key], [WWI Customer Transaction ID], [WWI Supplier Transaction ID],
+         [WWI Invoice ID], [WWI Purchase Order ID], [Supplier Invoice Number], [Total Excluding Tax],
          [Tax Amount], [Total Including Tax], [Outstanding Balance], [Is Finalized], @LineageKey
     FROM Integration.Transaction_Staging;
-    
-    UPDATE Integration.Lineage 
+
+    UPDATE Integration.Lineage
         SET [Data Load Completed] = SYSDATETIME(),
             [Was Successful] = 1
     WHERE [Lineage Key] = @LineageKey;
 
     UPDATE Integration.[ETL Cutoff]
-        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]  
-                             FROM Integration.Lineage 
+        SET [Cutoff Time] = (SELECT [Source System Cutoff Time]
+                             FROM Integration.Lineage
                              WHERE [Lineage Key] = @LineageKey)
     FROM Integration.[ETL Cutoff]
     WHERE [Table Name] = N'Transaction';
@@ -1039,8 +1039,8 @@ BEGIN
 	DECLARE @StartingETLCutoffTime datetime2(7) = '20121231';
 	DECLARE @StartOfTime datetime2(7) = '20130101';
 	DECLARE @EndOfTime datetime2(7) =  '99991231 23:59:59.9999999';
-	
-	UPDATE Integration.[ETL Cutoff] 
+
+	UPDATE Integration.[ETL Cutoff]
 		SET [Cutoff Time] = @StartingETLCutoffTime;
 
 	TRUNCATE TABLE Fact.Movement;
@@ -1058,25 +1058,25 @@ BEGIN
 	DELETE Dimension.Supplier;
 	DELETE Dimension.[Transaction Type];
 
-    INSERT Dimension.City 
-        ([City Key], [WWI City ID], City, [State Province], Country, Continent, [Sales Territory], Region, Subregion, 
+    INSERT Dimension.City
+        ([City Key], [WWI City ID], City, [State Province], Country, Continent, [Sales Territory], Region, Subregion,
          [Location], [Latest Recorded Population], [Valid From], [Valid To], [Lineage Key])
     VALUES
         (0, 0, N'Unknown', N'N/A', N'N/A', N'N/A', N'N/A', N'N/A', N'N/A',
          NULL, 0, @StartOfTime, @EndOfTime, 0);
 
     INSERT Dimension.Customer
-        ([Customer Key], [WWI Customer ID], [Customer], [Bill To Customer], Category, [Buying Group], 
+        ([Customer Key], [WWI Customer ID], [Customer], [Bill To Customer], Category, [Buying Group],
          [Primary Contact], [Postal Code], [Valid From], [Valid To], [Lineage Key])
     VALUES
-        (0, 0, N'Unknown', N'N/A', N'N/A', N'N/A', 
+        (0, 0, N'Unknown', N'N/A', N'N/A', N'N/A',
          N'N/A', N'N/A', @StartOfTime, @EndOfTime, 0);
 
     INSERT Dimension.Employee
-        ([Employee Key], [WWI Employee ID], Employee, [Preferred Name], 
+        ([Employee Key], [WWI Employee ID], Employee, [Preferred Name],
          [Is Salesperson], Photo, [Valid From], [Valid To], [Lineage Key])
     VALUES
-        (0, 0, N'Unknown', N'N/A', 
+        (0, 0, N'Unknown', N'N/A',
          0, NULL, @StartOfTime, @EndOfTime, 0);
 
     INSERT Dimension.[Payment Method]
@@ -1085,9 +1085,9 @@ BEGIN
         (0, 0, N'Unknown', @StartOfTime, @EndOfTime, 0);
 
     INSERT Dimension.[Stock Item]
-        ([Stock Item Key], [WWI Stock Item ID], [Stock Item], Color, [Selling Package], [Buying Package], 
-         Brand, Size, [Lead Time Days], [Quantity Per Outer], [Is Chiller Stock], 
-         Barcode, [Tax Rate], [Unit Price], [Recommended Retail Price], [Typical Weight Per Unit], 
+        ([Stock Item Key], [WWI Stock Item ID], [Stock Item], Color, [Selling Package], [Buying Package],
+         Brand, Size, [Lead Time Days], [Quantity Per Outer], [Is Chiller Stock],
+         Barcode, [Tax Rate], [Unit Price], [Recommended Retail Price], [Typical Weight Per Unit],
          Photo, [Valid From], [Valid To], [Lineage Key])
     VALUES
         (0, 0, N'Unknown', N'N/A', N'N/A', N'N/A',
@@ -1096,7 +1096,7 @@ BEGIN
          NULL, @StartOfTime, @EndOfTime, 0);
 
     INSERT Dimension.[Supplier]
-        ([Supplier Key], [WWI Supplier ID], Supplier, Category, [Primary Contact], [Supplier Reference], 
+        ([Supplier Key], [WWI Supplier ID], Supplier, Category, [Primary Contact], [Supplier Reference],
          [Payment Days], [Postal Code], [Valid From], [Valid To], [Lineage Key])
     VALUES
         (0, 0, N'Unknown', N'N/A', N'N/A', N'N/A',
@@ -1109,7 +1109,7 @@ BEGIN
 END;
 GO
 
-DROP PROCEDURE IF EXISTS [Application].Configuration_EnableInMemory; 
+DROP PROCEDURE IF EXISTS [Application].Configuration_EnableInMemory;
 GO
 
 CREATE PROCEDURE [Application].Configuration_EnableInMemory
@@ -1118,9 +1118,9 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
-    
-    IF SERVERPROPERTY(N'IsXTPSupported') = 0 
-    BEGIN                                    
+
+    IF SERVERPROPERTY(N'IsXTPSupported') = 0
+    BEGIN
         PRINT N'Warning: In-memory tables cannot be created on this edition.';
     END ELSE BEGIN -- if in-memory can be created
 
@@ -1137,19 +1137,19 @@ BEGIN
 				IF NOT EXISTS (SELECT 1 FROM sys.filegroups WHERE name = N'WWIDW_InMemory_Data')
 				BEGIN
 				    SET @SQL = N'
-ALTER DATABASE WideWorldImportersDW 
+ALTER DATABASE WideWorldImportersDW
 ADD FILEGROUP WWIDW_InMemory_Data CONTAINS MEMORY_OPTIMIZED_DATA;';
 					EXECUTE (@SQL);
 
 					SET @SQL = N'
 ALTER DATABASE WideWorldImportersDW
 ADD FILE (name = N''WWIDW_InMemory_Data_1'', filename = '''
-		                 + @MemoryOptimizedFilegroupFolder + N''') 
+		                 + @MemoryOptimizedFilegroupFolder + N''')
 TO FILEGROUP WWIDW_InMemory_Data;';
 					EXECUTE (@SQL);
 
 					SET @SQL = N'
-ALTER DATABASE WideWorldImportersDW 
+ALTER DATABASE WideWorldImportersDW
 SET MEMORY_OPTIMIZED_ELEVATE_TO_SNAPSHOT = ON;';
 					EXECUTE (@SQL);
 				END;
@@ -1521,7 +1521,7 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    IF SERVERPROPERTY(N'IsXTPSupported') = 0 -- TODO !! - currently no separate test for columnstore 
+    IF SERVERPROPERTY(N'IsXTPSupported') = 0 -- TODO !! - currently no separate test for columnstore
     BEGIN                                    -- but same editions with XTP support columnstore
         PRINT N'Warning: Columnstore indexes cannot be created on this edition.';
     END ELSE BEGIN -- if columnstore can be created
@@ -1532,22 +1532,22 @@ BEGIN
 			IF NOT EXISTS (SELECT 1 FROM sys.partition_functions WHERE name = N'PF_Date')
 			BEGIN
 				SET @SQL =  N'
-CREATE PARTITION FUNCTION PF_Date(date)  
-AS RANGE RIGHT 
+CREATE PARTITION FUNCTION PF_Date(date)
+AS RANGE RIGHT
 FOR VALUES (N''20120101'',N''20130101'',N''20140101'', N''20150101'', N''20160101'', N''20170101'');';
 				EXECUTE (@SQL);
 				PRINT N'Created partition function PF_Date';
-			END;       
+			END;
 
 			IF NOT EXISTS (SELECT 1 FROM sys.partition_schemes WHERE name = N'PS_Date')
 			BEGIN
 				SET @SQL =  N'
 CREATE PARTITION SCHEME PS_Date
 AS PARTITION PF_Date 
-ALL TO ([PRIMARY]);';
+ALL TO ([USERDATA]);';
 				EXECUTE (@SQL);
 				PRINT N'Created partition scheme PS_Date';
-			END;       
+			END;
 
             IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'CCX_Fact_Movement')
             BEGIN
@@ -1565,7 +1565,7 @@ DROP INDEX [IX_Integration_Movement_WWI_Stock_Item_Transaction_ID] ON Fact.Movem
 ALTER TABLE Fact.Movement
 DROP CONSTRAINT PK_Fact_Movement;
 
-CREATE CLUSTERED INDEX CCX_Fact_Movement 
+CREATE CLUSTERED INDEX CCX_Fact_Movement
 ON Fact.Movement
 (
 	[Date Key]
@@ -1576,53 +1576,53 @@ CREATE CLUSTERED COLUMNSTORE INDEX CCX_Fact_Movement
 ON Fact.Movement WITH (DROP_EXISTING = ON)
 ON PS_Date([Date Key]);
 
-ALTER TABLE [Fact].[Movement] 
-ADD  CONSTRAINT [PK_Fact_Movement] PRIMARY KEY NONCLUSTERED 
+ALTER TABLE [Fact].[Movement]
+ADD  CONSTRAINT [PK_Fact_Movement] PRIMARY KEY NONCLUSTERED
 (
 	[Movement Key],
 	[Date Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Movement_Customer_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Movement_Customer_Key]
 ON [Fact].[Movement]
 (
 	[Customer Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Movement_Date_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Movement_Date_Key]
 ON [Fact].[Movement]
 (
 	[Date Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Movement_Stock_Item_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Movement_Stock_Item_Key]
 ON [Fact].[Movement]
 (
 	[Stock Item Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Movement_Supplier_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Movement_Supplier_Key]
 ON [Fact].[Movement]
 (
 	[Supplier Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Movement_Transaction_Type_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Movement_Transaction_Type_Key]
 ON [Fact].[Movement]
 (
-	[Transaction Type Key] 
+	[Transaction Type Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [IX_Integration_Movement_WWI_Stock_Item_Transaction_ID] 
+CREATE NONCLUSTERED INDEX [IX_Integration_Movement_WWI_Stock_Item_Transaction_ID]
 ON [Fact].[Movement]
 (
-	[WWI Stock Item Transaction ID] 
+	[WWI Stock Item Transaction ID]
 )
 ON PS_Date([Date Key]);
 
@@ -1649,67 +1649,67 @@ CREATE CLUSTERED COLUMNSTORE INDEX CCX_Fact_Order
 ON Fact.[Order] WITH (DROP_EXISTING = ON)
 ON PS_Date([Order Date Key]);
 
-ALTER TABLE [Fact].[Order] 
-ADD  CONSTRAINT [PK_Fact_Order] PRIMARY KEY NONCLUSTERED 
+ALTER TABLE [Fact].[Order]
+ADD  CONSTRAINT [PK_Fact_Order] PRIMARY KEY NONCLUSTERED
 (
 	[Order Key],
 	[Order Date Key]
 )
 ON PS_Date([Order Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Order_City_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Order_City_Key]
 ON [Fact].[Order]
 (
 	[City Key]
 )
 ON PS_Date([Order Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Order_Customer_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Order_Customer_Key]
 ON [Fact].[Order]
 (
-	[Customer Key] 
+	[Customer Key]
 )
 ON PS_Date([Order Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Order_Order_Date_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Order_Order_Date_Key]
 ON [Fact].[Order]
 (
-	[Order Date Key] 
+	[Order Date Key]
 )
 ON PS_Date([Order Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Order_Picked_Date_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Order_Picked_Date_Key]
 ON [Fact].[Order]
 (
-	[Picked Date Key] 
+	[Picked Date Key]
 )
 ON PS_Date([Order Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Order_Picker_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Order_Picker_Key]
 ON [Fact].[Order]
 (
 	[Picker Key] ASC
 )
 ON PS_Date([Order Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Order_Salesperson_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Order_Salesperson_Key]
 ON [Fact].[Order]
 (
-	[Salesperson Key] 
+	[Salesperson Key]
 )
 ON PS_Date([Order Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Order_Stock_Item_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Order_Stock_Item_Key]
 ON [Fact].[Order]
 (
-	[Stock Item Key] 
+	[Stock Item Key]
 )
 ON PS_Date([Order Date Key]);
 
-CREATE NONCLUSTERED INDEX [IX_Integration_Order_WWI_Order_ID] 
+CREATE NONCLUSTERED INDEX [IX_Integration_Order_WWI_Order_ID]
 ON [Fact].[Order]
 (
-	[WWI Order ID] 
+	[WWI Order ID]
 )
 ON PS_Date([Order Date Key]);
 
@@ -1731,32 +1731,32 @@ CREATE CLUSTERED COLUMNSTORE INDEX CCX_Fact_Purchase
 ON Fact.Purchase WITH (DROP_EXISTING = ON)
 ON PS_Date([Date Key]);
 
-ALTER TABLE Fact.Purchase 
-ADD CONSTRAINT [PK_Fact_Purchase] PRIMARY KEY NONCLUSTERED 
+ALTER TABLE Fact.Purchase
+ADD CONSTRAINT [PK_Fact_Purchase] PRIMARY KEY NONCLUSTERED
 (
 	[Purchase Key],
 	[Date Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Purchase_Date_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Purchase_Date_Key]
 ON [Fact].[Purchase]
 (
 	[Date Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Purchase_Stock_Item_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Purchase_Stock_Item_Key]
 ON [Fact].[Purchase]
 (
 	[Stock Item Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Purchase_Supplier_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Purchase_Supplier_Key]
 ON [Fact].[Purchase]
 (
-	[Supplier Key] 
+	[Supplier Key]
 )
 ON PS_Date([Date Key]);
 
@@ -1782,67 +1782,67 @@ CREATE CLUSTERED COLUMNSTORE INDEX CCX_Fact_Sale
 ON Fact.Sale WITH (DROP_EXISTING = ON)
 ON PS_Date([Invoice Date Key]);
 
-ALTER TABLE Fact.Sale 
-ADD CONSTRAINT [PK_Fact_Sale] PRIMARY KEY NONCLUSTERED 
+ALTER TABLE Fact.Sale
+ADD CONSTRAINT [PK_Fact_Sale] PRIMARY KEY NONCLUSTERED
 (
 	[Sale Key],
 	[Invoice Date Key]
 )
 ON PS_Date([Invoice Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Bill_To_Customer_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Bill_To_Customer_Key]
 ON [Fact].[Sale]
 (
 	[Bill To Customer Key]
 )
 ON PS_Date([Invoice Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Sale_City_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Sale_City_Key]
 ON [Fact].[Sale]
 (
 	[City Key]
 )
 ON PS_Date([Invoice Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Customer_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Customer_Key]
 ON [Fact].[Sale]
 (
-	[Customer Key] 
+	[Customer Key]
 )
 ON PS_Date([Invoice Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Delivery_Date_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Delivery_Date_Key]
 ON [Fact].[Sale]
 (
-	[Delivery Date Key] 
+	[Delivery Date Key]
 )
 ON PS_Date([Invoice Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Invoice_Date_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Invoice_Date_Key]
 ON [Fact].[Sale]
 (
 	[Invoice Date Key]
 )
 ON PS_Date([Invoice Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Salesperson_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Salesperson_Key]
 ON [Fact].[Sale]
 (
-	[Salesperson Key] 
+	[Salesperson Key]
 )
 ON PS_Date([Invoice Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Stock_Item_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Stock_Item_Key]
 ON [Fact].[Sale]
 (
-	[Stock Item Key] 
+	[Stock Item Key]
 )
 ON PS_Date([Invoice Date Key]);
 
 ALTER TABLE Fact.[Stock Holding]
 DROP CONSTRAINT PK_Fact_Stock_Holding;
 
-ALTER TABLE Fact.[Stock Holding] 
+ALTER TABLE Fact.[Stock Holding]
 ADD CONSTRAINT PK_Fact_Stock_Holding PRIMARY KEY NONCLUSTERED ([Stock Holding Key]);
 
 CREATE CLUSTERED COLUMNSTORE INDEX CCX_Fact_Stock_Holding
@@ -1869,53 +1869,53 @@ CREATE CLUSTERED COLUMNSTORE INDEX CCX_Fact_Transaction
 ON Fact.[Transaction] WITH (DROP_EXISTING = ON)
 ON PS_Date([Date Key]);
 
-ALTER TABLE Fact.[Transaction] 
-ADD CONSTRAINT [PK_Fact_Transaction] PRIMARY KEY NONCLUSTERED 
+ALTER TABLE Fact.[Transaction]
+ADD CONSTRAINT [PK_Fact_Transaction] PRIMARY KEY NONCLUSTERED
 (
 	[Transaction Key],
 	[Date Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Transaction_Bill_To_Customer_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Transaction_Bill_To_Customer_Key]
 ON [Fact].[Transaction]
 (
-	[Bill To Customer Key] 
+	[Bill To Customer Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Transaction_Customer_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Transaction_Customer_Key]
 ON [Fact].[Transaction]
 (
-	[Customer Key] 
+	[Customer Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Transaction_Date_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Transaction_Date_Key]
 ON [Fact].[Transaction]
 (
-	[Date Key] 
+	[Date Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Transaction_Payment_Method_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Transaction_Payment_Method_Key]
 ON [Fact].[Transaction]
 (
-	[Payment Method Key] 
+	[Payment Method Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Transaction_Supplier_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Transaction_Supplier_Key]
 ON [Fact].[Transaction]
 (
-	[Supplier Key] 
+	[Supplier Key]
 )
 ON PS_Date([Date Key]);
 
-CREATE NONCLUSTERED INDEX [FK_Fact_Transaction_Transaction_Type_Key] 
+CREATE NONCLUSTERED INDEX [FK_Fact_Transaction_Transaction_Type_Key]
 ON [Fact].[Transaction]
 (
-	[Transaction Type Key] 
+	[Transaction Type Key]
 )
 ON PS_Date([Date Key]);';
                 EXECUTE (@SQL);
@@ -1923,7 +1923,7 @@ ON PS_Date([Date Key]);';
 				COMMIT;
 
                 PRINT N'Applied partitioned columnstore indexing';
-            END; 
+            END;
 
         END TRY
         BEGIN CATCH
@@ -1942,9 +1942,9 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
-    
-    IF SERVERPROPERTY(N'IsPolybaseInstalled') = 0 
-    BEGIN                                    
+
+    IF SERVERPROPERTY(N'IsPolybaseInstalled') = 0
+    BEGIN
         PRINT N'Warning: Either Polybase cannot be created on this edition or it has not been installed.';
 	END ELSE BEGIN -- if installed
 		IF (SELECT value FROM sys.configurations WHERE name = 'hadoop connectivity') NOT IN (1, 4, 7)
@@ -1957,19 +1957,19 @@ BEGIN
 			BEGIN TRY
 
 				SET @SQL = N'
-CREATE EXTERNAL DATA SOURCE AzureStorage 
-WITH 
+CREATE EXTERNAL DATA SOURCE AzureStorage
+WITH
 (
 	TYPE=HADOOP, LOCATION = ''wasbs://data@sqldwdatasets.blob.core.windows.net''
 );';
 				EXECUTE (@SQL);
 
 				SET @SQL = N'
-CREATE EXTERNAL FILE FORMAT CommaDelimitedTextFileFormat 
-WITH 
+CREATE EXTERNAL FILE FORMAT CommaDelimitedTextFileFormat
+WITH
 (
-	FORMAT_TYPE = DELIMITEDTEXT, 
-	FORMAT_OPTIONS 
+	FORMAT_TYPE = DELIMITEDTEXT,
+	FORMAT_OPTIONS
 	(
 		FIELD_TERMINATOR = '',''
 	)
@@ -1985,9 +1985,9 @@ CREATE EXTERNAL TABLE dbo.CityPopulationStatistics
 	YearNumber int NOT NULL,
 	LatestRecordedPopulation bigint NULL
 )
-WITH 
-(	
-	LOCATION = ''/'', 
+WITH
+(
+	LOCATION = ''/'',
 	DATA_SOURCE = AzureStorage,
 	FILE_FORMAT = CommaDelimitedTextFileFormat,
 	REJECT_TYPE = VALUE,
@@ -2031,15 +2031,15 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
-    
+
 	EXEC Integration.PopulateDateDimensionForYear 2012;
 	DECLARE @ReturnValue int;
 
 	EXEC @ReturnValue = [Application].Configuration_ApplyPartitionedColumnstoreIndexing;
 	DECLARE @LineageKey int = NEXT VALUE FOR Sequences.LineageKey;
 
-	INSERT Integration.Lineage 
-		([Lineage Key], [Data Load Started], [Table Name], [Data Load Completed], [Was Successful], 
+	INSERT Integration.Lineage
+		([Lineage Key], [Data Load Started], [Table Name], [Data Load Completed], [Was Successful],
 		 [Source System Cutoff Time])
 	VALUES
 		(@LineageKey, SYSDATETIME(), N'Sale', NULL, 0, '20121231')
@@ -2082,24 +2082,24 @@ BEGIN
 	BEGIN
 		SET @OutputCounter = CONVERT(varchar(20), @DateCounter, 112);
 		RAISERROR(@OutputCounter, 0, 1) WITH NOWAIT;
-		
+
 		SET @StartingSaleKey = @MaximumSaleKey - @NumberOfSalesPerDay - FLOOR(RAND() * 20000);
 		SET @OrderCounter = 0;
-	
+
 		INSERT Fact.Sale WITH (TABLOCK)
-			([City Key], [Customer Key], [Bill To Customer Key], [Stock Item Key], [Invoice Date Key], 
-			 [Delivery Date Key], [Salesperson Key], [WWI Invoice ID], [Description], 
-			 Package, Quantity, [Unit Price], [Tax Rate], [Total Excluding Tax], 
-			 [Tax Amount], Profit, [Total Including Tax], [Total Dry Items], [Total Chiller Items], 
+			([City Key], [Customer Key], [Bill To Customer Key], [Stock Item Key], [Invoice Date Key],
+			 [Delivery Date Key], [Salesperson Key], [WWI Invoice ID], [Description],
+			 Package, Quantity, [Unit Price], [Tax Rate], [Total Excluding Tax],
+			 [Tax Amount], Profit, [Total Including Tax], [Total Dry Items], [Total Chiller Items],
 			 [Lineage Key])
-		SELECT TOP(@NumberOfSalesPerDay) 
-			   [City Key], [Customer Key], [Bill To Customer Key], [Stock Item Key], @DateCounter, 
-			   DATEADD(day, 1, @DateCounter), [Salesperson Key], [WWI Invoice ID], [Description], 
-			   Package, Quantity, [Unit Price], [Tax Rate], [Total Excluding Tax], 
-			   [Tax Amount], Profit, [Total Including Tax], [Total Dry Items], [Total Chiller Items], 
-			   @LineageKey 
-		FROM Fact.Sale 
-		WHERE [Sale Key] > @StartingSaleKey 
+		SELECT TOP(@NumberOfSalesPerDay)
+			   [City Key], [Customer Key], [Bill To Customer Key], [Stock Item Key], @DateCounter,
+			   DATEADD(day, 1, @DateCounter), [Salesperson Key], [WWI Invoice ID], [Description],
+			   Package, Quantity, [Unit Price], [Tax Rate], [Total Excluding Tax],
+			   [Tax Amount], Profit, [Total Including Tax], [Total Dry Items], [Total Chiller Items],
+			   @LineageKey
+		FROM Fact.Sale
+		WHERE [Sale Key] > @StartingSaleKey
 			and [Invoice Date Key] >='2013-01-01'
 		ORDER BY [Sale Key];
 
@@ -2108,68 +2108,68 @@ BEGIN
 
 	RAISERROR('Compressing all open Rowgroups', 0, 1) WITH NOWAIT;
 
-	ALTER INDEX CCX_Fact_Sale 
-	ON Fact.Sale 
+	ALTER INDEX CCX_Fact_Sale
+	ON Fact.Sale
 	REORGANIZE WITH (COMPRESS_ALL_ROW_GROUPS = ON);
 
-	UPDATE Integration.Lineage 
+	UPDATE Integration.Lineage
 		SET [Data Load Completed] = SYSDATETIME(),
 		    [Was Successful] = 1;
 
 	-- Add back Constraints
 	RAISERROR('Adding Constraints', 0, 1) WITH NOWAIT;
 
-	ALTER TABLE [Fact].[Sale] 
-	ADD CONSTRAINT [PK_Fact_Sale] PRIMARY KEY NONCLUSTERED 
+	ALTER TABLE [Fact].[Sale]
+	ADD CONSTRAINT [PK_Fact_Sale] PRIMARY KEY NONCLUSTERED
 	(
 		[Sale Key] ASC,
 		[Invoice Date Key] ASC
 	);
 
-	ALTER TABLE [Fact].[Sale] 
-	WITH CHECK ADD CONSTRAINT [FK_Fact_Sale_Bill_To_Customer_Key_Dimension_Customer] 
+	ALTER TABLE [Fact].[Sale]
+	WITH CHECK ADD CONSTRAINT [FK_Fact_Sale_Bill_To_Customer_Key_Dimension_Customer]
 	FOREIGN KEY([Bill To Customer Key])
 	REFERENCES [Dimension].[Customer] ([Customer Key]);
 
 	ALTER TABLE [Fact].[Sale] CHECK CONSTRAINT [FK_Fact_Sale_Bill_To_Customer_Key_Dimension_Customer];
-	
-	ALTER TABLE [Fact].[Sale]  
-	WITH CHECK ADD CONSTRAINT [FK_Fact_Sale_Stock_Item_Key_Dimension_Stock Item] 
+
+	ALTER TABLE [Fact].[Sale]
+	WITH CHECK ADD CONSTRAINT [FK_Fact_Sale_Stock_Item_Key_Dimension_Stock Item]
 	FOREIGN KEY([Stock Item Key])
 	REFERENCES [Dimension].[Stock Item] ([Stock Item Key]);
 
 	ALTER TABLE [Fact].[Sale] CHECK CONSTRAINT [FK_Fact_Sale_Stock_Item_Key_Dimension_Stock Item];
 
-	ALTER TABLE [Fact].[Sale]  
-	WITH CHECK ADD  CONSTRAINT [FK_Fact_Sale_Salesperson_Key_Dimension_Employee] 
+	ALTER TABLE [Fact].[Sale]
+	WITH CHECK ADD  CONSTRAINT [FK_Fact_Sale_Salesperson_Key_Dimension_Employee]
 	FOREIGN KEY([Salesperson Key])
 	REFERENCES [Dimension].[Employee] ([Employee Key]);
 
 	ALTER TABLE [Fact].[Sale] CHECK CONSTRAINT [FK_Fact_Sale_Salesperson_Key_Dimension_Employee];
 
-	ALTER TABLE [Fact].[Sale]  
-	WITH CHECK ADD  CONSTRAINT [FK_Fact_Sale_Invoice_Date_Key_Dimension_Date] 
+	ALTER TABLE [Fact].[Sale]
+	WITH CHECK ADD  CONSTRAINT [FK_Fact_Sale_Invoice_Date_Key_Dimension_Date]
 	FOREIGN KEY([Invoice Date Key])
 	REFERENCES [Dimension].[Date] ([Date]);
 
 	ALTER TABLE [Fact].[Sale] CHECK CONSTRAINT [FK_Fact_Sale_Invoice_Date_Key_Dimension_Date];
 
-	ALTER TABLE [Fact].[Sale] 
-	WITH CHECK ADD CONSTRAINT [FK_Fact_Sale_Delivery_Date_Key_Dimension_Date] 
+	ALTER TABLE [Fact].[Sale]
+	WITH CHECK ADD CONSTRAINT [FK_Fact_Sale_Delivery_Date_Key_Dimension_Date]
 	FOREIGN KEY([Delivery Date Key])
 	REFERENCES [Dimension].[Date] ([Date]);
 
 	ALTER TABLE [Fact].[Sale] CHECK CONSTRAINT [FK_Fact_Sale_Delivery_Date_Key_Dimension_Date];
 
-	ALTER TABLE [Fact].[Sale]  
-	WITH CHECK ADD CONSTRAINT [FK_Fact_Sale_Customer_Key_Dimension_Customer] 
+	ALTER TABLE [Fact].[Sale]
+	WITH CHECK ADD CONSTRAINT [FK_Fact_Sale_Customer_Key_Dimension_Customer]
 	FOREIGN KEY([Customer Key])
 	REFERENCES [Dimension].[Customer] ([Customer Key]);
 
 	ALTER TABLE [Fact].[Sale] CHECK CONSTRAINT [FK_Fact_Sale_Customer_Key_Dimension_Customer];
 
-	ALTER TABLE [Fact].[Sale]  
-	WITH CHECK ADD  CONSTRAINT [FK_Fact_Sale_City_Key_Dimension_City] 
+	ALTER TABLE [Fact].[Sale]
+	WITH CHECK ADD  CONSTRAINT [FK_Fact_Sale_City_Key_Dimension_City]
 	FOREIGN KEY([City Key])
 	REFERENCES [Dimension].[City] ([City Key]);
 
@@ -2181,9 +2181,9 @@ BEGIN
 	CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Invoice_Date_Key] ON [Fact].[Sale] ([Invoice Date Key] ASC);
 	CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Delivery_Date_Key] ON [Fact].[Sale] ([Delivery Date Key] ASC);
 	CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Bill_To_Customer_Key] ON [Fact].[Sale] ([Bill To Customer Key] ASC);
-	CREATE NONCLUSTERED INDEX [FK_Fact_Sale_City_Key] ON [Fact].[Sale] ([City Key] ASC); 
+	CREATE NONCLUSTERED INDEX [FK_Fact_Sale_City_Key] ON [Fact].[Sale] ([City Key] ASC);
 	CREATE NONCLUSTERED INDEX [FK_Fact_Sale_Customer_Key] ON [Fact].[Sale] ([Customer Key] ASC);
-	
+
 	RETURN 0;
 END;
 GO

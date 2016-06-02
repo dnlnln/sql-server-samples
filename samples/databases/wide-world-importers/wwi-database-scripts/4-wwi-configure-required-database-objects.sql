@@ -9,7 +9,7 @@ GO
 
 CREATE PROCEDURE [Application].CreateRoleIfNonexistent
 @RoleName sysname
-WITH EXECUTE AS OWNER 
+WITH EXECUTE AS OWNER
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -18,9 +18,9 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM sys.database_principals WHERE name = @RoleName AND type = N'R')
     BEGIN
         BEGIN TRY
-        
+
             DECLARE @SQL nvarchar(max) = N'CREATE ROLE ' + QUOTENAME(@RoleName) + N';'
-            EXECUTE (@SQL);            
+            EXECUTE (@SQL);
 
             PRINT N'Role ' + @RoleName + N' created';
 
@@ -39,27 +39,27 @@ GO
 CREATE PROCEDURE [Application].AddRoleMemberIfNonexistent
 @RoleName sysname,
 @UserName sysname
-WITH EXECUTE AS OWNER 
+WITH EXECUTE AS OWNER
 AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    IF NOT EXISTS (SELECT 1 FROM sys.database_role_members AS drm 
-                            INNER JOIN sys.database_principals AS dpr 
+    IF NOT EXISTS (SELECT 1 FROM sys.database_role_members AS drm
+                            INNER JOIN sys.database_principals AS dpr
                             ON drm.role_principal_id = dpr.principal_id
                             AND dpr.type = N'R'
                             INNER JOIN sys.database_principals AS dpu
                             ON drm.member_principal_id = dpu.principal_id
                             AND dpu.type = N'S'
-                            WHERE dpr.name = @RoleName 
+                            WHERE dpr.name = @RoleName
                             AND dpu.name = @UserName)
     BEGIN
         BEGIN TRY
-        
-            DECLARE @SQL nvarchar(max) = N'ALTER ROLE ' + QUOTENAME(@RoleName) 
+
+            DECLARE @SQL nvarchar(max) = N'ALTER ROLE ' + QUOTENAME(@RoleName)
                                        + N' ADD MEMBER ' + QUOTENAME(@UserName) + N';'
-            EXECUTE (@SQL);            
+            EXECUTE (@SQL);
 
             PRINT N'User ' + @UserName + N' added to role ' + @RoleName;
 
@@ -92,8 +92,8 @@ CREATE PROCEDURE Website.SearchForPeople
 AS
 BEGIN
     SELECT TOP(@MaximumRowsToReturn)
-           p.PersonID, 
-           p.FullName, 
+           p.PersonID,
+           p.FullName,
            p.PreferredName,
            CASE WHEN p.IsSalesperson <> 0 THEN N'Salesperson'
                 WHEN p.IsEmployee <> 0 THEN N'Employee'
@@ -104,11 +104,11 @@ BEGIN
            COALESCE(c.CustomerName, sp.SupplierName, sa.SupplierName, N'WWI') AS Company
     FROM [Application].People AS p
     LEFT OUTER JOIN Sales.Customers AS c
-    ON c.PrimaryContactPersonID = p.PersonID 
+    ON c.PrimaryContactPersonID = p.PersonID
     LEFT OUTER JOIN Purchasing.Suppliers AS sp
-    ON sp.PrimaryContactPersonID = p.PersonID 
+    ON sp.PrimaryContactPersonID = p.PersonID
     LEFT OUTER JOIN Purchasing.Suppliers AS sa
-    ON sa.AlternateContactPersonID = p.PersonID 
+    ON sa.AlternateContactPersonID = p.PersonID
     WHERE p.SearchName LIKE N'%' + @SearchText + N'%'
     ORDER BY p.FullName
     FOR JSON AUTO, ROOT(N'People');
@@ -133,17 +133,17 @@ AS
 BEGIN
     SELECT TOP(@MaximumRowsToReturn)
            s.SupplierID,
-           s.SupplierName, 
-           c.CityName, 
-           s.PhoneNumber, 
+           s.SupplierName,
+           c.CityName,
+           s.PhoneNumber,
            s.FaxNumber ,
            p.FullName AS PrimaryContactFullName,
            p.PreferredName AS PrimaryContactPreferredName
     FROM Purchasing.Suppliers AS s
     INNER JOIN [Application].Cities AS c
-    ON s.DeliveryCityID = c.CityID 
+    ON s.DeliveryCityID = c.CityID
     LEFT OUTER JOIN [Application].People AS p
-    ON s.PrimaryContactPersonID = p.PersonID 
+    ON s.PrimaryContactPersonID = p.PersonID
     WHERE CONCAT(s.SupplierName, N' ', p.FullName, N' ', p.PreferredName) LIKE N'%' + @SearchText + N'%'
     ORDER BY s.SupplierName
     FOR JSON AUTO, ROOT(N'Suppliers');
@@ -166,18 +166,18 @@ WITH EXECUTE AS OWNER
 AS
 BEGIN
     SELECT TOP(@MaximumRowsToReturn)
-           c.CustomerID, 
-           c.CustomerName, 
-           ct.CityName, 
-           c.PhoneNumber, 
-           c.FaxNumber, 
+           c.CustomerID,
+           c.CustomerName,
+           ct.CityName,
+           c.PhoneNumber,
+           c.FaxNumber,
            p.FullName AS PrimaryContactFullName,
            p.PreferredName AS PrimaryContactPreferredName
     FROM Sales.Customers AS c
     INNER JOIN [Application].Cities AS ct
-    ON c.DeliveryCityID = ct.CityID 
+    ON c.DeliveryCityID = ct.CityID
     LEFT OUTER JOIN [Application].People AS p
-    ON c.PrimaryContactPersonID = p.PersonID 
+    ON c.PrimaryContactPersonID = p.PersonID
     WHERE CONCAT(c.CustomerName, N' ', p.FullName, N' ', p.PreferredName) LIKE N'%' + @SearchText + N'%'
     ORDER BY c.CustomerName
     FOR JSON AUTO, ROOT(N'Customers');
@@ -200,7 +200,7 @@ WITH EXECUTE AS OWNER
 AS
 BEGIN
     SELECT TOP(@MaximumRowsToReturn)
-           si.StockItemID, 
+           si.StockItemID,
            si.StockItemName
     FROM Warehouse.StockItems AS si
     WHERE si.SearchDetails LIKE N'%' + @SearchText + N'%'
@@ -226,7 +226,7 @@ WITH EXECUTE AS OWNER
 AS
 BEGIN
     SELECT TOP(@MaximumRowsToReturn)
-           si.StockItemID, 
+           si.StockItemID,
            si.StockItemName
     FROM Warehouse.StockItems AS si
     WHERE si.Tags LIKE N'%' + @SearchText + N'%'
@@ -259,7 +259,7 @@ BEGIN
               + N'        {"type":"Feature", "geometry": {"type":"Point", "coordinates":[-89.7600464,50.4742420] }, "properties":{"rego":"WWI-321-A","sensor":2,"when":"2016-01-01T07:00:00","temp":3.98}}' + @CrLf
               + N'    ]' + @CrLf
               + N'}';
-              
+
     IF ISJSON(@FullSensorDataArray) = 0
     BEGIN
         PRINT @HelpMessage;
@@ -268,14 +268,14 @@ BEGIN
     END;
 
     BEGIN TRY
-        
+
         BEGIN TRAN;
 
         INSERT Warehouse.VehicleTemperatures
-            (VehicleRegistration, ChillerSensorNumber, RecordedWhen, Temperature, 
+            (VehicleRegistration, ChillerSensorNumber, RecordedWhen, Temperature,
 			 FullSensorData, IsCompressed, CompressedSensorData)
-		SELECT VehicleRegistration, ChillerSensorNumber, RecordedWhen, Temperature, 
-		       FullSensorData, 0, NULL 
+		SELECT VehicleRegistration, ChillerSensorNumber, RecordedWhen, Temperature,
+		       FullSensorData, 0, NULL
 		FROM OPENJSON(@FullSensorDataArray, N'$.Recordings')
         WITH ( VehicleRegistration nvarchar(40) N'$.properties.rego',
                ChillerSensorNumber int N'$.properties.sensor',
@@ -294,9 +294,9 @@ BEGIN
     END TRY
     BEGIN CATCH
         PRINT @HelpMessage;
-        
+
         THROW 51000, N'Valid JSON was supplied but does not match the temperature recordings array structure', 2;
-        
+
         IF XACT_STATE() <> 0 ROLLBACK TRAN;
 
         RETURN 1;
@@ -304,14 +304,14 @@ BEGIN
 END;
 GO
 
-/* 
+/*
 
 -- should succeed
 
 DECLARE @Recordings nvarchar(max) = N'{"Recordings": '
-              + N'    [' 
-              + N'        {"type":"Feature", "geometry": {"type":"Point", "coordinates":[-89.7600464,50.4742420] }, "properties":{"rego":"WWI-321-A","sensor":1,"when":"2016-01-01T07:00:00","temp":3.96}},' 
-              + N'        {"type":"Feature", "geometry": {"type":"Point", "coordinates":[-89.7600464,50.4742420] }, "properties":{"rego":"WWI-321-A","sensor":2,"when":"2016-01-01T07:00:00","temp":3.98}}' 
+              + N'    ['
+              + N'        {"type":"Feature", "geometry": {"type":"Point", "coordinates":[-89.7600464,50.4742420] }, "properties":{"rego":"WWI-321-A","sensor":1,"when":"2016-01-01T07:00:00","temp":3.96}},'
+              + N'        {"type":"Feature", "geometry": {"type":"Point", "coordinates":[-89.7600464,50.4742420] }, "properties":{"rego":"WWI-321-A","sensor":2,"when":"2016-01-01T07:00:00","temp":3.98}}'
               + N'    ]'
               + N'}';
 EXEC Website.RecordVehicleTemperature @Recordings;
@@ -324,9 +324,9 @@ EXEC Website.RecordVehicleTemperature @Recordings;
 -- should get error and help message
 
 DECLARE @Recordings nvarchar(max) = N'{"Recordings": '
-              + N'    [' 
-              + N'        {"type":"Feature", "geometry": {"type":"Point", "coordinates":[-89.7600464,50.4742420] }, "properties":{"rego":"WWI-321-A","sensor":1,"when":"NOT A DATE","temp":3.96}},' 
-              + N'        {"type":"Feature", "geometry": {"type":"Point", "coordinates":[-89.7600464,50.4742420] }, "properties":{"rego":"WWI-321-A","sensor":2,"when":"NOT A DATE","temp":3.98}}' 
+              + N'    ['
+              + N'        {"type":"Feature", "geometry": {"type":"Point", "coordinates":[-89.7600464,50.4742420] }, "properties":{"rego":"WWI-321-A","sensor":1,"when":"NOT A DATE","temp":3.96}},'
+              + N'        {"type":"Feature", "geometry": {"type":"Point", "coordinates":[-89.7600464,50.4742420] }, "properties":{"rego":"WWI-321-A","sensor":2,"when":"NOT A DATE","temp":3.98}}'
               + N'    ]'
               + N'}';
 EXEC Website.RecordVehicleTemperature @Recordings;
@@ -340,7 +340,7 @@ DROP PROCEDURE IF EXISTS DataLoadSimulation.Configuration_ApplyDataLoadSimulatio
 GO
 
 CREATE PROCEDURE DataLoadSimulation.Configuration_ApplyDataLoadSimulationProcedures
-WITH EXECUTE AS OWNER 
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -350,7 +350,7 @@ BEGIN
 
 	DECLARE @SQL nvarchar(max);
 
-	IF NOT EXISTS (SELECT 1 FROM sys.objects WHERE name = N'GetAreaCode' 
+	IF NOT EXISTS (SELECT 1 FROM sys.objects WHERE name = N'GetAreaCode'
 	                                         AND type = N'FN'
 											 AND SCHEMA_NAME(schema_id) = N'DataLoadSimulation')
 	BEGIN
@@ -363,13 +363,13 @@ RETURNS INT
 WITH EXECUTE AS OWNER
 AS
 BEGIN
-    DECLARE @AreaCode int; 
+    DECLARE @AreaCode int;
 
     WITH AreaCodes
     AS
     (
-        SELECT StateProvinceCode, AreaCode 
-        FROM 
+        SELECT StateProvinceCode, AreaCode
+        FROM
         (VALUES (''NJ'', 201),
                 (''DC'', 202),
                 (''CT'', 203),
@@ -740,12 +740,12 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.ActivateWebsiteLogons
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
 WITH EXECUTE AS OWNER
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
@@ -753,7 +753,7 @@ BEGIN
     -- Approximately 1 in 8 days has a new website activation
 
     DECLARE @NumberOfLogonsToActivate int = CASE WHEN (RAND() * 8) <= 1 THEN 1 ELSE 0 END;
-    
+
     IF @IsSilentMode = 0
     BEGIN
         PRINT N''Activating '' + CAST(@NumberOfLogonsToActivate AS nvarchar(20)) + N'' logons'';
@@ -770,48 +770,48 @@ BEGIN
     BEGIN
         SELECT TOP(1) @PersonID = PersonID,
                       @EmailAddress = EmailAddress,
-                      @FullName = FullName  
-        FROM [Application].People 
+                      @FullName = FullName
+        FROM [Application].People
         WHERE IsPermittedToLogon = 0 AND PersonID <> 1
         ORDER BY NEWID();
-        
-        UPDATE [Application].People 
+
+        UPDATE [Application].People
         SET IsPermittedToLogon = 1,
             LogonName = @EmailAddress,
             HashedPassword = HASHBYTES(N''SHA2_256'', N''SQLRocks!00'' + @FullName),
             UserPreferences = @UserPreferences,
-            [ValidFrom] = @StartingWhen 
+            [ValidFrom] = @StartingWhen
         WHERE PersonID = @PersonID;
-        
+
         SET @Counter += 1;
     END;
 END;';
 		EXECUTE (@SQL);
 	END;
-	 
+
 	IF NOT EXISTS (SELECT 1 FROM sys.procedures WHERE SCHEMA_NAME(schema_id) = N'DataLoadSimulation'
 	                                            AND name = N'AddCustomers')
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.AddCustomers
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
 WITH EXECUTE AS OWNER
-AS 
+AS
 BEGIN
-    
+
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
     -- add a customer one in 15 days average
-    DECLARE @NumberOfCustomersToAdd int = (SELECT TOP(1) Quantity 
-                                              FROM (VALUES (0), (0), (0), (0), (0), 
+    DECLARE @NumberOfCustomersToAdd int = (SELECT TOP(1) Quantity
+                                              FROM (VALUES (0), (0), (0), (0), (0),
                                                            (0), (0), (0), (0), (0),
                                                            (0), (0), (0), (0), (0),
                                                            (0), (0), (0), (0), (0),
-                                                           (0), (0), (0), (0), (1)) AS q(Quantity) 
+                                                           (0), (0), (0), (0), (1)) AS q(Quantity)
                                               ORDER BY NEWID());
     IF @IsSilentMode = 0
     BEGIN
@@ -825,13 +825,13 @@ BEGIN
     DECLARE @CityStateProvinceCode nvarchar(5);
     DECLARE @AreaCode int;
     DECLARE @CustomerCategoryID int;
-    
-    
+
+
     DECLARE @CustomerID int;
     DECLARE @PrimaryContactFullName nvarchar(50);
     DECLARE @PrimaryContactPersonID int;
     DECLARE @PrimaryContactFirstName nvarchar(50);
-    DECLARE @DeliveryMethodID int = (SELECT DeliveryMethodID FROM [Application].DeliveryMethods 
+    DECLARE @DeliveryMethodID int = (SELECT DeliveryMethodID FROM [Application].DeliveryMethods
                                                              WHERE DeliveryMethodName = N''Delivery Van'');
     DECLARE @DeliveryAddressLine1 nvarchar(max);
     DECLARE @DeliveryAddressLine2 nvarchar(max);
@@ -1127,39 +1127,39 @@ BEGIN
         UnusedNames
         AS
         (
-            SELECT * 
+            SELECT *
             FROM NamesToUse AS ntu
             WHERE NOT EXISTS (SELECT 1 FROM [Application].People AS p WHERE p.FullName = ntu.FullName)
         )
         SELECT TOP(1) @PrimaryContactFullName = un.FullName,
-                      @PrimaryContactFirstName = un.FirstName 
+                      @PrimaryContactFirstName = un.FirstName
         FROM UnusedNames AS un
         ORDER BY NEWID();
 
         SET @CustomerID = NEXT VALUE FOR Sequences.CustomerID;
-        SET @CustomerCategoryID = (SELECT TOP(1) CustomerCategoryID 
-                                   FROM Sales.CustomerCategories 
+        SET @CustomerCategoryID = (SELECT TOP(1) CustomerCategoryID
+                                   FROM Sales.CustomerCategories
                                    WHERE CustomerCategoryName IN (N''Novelty Shop'', N''Supermarket'', N''Computer Store'', N''Gift Store'', N''Corporate'')
                                    ORDER BY NEWID());
         SET @CityID = (SELECT TOP(1) CityID FROM [Application].Cities AS c
                                             ORDER BY NEWID());
         SET @CityName = (SELECT CityName FROM [Application].Cities WHERE CityID = @CityID);
         SET @CityStateProvinceID = (SELECT StateProvinceID FROM [Application].Cities WHERE CityID = @CityID);
-        SET @CityStateProvinceCode = (SELECT StateProvinceCode 
-                                      FROM [Application].StateProvinces 
+        SET @CityStateProvinceCode = (SELECT StateProvinceCode
+                                      FROM [Application].StateProvinces
                                       WHERE StateProvinceID = @CityStateProvinceID);
         SET @AreaCode = DataLoadSimulation.GetAreaCode(@CityStateProvinceCode);
-        SET @StreetSuffix = (SELECT TOP(1) StreetType 
+        SET @StreetSuffix = (SELECT TOP(1) StreetType
                              FROM (VALUES(N''Street''), (N''Lane''), (N''Avenue''), (N''Boulevard''), (N''Crescent''), (N''Road'')) AS st(StreetType)
                              ORDER BY NEWID());
-        SET @CompanySuffix = (SELECT TOP(1) CompanySuffix 
+        SET @CompanySuffix = (SELECT TOP(1) CompanySuffix
                               FROM (VALUES(N''Inc''), (N''Corp''), (N''LLC'')) AS cs(CompanySuffix)
                               ORDER BY NEWID());
-        SET @StorePrefix = (SELECT TOP(1) StorePrefix 
+        SET @StorePrefix = (SELECT TOP(1) StorePrefix
                             FROM (VALUES(N''Shop''), (N''Suite''), (N''Unit'')) AS sp(StorePrefix)
                             ORDER BY NEWID());
         SET @CreditLimit = CEILING(RAND() * 30) * 100 + 1000;
-    
+
         SET @DeliveryAddressLine1 = @StorePrefix + N'' '' + CAST(CEILING(RAND() * 30) + 1 AS nvarchar(20));
         SET @DeliveryAddressLine2 = CAST(CEILING(RAND() * 2000) + 1 AS nvarchar(20)) + N'' ''
                                   + (SELECT TOP(1) PreferredName FROM [Application].People ORDER BY NEWID())
@@ -1168,29 +1168,29 @@ BEGIN
         SET @PostalAddressLine1 = N''PO Box '' + CAST(CEILING(RAND() * 10000) + 10 AS nvarchar(20));
         SET @PostalAddressLine2 = (SELECT TOP(1) PreferredName FROM [Application].People ORDER BY NEWID()) + N''ville'';
         SET @PostalPostalCode = @DeliveryPostalCode;
-        
+
         SET @PrimaryContactPersonID = NEXT VALUE FOR Sequences.PersonID;
-        
+
         BEGIN TRAN;
 
         INSERT [Application].People
-            (PersonID, FullName, PreferredName, IsPermittedToLogon, LogonName, 
-             IsExternalLogonProvider, HashedPassword, IsSystemUser, IsEmployee, 
-             IsSalesperson, UserPreferences, PhoneNumber, FaxNumber, 
+            (PersonID, FullName, PreferredName, IsPermittedToLogon, LogonName,
+             IsExternalLogonProvider, HashedPassword, IsSystemUser, IsEmployee,
+             IsSalesperson, UserPreferences, PhoneNumber, FaxNumber,
              EmailAddress, LastEditedBy, ValidFrom, ValidTo)
         VALUES
             (@PrimaryContactPersonID, @PrimaryContactFullName, @PrimaryContactFirstName, 0, N''NO LOGON'',
-             0, NULL, 0, 0, 
+             0, NULL, 0, 0,
              0, NULL, N''('' + CAST(@AreaCode AS nvarchar(20)) + N'') 555-0100'', N''('' + CAST(@AreaCode AS nvarchar(20)) + N'') 555-0101'',
              LOWER(REPLACE(@PrimaryContactFirstName, N'''''''', N'''')) + N''@example.com'', 1, @CurrentDateTime, @EndOfTime);
-         
+
         INSERT Sales.Customers
-            (CustomerID, CustomerName, BillToCustomerID, CustomerCategoryID, 
-             BuyingGroupID, PrimaryContactPersonID, AlternateContactPersonID, DeliveryMethodID, 
-             DeliveryCityID, PostalCityID, CreditLimit, AccountOpenedDate, StandardDiscountPercentage, 
-             IsStatementSent, IsOnCreditHold, PaymentDays, PhoneNumber, FaxNumber, 
-             DeliveryRun, RunPosition, WebsiteURL, DeliveryAddressLine1, DeliveryAddressLine2, 
-             DeliveryPostalCode, DeliveryLocation, PostalAddressLine1, PostalAddressLine2, 
+            (CustomerID, CustomerName, BillToCustomerID, CustomerCategoryID,
+             BuyingGroupID, PrimaryContactPersonID, AlternateContactPersonID, DeliveryMethodID,
+             DeliveryCityID, PostalCityID, CreditLimit, AccountOpenedDate, StandardDiscountPercentage,
+             IsStatementSent, IsOnCreditHold, PaymentDays, PhoneNumber, FaxNumber,
+             DeliveryRun, RunPosition, WebsiteURL, DeliveryAddressLine1, DeliveryAddressLine2,
+             DeliveryPostalCode, DeliveryLocation, PostalAddressLine1, PostalAddressLine2,
              PostalPostalCode, LastEditedBy, ValidFrom, ValidTo)
          VALUES
             (@CustomerID, @PrimaryContactFullName, @CustomerID, @CustomerCategoryID,
@@ -1215,13 +1215,13 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.AddSpecialDeals
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
-AS 
+AS
 BEGIN
-    
+
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
@@ -1229,22 +1229,22 @@ BEGIN
     BEGIN
         BEGIN TRAN;
 
-        INSERT Sales.SpecialDeals 
-            (StockItemID, CustomerID, BuyingGroupID, CustomerCategoryID, StockGroupID, 
-             DealDescription, StartDate, EndDate, DiscountAmount, DiscountPercentage, 
+        INSERT Sales.SpecialDeals
+            (StockItemID, CustomerID, BuyingGroupID, CustomerCategoryID, StockGroupID,
+             DealDescription, StartDate, EndDate, DiscountAmount, DiscountPercentage,
              UnitPrice, LastEditedBy, LastEditedWhen)
         VALUES
-            (NULL, NULL, (SELECT BuyingGroupID FROM Sales.BuyingGroups WHERE BuyingGroupName = N''Wingtip Toys''), 
+            (NULL, NULL, (SELECT BuyingGroupID FROM Sales.BuyingGroups WHERE BuyingGroupName = N''Wingtip Toys''),
              NULL, (SELECT StockGroupID FROM Warehouse.StockGroups WHERE StockGroupName = N''USB Novelties''),
              N''10% 1st qtr USB Wingtip'', ''20160101'', ''20160331'', NULL, 10, NULL,
              2, @StartingWhen);
 
-        INSERT Sales.SpecialDeals 
-            (StockItemID, CustomerID, BuyingGroupID, CustomerCategoryID, StockGroupID, 
-             DealDescription, StartDate, EndDate, DiscountAmount, DiscountPercentage, 
+        INSERT Sales.SpecialDeals
+            (StockItemID, CustomerID, BuyingGroupID, CustomerCategoryID, StockGroupID,
+             DealDescription, StartDate, EndDate, DiscountAmount, DiscountPercentage,
              UnitPrice, LastEditedBy, LastEditedWhen)
         VALUES
-            (NULL, NULL, (SELECT BuyingGroupID FROM Sales.BuyingGroups WHERE BuyingGroupName = N''Tailspin Toys''), 
+            (NULL, NULL, (SELECT BuyingGroupID FROM Sales.BuyingGroups WHERE BuyingGroupName = N''Tailspin Toys''),
              NULL, (SELECT StockGroupID FROM Warehouse.StockGroups WHERE StockGroupName = N''USB Novelties''),
              N''15% 2nd qtr USB Tailspin'', ''20160401'', ''20160630'', NULL, 15, NULL,
              2, @StartingWhen);
@@ -1267,13 +1267,13 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.AddStockItems
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
-AS 
+AS
 BEGIN
-    
+
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
@@ -1299,7 +1299,7 @@ BEGIN
         SET @NumberOfStockItems = 2;
 
         BEGIN TRAN;
-        
+
         INSERT Warehouse.StockItems (StockItemID, StockItemName, SupplierID, ColorID,  UnitPackageID, OuterPackageID, Brand, Size, LeadTimeDays, QuantityPerOuter, IsChillerStock, Barcode, TaxRate, UnitPrice, RecommendedRetailPrice, TypicalWeightPerUnit, MarketingComments, InternalComments, Photo, CustomFields, LastEditedBy, ValidFrom, ValidTo) VALUES (222,''Chocolate beetles 250g'',(SELECT SupplierID FROM Purchasing.Suppliers WHERE SupplierName = N''A Datum Corporation''),(SELECT ColorID FROM Warehouse.Colors WHERE ColorName = N''NULL''),(SELECT PackageTypeID FROM Warehouse.PackageTypes WHERE PackageTypeName = N''Bag''),(SELECT PackageTypeID FROM Warehouse.PackageTypes WHERE PackageTypeName = N''Carton''),NULL,''250g'',3,24,1,''8792838293820'',10,8.55,12.23,0.25,''Perfect for your child''''s party'',NULL,NULL,NULL,1,@CurrentDateTime,@EndOfTime);
         INSERT Warehouse.StockItems (StockItemID, StockItemName, SupplierID, ColorID,  UnitPackageID, OuterPackageID, Brand, Size, LeadTimeDays, QuantityPerOuter, IsChillerStock, Barcode, TaxRate, UnitPrice, RecommendedRetailPrice, TypicalWeightPerUnit, MarketingComments, InternalComments, Photo, CustomFields, LastEditedBy, ValidFrom, ValidTo) VALUES (223,''Chocolate echidnas 250g'',(SELECT SupplierID FROM Purchasing.Suppliers WHERE SupplierName = N''A Datum Corporation''),(SELECT ColorID FROM Warehouse.Colors WHERE ColorName = N''NULL''),(SELECT PackageTypeID FROM Warehouse.PackageTypes WHERE PackageTypeName = N''Bag''),(SELECT PackageTypeID FROM Warehouse.PackageTypes WHERE PackageTypeName = N''Carton''),NULL,''250g'',3,24,1,''8792838293728'',10,8.55,12.23,0.25,''Perfect for your child''''s party'',NULL,NULL,NULL,1,@CurrentDateTime,@EndOfTime);
         INSERT Warehouse.StockItemHoldings (StockItemID, QuantityOnHand, BinLocation, LastStocktakeQuantity, LastCostPrice, ReorderLevel, TargetStockLevel, LastEditedBy, LastEditedWhen) VALUES (222,120,''CH-3'',120,4.75,240,500,1,@CurrentDateTime);
@@ -1354,20 +1354,20 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.ChangePasswords
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
 WITH EXECUTE AS OWNER
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
     -- 1 in 4 days will be 1 password change, 1 in 8 days will be 2 passwords changed
 
-    DECLARE @NumberOfPasswordsToChange int = (SELECT TOP(1) Quantity 
-                                              FROM (VALUES (0), (0), (0), (0), (0), (1), (1), (2)) AS q(Quantity) 
+    DECLARE @NumberOfPasswordsToChange int = (SELECT TOP(1) Quantity
+                                              FROM (VALUES (0), (0), (0), (0), (0), (1), (1), (2)) AS q(Quantity)
                                               ORDER BY NEWID());
     IF @IsSilentMode = 0
     BEGIN
@@ -1384,16 +1384,16 @@ BEGIN
     BEGIN
         SELECT TOP(1) @PersonID = PersonID,
                       @EmailAddress = EmailAddress,
-                      @FullName = FullName  
-        FROM [Application].People 
+                      @FullName = FullName
+        FROM [Application].People
         WHERE IsPermittedToLogon <> 0 AND PersonID <> 1
         ORDER BY NEWID();
-        
-        UPDATE [Application].People 
+
+        UPDATE [Application].People
         SET HashedPassword = HASHBYTES(N''SHA2_256'', N''SQLRocks!00'' + @FullName),
-            [ValidFrom] = @StartingWhen 
+            [ValidFrom] = @StartingWhen
         WHERE PersonID = @PersonID;
-        
+
         SET @Counter += 1;
     END;
 END;';
@@ -1405,13 +1405,13 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.CreateCustomerOrders
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @NumberOfCustomerOrders int,
 @IsSilentMode bit
 WITH EXECUTE AS OWNER
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
@@ -1446,7 +1446,7 @@ BEGIN
     BEGIN
         SET @ExpectedDeliveryDate = DATEADD(day, 1, @ExpectedDeliveryDate);
     END;
-    
+
     -- Generate the required orders
 
     WHILE @OrderCounter < @NumberOfCustomerOrders
@@ -1462,17 +1462,17 @@ BEGIN
         WHERE c.IsOnCreditHold = 0
         ORDER BY NEWID();
 
-        SET @SalespersonPersonID = (SELECT TOP(1) PersonID 
-                                    FROM [Application].People 
-                                    WHERE IsSalesperson <> 0 
+        SET @SalespersonPersonID = (SELECT TOP(1) PersonID
+                                    FROM [Application].People
+                                    WHERE IsSalesperson <> 0
                                     ORDER BY NEWID());
 
-        INSERT Sales.Orders 
-            (OrderID, CustomerID, SalespersonPersonID, PickedByPersonID, ContactPersonID, BackorderOrderID, OrderDate, 
-             ExpectedDeliveryDate, CustomerPurchaseOrderNumber, IsUndersupplyBackordered, Comments, DeliveryInstructions, InternalComments, 
+        INSERT Sales.Orders
+            (OrderID, CustomerID, SalespersonPersonID, PickedByPersonID, ContactPersonID, BackorderOrderID, OrderDate,
+             ExpectedDeliveryDate, CustomerPurchaseOrderNumber, IsUndersupplyBackordered, Comments, DeliveryInstructions, InternalComments,
              PickingCompletedWhen, LastEditedBy, LastEditedWhen)
-        VALUES 
-            (@OrderID, @CustomerID, @SalespersonPersonID, NULL, @PrimaryContactPersonID, NULL, @CurrentDateTime, 
+        VALUES
+            (@OrderID, @CustomerID, @SalespersonPersonID, NULL, @PrimaryContactPersonID, NULL, @CurrentDateTime,
              @ExpectedDeliveryDate, CAST(CEILING(RAND() * 10000) + 10000 AS nvarchar(20)), 1, NULL, NULL, NULL,
              NULL, 1, @OrderDateTime);
 
@@ -1481,22 +1481,22 @@ BEGIN
 
         WHILE @OrderLineCounter < @NumberOfOrderLines
         BEGIN
-            SELECT TOP(1) @StockItemID = si.StockItemID, 
+            SELECT TOP(1) @StockItemID = si.StockItemID,
                           @StockItemName = si.StockItemName,
                           @UnitPackageID = si.UnitPackageID,
                           @QuantityPerOuter = si.QuantityPerOuter,
                           @TaxRate = si.TaxRate
             FROM Warehouse.StockItems AS si
-            WHERE NOT EXISTS (SELECT 1 FROM Sales.OrderLines AS ol 
-                                       WHERE ol.OrderID = @OrderID 
+            WHERE NOT EXISTS (SELECT 1 FROM Sales.OrderLines AS ol
+                                       WHERE ol.OrderID = @OrderID
                                        AND ol.StockItemID = si.StockItemID)
             ORDER BY NEWID();
 
             SET @Quantity = @QuantityPerOuter * (1 + FLOOR(RAND() * 10));
             SET @CustomerPrice = Website.CalculateCustomerPrice(@CustomerID, @StockItemID, @CurrentDateTime);
 
-            INSERT Sales.OrderLines 
-                (OrderID, StockItemID, [Description], PackageTypeID, Quantity, UnitPrice, 
+            INSERT Sales.OrderLines
+                (OrderID, StockItemID, [Description], PackageTypeID, Quantity, UnitPrice,
                  TaxRate, PickedQuantity, PickingCompletedWhen, LastEditedBy, LastEditedWhen)
             VALUES
                 (@OrderID, @StockItemID, @StockItemName, @UnitPackageID, @Quantity, @CustomerPrice,
@@ -1504,7 +1504,7 @@ BEGIN
 
             SET @OrderLineCounter += 1;
         END;
-        
+
         COMMIT;
 
         SET @OrderCounter += 1;
@@ -1518,11 +1518,11 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.InvoicePickedOrders
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
@@ -1548,17 +1548,17 @@ BEGIN
 
     DECLARE OrderList CURSOR FAST_FORWARD READ_ONLY
     FOR
-    SELECT o.OrderID, o.PickingCompletedWhen, c.BillToCustomerID 
+    SELECT o.OrderID, o.PickingCompletedWhen, c.BillToCustomerID
     FROM Sales.Orders AS o
     INNER JOIN Sales.Customers AS c
-    ON o.CustomerID = c.CustomerID 
+    ON o.CustomerID = c.CustomerID
     WHERE NOT EXISTS (SELECT 1 FROM Sales.Invoices AS i WHERE i.OrderID = o.OrderID)  -- not already invoiced
     AND c.IsOnCreditHold = 0                                                          -- and customer not on credit hold
     AND ((o.PickingCompletedWhen IS NOT NULL)                                         -- order completely picked
         OR (o.PickingCompletedWhen IS NULL                                            -- order not picked but customer happy
             AND o.IsUndersupplyBackordered <> 0                                       -- for part shipments and at least one
             AND EXISTS (SELECT 1 FROM Sales.OrderLines AS ol                          -- order line has been picked
-                                 WHERE ol.OrderID = o.OrderID 
+                                 WHERE ol.OrderID = o.OrderID
                                  AND ol.PickingCompletedWhen IS NOT NULL)));
 
     OPEN OrderList;
@@ -1575,30 +1575,30 @@ BEGIN
             SET @PickingCompletedWhen = @StartingWhen;
 
             -- create the backorder order
-            INSERT Sales.Orders 
-                (OrderID, CustomerID, SalespersonPersonID, PickedByPersonID, ContactPersonID, BackorderOrderID, 
-                 OrderDate, ExpectedDeliveryDate, CustomerPurchaseOrderNumber, IsUndersupplyBackordered, 
+            INSERT Sales.Orders
+                (OrderID, CustomerID, SalespersonPersonID, PickedByPersonID, ContactPersonID, BackorderOrderID,
+                 OrderDate, ExpectedDeliveryDate, CustomerPurchaseOrderNumber, IsUndersupplyBackordered,
                  Comments, DeliveryInstructions, InternalComments, PickingCompletedWhen, LastEditedBy, LastEditedWhen)
             SELECT @BackorderOrderID, o.CustomerID, o.SalespersonPersonID, NULL, o.ContactPersonID, NULL,
                    o.OrderDate, o.ExpectedDeliveryDate, o.CustomerPurchaseOrderNumber, 1,
-                   o.Comments, o.DeliveryInstructions, o.InternalComments, NULL, @InvoicingPersonID, @StartingWhen 
+                   o.Comments, o.DeliveryInstructions, o.InternalComments, NULL, @InvoicingPersonID, @StartingWhen
             FROM Sales.Orders AS o
             WHERE o.OrderID = @OrderID;
 
             -- move the items that haven''t been supplied to the new order
-            UPDATE Sales.OrderLines 
+            UPDATE Sales.OrderLines
             SET OrderID = @BackorderOrderID,
                 LastEditedBy = @InvoicingPersonID,
-                LastEditedWhen = @StartingWhen 
-            WHERE OrderID = @OrderID 
+                LastEditedWhen = @StartingWhen
+            WHERE OrderID = @OrderID
             AND PickingCompletedWhen IS NULL;
 
             -- flag the original order as backordered and picking completed
-            UPDATE Sales.Orders 
+            UPDATE Sales.Orders
             SET BackorderOrderID = @BackorderOrderID,
                 PickingCompletedWhen = @PickingCompletedWhen,
                 LastEditedBy = @InvoicingPersonID,
-                LastEditedWhen = @StartingWhen 
+                LastEditedWhen = @StartingWhen
             WHERE OrderID = @OrderID;
 
             COMMIT;
@@ -1606,9 +1606,9 @@ BEGIN
 
         SELECT @TotalDryItems = SUM(CASE WHEN si.IsChillerStock <> 0 THEN 0 ELSE 1 END),
                @TotalChillerItems = SUM(CASE WHEN si.IsChillerStock <> 0 THEN 1 ELSE 0 END)
-        FROM Sales.OrderLines AS ol 
+        FROM Sales.OrderLines AS ol
         INNER JOIN Warehouse.StockItems AS si
-        ON ol.StockItemID = si.StockItemID 
+        ON ol.StockItemID = si.StockItemID
         WHERE ol.OrderID = @OrderID;
 
         -- now invoice whatever is left on the order
@@ -1625,17 +1625,17 @@ BEGIN
 
         SET @ReturnedDeliveryData = JSON_MODIFY(@ReturnedDeliveryData, N''append $.Events'', JSON_QUERY(@DeliveryEvent));
 
-        INSERT Sales.Invoices 
-            (InvoiceID, CustomerID, BillToCustomerID, OrderID, DeliveryMethodID, ContactPersonID, AccountsPersonID, 
-             SalespersonPersonID, PackedByPersonID, InvoiceDate, CustomerPurchaseOrderNumber, 
-             IsCreditNote, CreditNoteReason, Comments, DeliveryInstructions, InternalComments, 
-             TotalDryItems, TotalChillerItems,  
+        INSERT Sales.Invoices
+            (InvoiceID, CustomerID, BillToCustomerID, OrderID, DeliveryMethodID, ContactPersonID, AccountsPersonID,
+             SalespersonPersonID, PackedByPersonID, InvoiceDate, CustomerPurchaseOrderNumber,
+             IsCreditNote, CreditNoteReason, Comments, DeliveryInstructions, InternalComments,
+             TotalDryItems, TotalChillerItems,
              DeliveryRun, RunPosition, ReturnedDeliveryData, LastEditedBy, LastEditedWhen)
         SELECT @InvoiceID, c.CustomerID, @BillToCustomerID, @OrderID, c.DeliveryMethodID, o.ContactPersonID, btc.PrimaryContactPersonID,
                o.SalespersonPersonID, @PackedByPersonID, @StartingWhen, o.CustomerPurchaseOrderNumber,
                0, NULL, NULL, c.DeliveryAddressLine1 + N'', '' + c.DeliveryAddressLine2, NULL,
-               @TotalDryItems, @TotalChillerItems, 
-               c.DeliveryRun, c.RunPosition, @ReturnedDeliveryData, @InvoicingPersonID, @StartingWhen  
+               @TotalDryItems, @TotalChillerItems,
+               c.DeliveryRun, c.RunPosition, @ReturnedDeliveryData, @InvoicingPersonID, @StartingWhen
         FROM Sales.Orders AS o
         INNER JOIN Sales.Customers AS c
         ON o.CustomerID = c.CustomerID
@@ -1643,61 +1643,61 @@ BEGIN
         ON btc.CustomerID = c.BillToCustomerID
         WHERE o.OrderID = @OrderID;
 
-        INSERT Sales.InvoiceLines 
-            (InvoiceID, StockItemID, [Description], PackageTypeID, 
-             Quantity, UnitPrice, TaxRate, TaxAmount, LineProfit, ExtendedPrice, 
+        INSERT Sales.InvoiceLines
+            (InvoiceID, StockItemID, [Description], PackageTypeID,
+             Quantity, UnitPrice, TaxRate, TaxAmount, LineProfit, ExtendedPrice,
              LastEditedBy, LastEditedWhen)
         SELECT @InvoiceID, ol.StockItemID, ol.[Description], ol.PackageTypeID,
-               ol.PickedQuantity, ol.UnitPrice, ol.TaxRate, 
+               ol.PickedQuantity, ol.UnitPrice, ol.TaxRate,
                ROUND(ol.PickedQuantity * ol.UnitPrice * ol.TaxRate / 100.0, 2),
                ROUND(ol.PickedQuantity * (ol.UnitPrice - sih.LastCostPrice), 2),
                ROUND(ol.PickedQuantity * ol.UnitPrice, 2)
                  + ROUND(ol.PickedQuantity * ol.UnitPrice * ol.TaxRate / 100.0, 2),
-               @InvoicingPersonID, @StartingWhen 
+               @InvoicingPersonID, @StartingWhen
         FROM Sales.OrderLines AS ol
         INNER JOIN Warehouse.StockItems AS si
         ON ol.StockItemID = si.StockItemID
         INNER JOIN Warehouse.StockItemHoldings AS sih
         ON si.StockItemID = sih.StockItemID
         WHERE ol.OrderID = @OrderID
-        ORDER BY ol.OrderLineID; 
+        ORDER BY ol.OrderLineID;
 
         INSERT Warehouse.StockItemTransactions
-            (StockItemID, TransactionTypeID, CustomerID, InvoiceID, SupplierID, PurchaseOrderID, 
+            (StockItemID, TransactionTypeID, CustomerID, InvoiceID, SupplierID, PurchaseOrderID,
              TransactionOccurredWhen, Quantity, LastEditedBy, LastEditedWhen)
         SELECT il.StockItemID, (SELECT TransactionTypeID FROM [Application].TransactionTypes WHERE TransactionTypeName = N''Stock Issue''),
                i.CustomerID, i.InvoiceID, NULL, NULL,
-               @StartingWhen, 0 - il.Quantity, @InvoicingPersonID, @StartingWhen 
+               @StartingWhen, 0 - il.Quantity, @InvoicingPersonID, @StartingWhen
         FROM Sales.InvoiceLines AS il
         INNER JOIN Sales.Invoices AS i
-        ON il.InvoiceID = i.InvoiceID 
-        WHERE i.InvoiceID = @InvoiceID 
+        ON il.InvoiceID = i.InvoiceID
+        WHERE i.InvoiceID = @InvoiceID
         ORDER BY il.InvoiceLineID;
 
         WITH StockItemTotals
         AS
         (
-            SELECT il.StockItemID, SUM(il.Quantity) AS TotalQuantity 
-            FROM Sales.InvoiceLines aS il 
-            WHERE il.InvoiceID = @InvoiceID 
-            GROUP BY il.StockItemID 
+            SELECT il.StockItemID, SUM(il.Quantity) AS TotalQuantity
+            FROM Sales.InvoiceLines aS il
+            WHERE il.InvoiceID = @InvoiceID
+            GROUP BY il.StockItemID
         )
         UPDATE sih
         SET sih.QuantityOnHand -= sit.TotalQuantity,
             sih.LastEditedBy = @InvoicingPersonID,
-            sih.LastEditedWhen = @StartingWhen 
+            sih.LastEditedWhen = @StartingWhen
         FROM Warehouse.StockItemHoldings AS sih
-        INNER JOIN StockItemTotals AS sit 
+        INNER JOIN StockItemTotals AS sit
         ON sih.StockItemID = sit.StockItemID;
 
         SELECT @TransactionAmount = SUM(il.ExtendedPrice),
-               @TaxAmount = SUM(il.TaxAmount) 
+               @TaxAmount = SUM(il.TaxAmount)
         FROM Sales.InvoiceLines AS il
         WHERE il.InvoiceID = @InvoiceID;
 
-        INSERT Sales.CustomerTransactions 
-            (CustomerID, TransactionTypeID, InvoiceID, PaymentMethodID, 
-             TransactionDate, AmountExcludingTax, TaxAmount, TransactionAmount, 
+        INSERT Sales.CustomerTransactions
+            (CustomerID, TransactionTypeID, InvoiceID, PaymentMethodID,
+             TransactionDate, AmountExcludingTax, TaxAmount, TransactionAmount,
              OutstandingBalance, FinalizationDate, LastEditedBy, LastEditedWhen)
         VALUES
             (@BillToCustomerID, (SELECT TransactionTypeID FROM [Application].TransactionTypes WHERE TransactionTypeName = N''Customer Invoice''),
@@ -1721,13 +1721,13 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.MakeTemporalChanges
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
-AS 
+AS
 BEGIN
-    
+
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
@@ -1739,68 +1739,68 @@ BEGIN
     BEGIN
         SET @Counter = 0;
         SET @RowsToModify = CEILING(RAND() * 20);
-        
+
         WHILE @Counter < @RowsToModify
         BEGIN
-            UPDATE [Application].Cities 
+            UPDATE [Application].Cities
             SET LatestRecordedPopulation = LatestRecordedPopulation * 1.04,
                 LastEditedBy = @StaffMember,
-                ValidFrom = @StartingWhen 
+                ValidFrom = @StartingWhen
             WHERE CityID = (SELECT TOP(1) CityID FROM [Application].Cities ORDER BY NEWID());
             SET @Counter += 1;
-        END;    
+        END;
     END;
 
     IF DAY(@StartingWhen) = 1 AND MONTH(@StartingWhen) = 7
     BEGIN
         SET @Counter = 0;
         SET @RowsToModify = CEILING(RAND() * 20);
-        
+
         WHILE @Counter < @RowsToModify
         BEGIN
-            UPDATE [Application].StateProvinces 
+            UPDATE [Application].StateProvinces
             SET LatestRecordedPopulation = LatestRecordedPopulation * 1.04,
                 LastEditedBy = @StaffMember,
-                ValidFrom = @StartingWhen 
+                ValidFrom = @StartingWhen
             WHERE StateProvinceID = (SELECT TOP(1) StateProvinceID FROM [Application].StateProvinces ORDER BY NEWID());
             SET @Counter += 1;
-        END;    
+        END;
     END;
 
     IF DAY(@StartingWhen) = 1 AND MONTH(@StartingWhen) = 7
     BEGIN
         SET @Counter = 0;
         SET @RowsToModify = CEILING(RAND() * 20);
-        
+
         WHILE @Counter < @RowsToModify
         BEGIN
-            UPDATE [Application].Countries 
+            UPDATE [Application].Countries
             SET LatestRecordedPopulation = LatestRecordedPopulation * 1.04,
                 LastEditedBy = @StaffMember,
-                ValidFrom = @StartingWhen 
+                ValidFrom = @StartingWhen
             WHERE CountryID = (SELECT TOP(1) CountryID FROM [Application].Countries ORDER BY NEWID());
             SET @Counter += 1;
-        END;    
+        END;
     END;
 
     IF CAST(@StartingWhen AS date) = ''20150101''
     BEGIN
-        UPDATE [Application].DeliveryMethods 
+        UPDATE [Application].DeliveryMethods
             SET DeliveryMethodName = N''Chilled Van'',
                 LastEditedBy = @StaffMember,
-                ValidFrom = @StartingWhen 
+                ValidFrom = @StartingWhen
             WHERE DeliveryMethodName = N''Van with Chiller'';
     END;
 
     IF CAST(@StartingWhen AS date) = ''20160101''
     BEGIN
-        UPDATE [Application].PaymentMethods 
+        UPDATE [Application].PaymentMethods
             SET PaymentMethodName = N''Credit-Card'',
                 LastEditedBy = @StaffMember,
-                ValidFrom = @StartingWhen 
+                ValidFrom = @StartingWhen
             WHERE PaymentMethodName = N''Credit Card'';
 
-        INSERT [Application].TransactionTypes 
+        INSERT [Application].TransactionTypes
             (TransactionTypeName, LastEditedBy, ValidFrom, ValidTo)
         VALUES
             (N''Contra'', @StaffMember, @StartingWhen, @EndOfTime);
@@ -1811,7 +1811,7 @@ BEGIN
                 ValidFrom = DATEADD(minute, 5, @StartingWhen)
             WHERE TransactionTypeName = N''Contra'';
 
-        UPDATE Warehouse.Colors 
+        UPDATE Warehouse.Colors
             SET ColorName = N''Steel Gray'',
                 LastEditedBy = @StaffMember,
                 ValidFrom = @StartingWhen
@@ -1824,52 +1824,52 @@ BEGIN
 
         DELETE Warehouse.PackageTypes WHERE PackageTypeName = N''Bin'';
 
-        UPDATE Warehouse.StockGroups 
+        UPDATE Warehouse.StockGroups
             SET StockGroupName = N''Furry Footwear'',
                 LastEditedBy = @StaffMember,
-                ValidFrom = @StartingWhen 
+                ValidFrom = @StartingWhen
             WHERE StockGroupName = N''Footwear'';
     END;
 
     IF CAST(@StartingWhen AS date) = ''20150101''
     BEGIN
-        UPDATE Purchasing.SupplierCategories 
+        UPDATE Purchasing.SupplierCategories
             SET SupplierCategoryName = N''Courier Services Supplier'',
                 LastEditedBy = @StaffMember,
-                ValidFrom = @StartingWhen 
+                ValidFrom = @StartingWhen
             WHERE SupplierCategoryName = N''Courier'';
     END;
 
     IF CAST(@StartingWhen AS date) = ''20140101''
     BEGIN
-        INSERT Sales.CustomerCategories   
+        INSERT Sales.CustomerCategories
             (CustomerCategoryName, LastEditedBy, ValidFrom, ValidTo)
         VALUES
             (N''Retailer'', 1, @StartingWhen, @EndOfTime);
 
-        UPDATE Sales.CustomerCategories 
+        UPDATE Sales.CustomerCategories
             SET CustomerCategoryName = N''General Retailer'',
                 LastEditedBy = @StaffMember,
                 ValidFrom = DATEADD(minute, 15, @StartingWhen)
             WHERE CustomerCategoryName = N''Retailer'';
     END;
-    
+
     IF DAY(@StartingWhen) = 1 AND MONTH(@StartingWhen) = 7
     BEGIN
         SET @Counter = 0;
         SET @RowsToModify = CEILING(RAND() * 20);
-        
+
         WHILE @Counter < @RowsToModify
         BEGIN
-            UPDATE Sales.Customers  
+            UPDATE Sales.Customers
             SET CreditLimit = CreditLimit * 1.05,
                 LastEditedBy = @StaffMember,
                 ValidFrom = @StartingWhen
             WHERE CustomerID = (SELECT TOP(1) CustomerID FROM Sales.Customers WHERE CreditLimit > 0 ORDER BY NEWID());
             SET @Counter += 1;
-        END;    
+        END;
     END;
-    
+
     IF @IsSilentMode = 0
     BEGIN
         PRINT N''Modifying a few temporal items '';
@@ -1884,11 +1884,11 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.PaySuppliers
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
@@ -1897,10 +1897,10 @@ BEGIN
     BEGIN
         PRINT N''Paying suppliers'';
     END;
-    
-    DECLARE @StaffMemberPersonID int = (SELECT TOP(1) PersonID 
-                                        FROM [Application].People 
-                                        WHERE IsEmployee <> 0 
+
+    DECLARE @StaffMemberPersonID int = (SELECT TOP(1) PersonID
+                                        FROM [Application].People
+                                        WHERE IsEmployee <> 0
                                         ORDER BY NEWID());
 
     DECLARE @TransactionsToPay TABLE
@@ -1912,32 +1912,32 @@ BEGIN
         OutstandingBalance decimal(18,2)
     );
 
-    INSERT @TransactionsToPay 
+    INSERT @TransactionsToPay
         (SupplierTransactionID, SupplierID, PurchaseOrderID, SupplierInvoiceNumber, OutstandingBalance)
     SELECT SupplierTransactionID, SupplierID, PurchaseOrderID, SupplierInvoiceNumber, OutstandingBalance
-    FROM Purchasing.SupplierTransactions 
+    FROM Purchasing.SupplierTransactions
     WHERE IsFinalized = 0;
 
     BEGIN TRAN;
 
-    UPDATE Purchasing.SupplierTransactions 
+    UPDATE Purchasing.SupplierTransactions
     SET OutstandingBalance = 0,
         FinalizationDate = @StartingWhen,
         LastEditedBy = @StaffMemberPersonID,
-        LastEditedWhen = @StartingWhen 
+        LastEditedWhen = @StartingWhen
     WHERE SupplierTransactionID IN (SELECT SupplierTransactionID FROM @TransactionsToPay);
 
-    INSERT Purchasing.SupplierTransactions 
-        (SupplierID, TransactionTypeID, PurchaseOrderID, PaymentMethodID, 
-         SupplierInvoiceNumber, TransactionDate, AmountExcludingTax, TaxAmount, TransactionAmount, 
+    INSERT Purchasing.SupplierTransactions
+        (SupplierID, TransactionTypeID, PurchaseOrderID, PaymentMethodID,
+         SupplierInvoiceNumber, TransactionDate, AmountExcludingTax, TaxAmount, TransactionAmount,
          OutstandingBalance, FinalizationDate, LastEditedBy, LastEditedWhen)
     SELECT ttp.SupplierID, (SELECT TransactionTypeID FROM [Application].TransactionTypes WHERE TransactionTypeName = N''Supplier Payment Issued''),
            NULL, (SELECT PaymentMethodID FROM [Application].PaymentMethods WHERE PaymentMethodName = N''EFT''),
            NULL, CAST(@StartingWhen AS date), 0, 0, 0 - SUM(ttp.OutstandingBalance),
-           0, CAST(@StartingWhen AS date), @StaffMemberPersonID, @StartingWhen 
+           0, CAST(@StartingWhen AS date), @StaffMemberPersonID, @StartingWhen
     FROM @TransactionsToPay AS ttp
     GROUP BY ttp.SupplierID;
-    
+
     COMMIT;
 
 END;';
@@ -1949,11 +1949,11 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.PerformStocktake
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
@@ -1963,9 +1963,9 @@ BEGIN
         PRINT N''Performing stocktake'';
     END;
 
-    DECLARE @StaffMemberPersonID int = (SELECT TOP(1) PersonID 
-                                        FROM [Application].People 
-                                        WHERE IsEmployee <> 0 
+    DECLARE @StaffMemberPersonID int = (SELECT TOP(1) PersonID
+                                        FROM [Application].People
+                                        WHERE IsEmployee <> 0
                                         ORDER BY NEWID());
 
     DECLARE @Counter int = 0;
@@ -1983,8 +1983,8 @@ BEGIN
     WHILE @Counter < @NumberOfAdjustedStockItems
     BEGIN
         SET @QuantityToAdjust = 5 - CEILING(RAND() * 10);
-        SET @StockItemIDToAdjust = (SELECT TOP(1) StockItemID 
-                                    FROM Warehouse.StockItemHoldings 
+        SET @StockItemIDToAdjust = (SELECT TOP(1) StockItemID
+                                    FROM Warehouse.StockItemHoldings
                                     WHERE (QuantityOnHand + @QuantityToAdjust) >= 0
                                     ORDER BY NEWID());
 
@@ -1996,12 +1996,12 @@ BEGIN
                 LastEditedBy = @StaffMemberPersonID,
                 LastEditedWhen = @StartingWhen
             WHERE StockItemID = @StockItemIDToAdjust;
-            
+
             INSERT Warehouse.StockItemTransactions
-                (StockItemID, TransactionTypeID, CustomerID, InvoiceID, SupplierID, PurchaseOrderID, 
+                (StockItemID, TransactionTypeID, CustomerID, InvoiceID, SupplierID, PurchaseOrderID,
                  TransactionOccurredWhen, Quantity, LastEditedBy, LastEditedWhen)
             VALUES
-                (@StockItemIDToAdjust, 
+                (@StockItemIDToAdjust,
                  (SELECT TransactionTypeID FROM [Application].TransactionTypes WHERE TransactionTypeName = N''Stock Adjustment at Stocktake''),
                  NULL, NULL, NULL, NULL,
                  @StartingWhen, @QuantityToAdjust, @StaffMemberPersonID, @StartingWhen);
@@ -2019,11 +2019,11 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.PickStockForCustomerOrders
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
@@ -2040,7 +2040,7 @@ BEGIN
         OrderID int PRIMARY KEY
     );
 
-    INSERT @UninvoicedOrders 
+    INSERT @UninvoicedOrders
     SELECT o.OrderID
     FROM Sales.Orders AS o
     WHERE NOT EXISTS (SELECT 1 FROM Sales.Invoices AS i WHERE i.OrderID = o.OrderID);
@@ -2058,14 +2058,14 @@ BEGIN
         FROM Sales.OrderLines AS ol
         INNER JOIN @UninvoicedOrders AS uo
         ON ol.OrderID = uo.OrderID
-        WHERE ol.PickingCompletedWhen IS NULL 
+        WHERE ol.PickingCompletedWhen IS NULL
         GROUP BY ol.StockItemID
     )
     INSERT @StockAlreadyAllocated (StockItemID, QuantityAllocated)
     SELECT sa.StockItemID, sa.TotalPickedQuantity
     FROM StockAlreadyAllocated AS sa;
 
-    DECLARE OrderLineList CURSOR FAST_FORWARD READ_ONLY 
+    DECLARE OrderLineList CURSOR FAST_FORWARD READ_ONLY
     FOR
     SELECT ol.OrderID, ol.OrderLineID, ol.StockItemID, ol.Quantity
     FROM Sales.OrderLines AS ol
@@ -2077,9 +2077,9 @@ BEGIN
     DECLARE @StockItemID int;
     DECLARE @Quantity int;
     DECLARE @AvailableStock int;
-    DECLARE @PickingPersonID int = (SELECT TOP(1) PersonID 
-                                    FROM [Application].People 
-                                    WHERE IsEmployee <> 0 
+    DECLARE @PickingPersonID int = (SELECT TOP(1) PersonID
+                                    FROM [Application].People
+                                    WHERE IsEmployee <> 0
                                     ORDER BY NEWID());
 
     OPEN OrderLineList;
@@ -2091,7 +2091,7 @@ BEGIN
         SET @AvailableStock = (SELECT QuantityOnHand FROM Warehouse.StockItemHoldings AS sih WHERE sih.StockItemID = @StockItemID);
         SET @AvailableStock -= COALESCE((SELECT QuantityAllocated FROM @StockAlreadyAllocated AS saa WHERE saa.StockItemID = @StockItemID), 0);
 
-        IF @AvailableStock >= @Quantity 
+        IF @AvailableStock >= @Quantity
         BEGIN
             BEGIN TRAN;
 
@@ -2104,23 +2104,23 @@ BEGIN
                 INSERT (StockItemID, QuantityAllocated) VALUES (sa.StockItemID, sa.Quantity);
 
             -- reserve the required stock
-            UPDATE Sales.OrderLines 
+            UPDATE Sales.OrderLines
             SET PickedQuantity = @Quantity,
                 PickingCompletedWhen = @StartingWhen,
                 LastEditedBy = @PickingPersonID,
-                LastEditedWhen = @StartingWhen 
+                LastEditedWhen = @StartingWhen
             WHERE OrderLineID = @OrderLineID;
-            
+
             -- mark the order as ready to invoice (picking complete) if all lines picked
-            IF NOT EXISTS (SELECT 1 FROM Sales.OrderLines AS ol 
-                                    WHERE ol.OrderID = @OrderID 
+            IF NOT EXISTS (SELECT 1 FROM Sales.OrderLines AS ol
+                                    WHERE ol.OrderID = @OrderID
                                     AND ol.PickingCompletedWhen IS NULL)
             BEGIN
-                UPDATE Sales.Orders 
+                UPDATE Sales.Orders
                 SET PickingCompletedWhen = @StartingWhen,
                     PickedByPersonID = @PickingPersonID,
                     LastEditedBy = @PickingPersonID,
-                    LastEditedWhen = @StartingWhen 
+                    LastEditedWhen = @StartingWhen
                 WHERE OrderID = @OrderID;
             END;
 
@@ -2142,11 +2142,11 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.PlaceSupplierOrders
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
@@ -2185,25 +2185,25 @@ BEGIN
     (
         SELECT si.StockItemID,
                si.StockItemName AS [Description],
-               si.SupplierID, 
-               sih.TargetStockLevel, 
-               sih.ReorderLevel, 
+               si.SupplierID,
+               sih.TargetStockLevel,
+               sih.ReorderLevel,
                si.QuantityPerOuter,
                si.LeadTimeDays,
                si.OuterPackageID,
                sih.QuantityOnHand,
                sih.LastCostPrice,
-               COALESCE((SELECT SUM(ol.Quantity) 
+               COALESCE((SELECT SUM(ol.Quantity)
                          FROM Sales.OrderLines AS ol
-                         WHERE ol.StockItemID = si.StockItemID 
+                         WHERE ol.StockItemID = si.StockItemID
                          AND ol.PickingCompletedWhen IS NULL), 0) AS StockNeededForOrders,
-               COALESCE((SELECT si.QuantityPerOuter * SUM(pol.OrderedOuters - pol.ReceivedOuters) 
+               COALESCE((SELECT si.QuantityPerOuter * SUM(pol.OrderedOuters - pol.ReceivedOuters)
                          FROM Purchasing.PurchaseOrderLines AS pol
-                         WHERE pol.StockItemID = si.StockItemID 
-                         AND pol.IsOrderLineFinalized = 0), 0) AS StockOnOrder                     
+                         WHERE pol.StockItemID = si.StockItemID
+                         AND pol.IsOrderLineFinalized = 0), 0) AS StockOnOrder
         FROM Warehouse.StockItems AS si
         INNER JOIN Warehouse.StockItemHoldings AS sih
-        ON si.StockItemID = sih.StockItemID 
+        ON si.StockItemID = sih.StockItemID
     ),
     StockItemsToOrder
     AS
@@ -2216,7 +2216,7 @@ BEGIN
                sitc.QuantityPerOuter,
                sitc.LeadTimeDays,
                sitc.OuterPackageID,
-               sitc.LastCostPrice 
+               sitc.LastCostPrice
         FROM StockItemsToCheck AS sitc
         WHERE (sitc.QuantityOnHand + sitc.StockOnOrder - sitc.StockNeededForOrders) < sitc.ReorderLevel
         AND sitc.QuantityPerOuter <> 0
@@ -2232,30 +2232,30 @@ BEGIN
     FROM StockItemsToOrder AS sito;
 
     INSERT @Orders (SupplierID, PurchaseOrderID, DeliveryMethodID, ContactPersonID, SupplierReference)
-    
-    SELECT s.SupplierID, NEXT VALUE FOR Sequences.PurchaseOrderID, s.DeliveryMethodID, 
+
+    SELECT s.SupplierID, NEXT VALUE FOR Sequences.PurchaseOrderID, s.DeliveryMethodID,
            (SELECT TOP(1) PersonID FROM [Application].People WHERE IsEmployee <> 0),
            s.SupplierReference
     FROM Purchasing.Suppliers AS s
     WHERE s.SupplierID IN (SELECT SupplierID FROM @OrderLines);
 
-    INSERT Purchasing.PurchaseOrders 
-        (PurchaseOrderID, SupplierID, OrderDate, DeliveryMethodID, ContactPersonID, 
-         ExpectedDeliveryDate, SupplierReference, IsOrderFinalized, Comments, 
+    INSERT Purchasing.PurchaseOrders
+        (PurchaseOrderID, SupplierID, OrderDate, DeliveryMethodID, ContactPersonID,
+         ExpectedDeliveryDate, SupplierReference, IsOrderFinalized, Comments,
          InternalComments, LastEditedBy, LastEditedWhen)
     SELECT o.PurchaseOrderID, o.SupplierID, CAST(@StartingWhen AS date), o.DeliveryMethodID, o.ContactPersonID,
            DATEADD(day, (SELECT MAX(LeadTimeDays) FROM @OrderLines), CAST(@StartingWhen AS date)),
-           o.SupplierReference, 0, NULL, 
+           o.SupplierReference, 0, NULL,
            NULL, 1, @StartingWhen
     FROM @Orders AS o;
-    
-    INSERT Purchasing.PurchaseOrderLines 
-        (PurchaseOrderID, StockItemID, OrderedOuters, [Description], 
-         ReceivedOuters, PackageTypeID, ExpectedUnitPricePerOuter, LastReceiptDate, 
+
+    INSERT Purchasing.PurchaseOrderLines
+        (PurchaseOrderID, StockItemID, OrderedOuters, [Description],
+         ReceivedOuters, PackageTypeID, ExpectedUnitPricePerOuter, LastReceiptDate,
          IsOrderLineFinalized, LastEditedBy, LastEditedWhen)
     SELECT o.PurchaseOrderID, ol.StockItemID, ol.QuantityOfOuters, ol.[Description],
            0, ol.OuterPackageID, ol.LastOuterCostPrice, NULL,
-           0, @ContactPersonID, @StartingWhen 
+           0, @ContactPersonID, @StartingWhen
     FROM @OrderLines AS ol
     INNER JOIN @Orders AS o
     ON ol.SupplierID = o.SupplierID;
@@ -2270,12 +2270,12 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.ProcessCustomerPayments
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
 WITH EXECUTE AS OWNER
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
@@ -2284,10 +2284,10 @@ BEGIN
     BEGIN
         PRINT N''Processing customer payments'';
     END;
-    
-    DECLARE @StaffMemberPersonID int = (SELECT TOP(1) PersonID 
-                                        FROM [Application].People 
-                                        WHERE IsEmployee <> 0 
+
+    DECLARE @StaffMemberPersonID int = (SELECT TOP(1) PersonID
+                                        FROM [Application].People
+                                        WHERE IsEmployee <> 0
                                         ORDER BY NEWID());
 
     DECLARE @TransactionsToReceive TABLE
@@ -2298,32 +2298,32 @@ BEGIN
         OutstandingBalance decimal(18,2)
     );
 
-    INSERT @TransactionsToReceive 
+    INSERT @TransactionsToReceive
         (CustomerTransactionID, CustomerID, InvoiceID, OutstandingBalance)
     SELECT CustomerTransactionID, CustomerID, InvoiceID, OutstandingBalance
-    FROM Sales.CustomerTransactions  
+    FROM Sales.CustomerTransactions
     WHERE IsFinalized = 0;
 
     BEGIN TRAN;
 
-    UPDATE Sales.CustomerTransactions 
+    UPDATE Sales.CustomerTransactions
     SET OutstandingBalance = 0,
         FinalizationDate = @StartingWhen,
         LastEditedBy = @StaffMemberPersonID,
-        LastEditedWhen = @StartingWhen 
+        LastEditedWhen = @StartingWhen
     WHERE CustomerTransactionID IN (SELECT CustomerTransactionID FROM @TransactionsToReceive);
 
-    INSERT Sales.CustomerTransactions 
-        (CustomerID, TransactionTypeID, InvoiceID, PaymentMethodID, TransactionDate, 
-         AmountExcludingTax, TaxAmount, TransactionAmount, OutstandingBalance, 
+    INSERT Sales.CustomerTransactions
+        (CustomerID, TransactionTypeID, InvoiceID, PaymentMethodID, TransactionDate,
+         AmountExcludingTax, TaxAmount, TransactionAmount, OutstandingBalance,
          FinalizationDate, LastEditedBy, LastEditedWhen)
     SELECT ttr.CustomerID, (SELECT TransactionTypeID FROM [Application].TransactionTypes WHERE TransactionTypeName = N''Customer Payment Received''),
            NULL, (SELECT PaymentMethodID FROM [Application].PaymentMethods WHERE PaymentMethodName = N''EFT''),
            CAST(@StartingWhen AS date), 0, 0, 0 - SUM(ttr.OutstandingBalance),
-           0, CAST(@StartingWhen AS date), @StaffMemberPersonID, @StartingWhen 
+           0, CAST(@StartingWhen AS date), @StaffMemberPersonID, @StartingWhen
     FROM @TransactionsToReceive AS ttr
     GROUP BY ttr.CustomerID;
-    
+
     COMMIT;
 
 END;';
@@ -2335,11 +2335,11 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.ReceivePurchaseOrders
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
@@ -2349,9 +2349,9 @@ BEGIN
         PRINT N''Receiving stock from purchase orders'';
     END;
 
-    DECLARE @StaffMemberPersonID int = (SELECT TOP(1) PersonID 
-                                        FROM [Application].People 
-                                        WHERE IsEmployee <> 0 
+    DECLARE @StaffMemberPersonID int = (SELECT TOP(1) PersonID
+                                        FROM [Application].People
+                                        WHERE IsEmployee <> 0
                                         ORDER BY NEWID());
     DECLARE @PurchaseOrderID int;
     DECLARE @SupplierID int;
@@ -2373,15 +2373,15 @@ BEGIN
 
         BEGIN TRAN;
 
-        UPDATE Purchasing.PurchaseOrderLines 
+        UPDATE Purchasing.PurchaseOrderLines
         SET ReceivedOuters = OrderedOuters,
             IsOrderLineFinalized = 1,
             LastReceiptDate = CAST(@StartingWhen as date),
             LastEditedBy = @StaffMemberPersonID,
             LastEditedWhen = @StartingWhen
         WHERE PurchaseOrderID = @PurchaseOrderID;
-        
-        UPDATE sih  
+
+        UPDATE sih
         SET sih.QuantityOnHand += pol.ReceivedOuters * si.QuantityPerOuter,
             sih.LastEditedBy = @StaffMemberPersonID,
             sih.LastEditedWhen = @StartingWhen
@@ -2392,20 +2392,20 @@ BEGIN
         ON sih.StockItemID = si.StockItemID;
 
         INSERT Warehouse.StockItemTransactions
-            (StockItemID, TransactionTypeID, CustomerID, InvoiceID, SupplierID, PurchaseOrderID, 
+            (StockItemID, TransactionTypeID, CustomerID, InvoiceID, SupplierID, PurchaseOrderID,
              TransactionOccurredWhen, Quantity, LastEditedBy, LastEditedWhen)
         SELECT pol.StockItemID, (SELECT TransactionTypeID FROM [Application].TransactionTypes WHERE TransactionTypeName = N''Stock Receipt''),
                NULL, NULL, @SupplierID, pol.PurchaseOrderID,
                @StartingWhen, pol.ReceivedOuters * si.QuantityPerOuter, @StaffMemberPersonID, @StartingWhen
         FROM Purchasing.PurchaseOrderLines AS pol
         INNER JOIN Warehouse.StockItems AS si
-        ON pol.StockItemID = si.StockItemID 
+        ON pol.StockItemID = si.StockItemID
         WHERE pol.PurchaseOrderID = @PurchaseOrderID;
 
-        UPDATE Purchasing.PurchaseOrders 
+        UPDATE Purchasing.PurchaseOrders
         SET IsOrderFinalized = 1,
             LastEditedBy = @StaffMemberPersonID,
-            LastEditedWhen = @StartingWhen 
+            LastEditedWhen = @StartingWhen
         WHERE PurchaseOrderID = @PurchaseOrderID;
 
         SELECT @TotalExcludingTax = SUM(ROUND(pol.OrderedOuters * pol.ExpectedUnitPricePerOuter,2)),
@@ -2413,13 +2413,13 @@ BEGIN
                                   + SUM(ROUND(pol.OrderedOuters * pol.ExpectedUnitPricePerOuter * si.TaxRate / 100.0,2))
         FROM Purchasing.PurchaseOrderLines AS pol
         INNER JOIN Warehouse.StockItems AS si
-        ON pol.StockItemID = si.StockItemID 
+        ON pol.StockItemID = si.StockItemID
         WHERE pol.PurchaseOrderID = @PurchaseOrderID;
 
-        INSERT Purchasing.SupplierTransactions 
-            (SupplierID, TransactionTypeID, PurchaseOrderID, PaymentMethodID, 
-             SupplierInvoiceNumber, TransactionDate, AmountExcludingTax, 
-             TaxAmount, TransactionAmount, OutstandingBalance, 
+        INSERT Purchasing.SupplierTransactions
+            (SupplierID, TransactionTypeID, PurchaseOrderID, PaymentMethodID,
+             SupplierInvoiceNumber, TransactionDate, AmountExcludingTax,
+             TaxAmount, TransactionAmount, OutstandingBalance,
              FinalizationDate, LastEditedBy, LastEditedWhen)
         VALUES
             (@SupplierID, (SELECT TransactionTypeID FROM [Application].TransactionTypes WHERE TransactionTypeName = N''Supplier Invoice''),
@@ -2427,7 +2427,7 @@ BEGIN
              CAST(CEILING(RAND() * 10000) AS nvarchar(20)), CAST(@StartingWhen AS date), @TotalExcludingTax,
              @TotalIncludingTax - @TotalExcludingTax, @TotalIncludingTax, @TotalIncludingTax,
              NULL, @StaffMemberPersonID, @StartingWhen);
-        
+
         COMMIT;
 
         FETCH NEXT FROM PurchaseOrderList INTO @PurchaseOrderID, @SupplierID;
@@ -2446,11 +2446,11 @@ END;';
 CREATE PROCEDURE DataLoadSimulation.RecordColdRoomTemperatures
 @AverageSecondsBetweenReadings int,
 @NumberOfSensors int,
-@CurrentDateTime datetime2(7), 
+@CurrentDateTime datetime2(7),
 @EndOfTime datetime2(7),
 @IsSilentMode bit
 WITH EXECUTE AS OWNER
-AS 
+AS
 BEGIN
 
     SET NOCOUNT ON;
@@ -2474,19 +2474,19 @@ BEGIN
         BEGIN
             SET @Temperature = 3 + RAND() * 2;
 
-            DELETE Warehouse.ColdRoomTemperatures 
-            OUTPUT deleted.ColdRoomTemperatureID, 
+            DELETE Warehouse.ColdRoomTemperatures
+            OUTPUT deleted.ColdRoomTemperatureID,
                    deleted.ColdRoomSensorNumber,
-                   deleted.RecordedWhen, 
+                   deleted.RecordedWhen,
                    deleted.Temperature,
                    deleted.ValidFrom,
                    @TimeCounter
-            INTO Warehouse.ColdRoomTemperatures_Archive 
+            INTO Warehouse.ColdRoomTemperatures_Archive
             WHERE ColdRoomSensorNumber = @SensorCounter + 1;
 
-            INSERT Warehouse.ColdRoomTemperatures 
+            INSERT Warehouse.ColdRoomTemperatures
                 (ColdRoomSensorNumber, RecordedWhen, Temperature, ValidFrom, ValidTo)
-            VALUES 
+            VALUES
                 (@SensorCounter + 1, @TimeCounter, @Temperature, @TimeCounter, @EndOfTime);
 
             SET @SensorCounter += 1;
@@ -2505,11 +2505,11 @@ END;';
 CREATE PROCEDURE DataLoadSimulation.RecordDeliveryVanTemperatures
 @AverageSecondsBetweenReadings int,
 @NumberOfSensors int,
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @IsSilentMode bit
 WITH EXECUTE AS OWNER
-AS 
+AS
 BEGIN
 
     SET NOCOUNT ON;
@@ -2546,21 +2546,21 @@ BEGIN
 
             SET @FullSensorData = N''{"Recordings": ''
               + N''[''
-              + N''{"type":"Feature", "geometry": {"type":"Point", "coordinates":['' 
+              + N''{"type":"Feature", "geometry": {"type":"Point", "coordinates":[''
               + CAST(@Longitude AS nvarchar(20)) + N'','' + CAST(@Latitude AS nvarchar(20))
               + N''] }, "properties":{"rego":"'' + STRING_ESCAPE(@VehicleRegistration, N''json'')
-              + N''","sensor":"'' + CAST(@SensorCounter + 1 AS nvarchar(20)) 
+              + N''","sensor":"'' + CAST(@SensorCounter + 1 AS nvarchar(20))
               + N'',"when":"'' + CONVERT(nvarchar(30), @TimeCounter, 126)
               + N''","temp":'' + CAST(@Temperature AS nvarchar(20))
               + N''}} ]'';
-    
-            INSERT Warehouse.VehicleTemperatures 
-                (VehicleRegistration, ChillerSensorNumber, 
-                 RecordedWhen, Temperature, 
+
+            INSERT Warehouse.VehicleTemperatures
+                (VehicleRegistration, ChillerSensorNumber,
+                 RecordedWhen, Temperature,
                  FullSensorData, IsCompressed, CompressedSensorData)
-            VALUES 
+            VALUES
                 (@VehicleRegistration, @SensorCounter + 1,
-                 @TimeCounter, @Temperature, 
+                 @TimeCounter, @Temperature,
                  CASE WHEN @IsCompressed = 0 THEN @FullSensorData END,
                  @IsCompressed,
                  CASE WHEN @IsCompressed <> 0 THEN COMPRESS(@FullSensorData) END);
@@ -2579,12 +2579,12 @@ END;';
 	BEGIN
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.RecordInvoiceDeliveries
-@CurrentDateTime datetime2(7), 
-@StartingWhen datetime, 
+@CurrentDateTime datetime2(7),
+@StartingWhen datetime,
 @EndOfTime datetime2(7),
 @IsSilentMode bit
 WITH EXECUTE AS OWNER
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
@@ -2594,9 +2594,9 @@ BEGIN
         PRINT N''Recording invoice deliveries'';
     END;
 
-    DECLARE @DeliveryDriverPersonID int = (SELECT TOP(1) PersonID 
-                                           FROM [Application].People 
-                                           WHERE IsEmployee <> 0 
+    DECLARE @DeliveryDriverPersonID int = (SELECT TOP(1) PersonID
+                                           FROM [Application].People
+                                           WHERE IsEmployee <> 0
                                            ORDER BY NEWID());
 
     DECLARE @ReturnedDeliveryData nvarchar(max);
@@ -2612,14 +2612,14 @@ BEGIN
 
     DECLARE InvoiceList CURSOR FAST_FORWARD READ_ONLY
     FOR
-    SELECT i.InvoiceID, i.ReturnedDeliveryData, c.CustomerName, p.FullName, ct.[Location].Lat, ct.[Location].Long 
+    SELECT i.InvoiceID, i.ReturnedDeliveryData, c.CustomerName, p.FullName, ct.[Location].Lat, ct.[Location].Long
     FROM Sales.Invoices AS i
     INNER JOIN Sales.Customers AS c
-    ON i.CustomerID = c.CustomerID 
+    ON i.CustomerID = c.CustomerID
     INNER JOIN [Application].Cities AS ct
-    ON c.DeliveryCityID = ct.CityID 
+    ON c.DeliveryCityID = ct.CityID
     INNER JOIN [Application].People AS p
-    ON c.PrimaryContactPersonID = p.PersonID 
+    ON c.PrimaryContactPersonID = p.PersonID
     WHERE i.ConfirmedDeliveryTime IS NULL
     AND i.InvoiceDate < CAST(@StartingWhen AS date)
     ORDER BY i.InvoiceID;
@@ -2639,7 +2639,7 @@ BEGIN
         SET @DeliveryEvent = JSON_MODIFY(@DeliveryEvent, N''$.DriverID'', @DeliveryDriverPersonID);
         SET @DeliveryEvent = JSON_MODIFY(@DeliveryEvent, N''$.Latitude'', @Latitude);
         SET @DeliveryEvent = JSON_MODIFY(@DeliveryEvent, N''$.Longitude'', @Longitude);
-        
+
         SET @IsDelivered = 0;
 
         IF RAND() < 0.1 -- 10 % chance of non-delivery on this attempt
@@ -2654,7 +2654,7 @@ BEGIN
         SET @ReturnedDeliveryData = JSON_MODIFY(@ReturnedDeliveryData, N''$.DeliveredWhen'', CONVERT(nvarchar(20), @DeliveryAttemptWhen, 126));
         SET @ReturnedDeliveryData = JSON_MODIFY(@ReturnedDeliveryData, N''$.ReceivedBy'', @PrimaryContactFullName);
 
-        UPDATE Sales.Invoices 
+        UPDATE Sales.Invoices
         SET ReturnedDeliveryData = @ReturnedDeliveryData,
             LastEditedBy = @DeliveryDriverPersonID,
             LastEditedWhen = @StartingWhen
@@ -2675,16 +2675,16 @@ END;';
 		SET @SQL = N'
 CREATE PROCEDURE DataLoadSimulation.UpdateCustomFields
 @CurrentDateTime AS date
-WITH EXECUTE AS OWNER 
+WITH EXECUTE AS OWNER
 AS
 BEGIN
     DECLARE @StartingWhen datetime2(7) = CAST(@CurrentDateTime AS date);
-    
+
     SET @StartingWhen = DATEADD(hour, 23, @StartingWhen);
 
     -- Populate custom data for stock items
 
-    UPDATE Warehouse.StockItems 
+    UPDATE Warehouse.StockItems
     SET CustomFields = N''{ "CountryOfManufacture": ''
                      + CASE WHEN IsChillerStock <> 0 THEN N''"USA", "ShelfLife": "7 days"''
                             WHEN StockItemName LIKE N''%USB food%'' THEN N''"Japan"''
@@ -2703,90 +2703,90 @@ BEGIN
         ValidFrom = @StartingWhen;
 
     SET @StartingWhen = DATEADD(minute, 1, @StartingWhen);
-            
-    UPDATE Warehouse.StockItems 
+
+    UPDATE Warehouse.StockItems
     SET CustomFields = JSON_MODIFY(CustomFields, N''append $.Tags'', N''Radio Control''),
-        ValidFrom = @StartingWhen 
+        ValidFrom = @StartingWhen
     WHERE StockItemName LIKE N''RC %'';
-    
+
     SET @StartingWhen = DATEADD(minute, 1, @StartingWhen);
 
-    UPDATE Warehouse.StockItems 
+    UPDATE Warehouse.StockItems
     SET CustomFields = JSON_MODIFY(CustomFields, N''append $.Tags'', N''Realistic Sound''),
-        ValidFrom = @StartingWhen 
+        ValidFrom = @StartingWhen
     WHERE StockItemName LIKE N''RC %'';
 
     SET @StartingWhen = DATEADD(minute, 1, @StartingWhen);
 
-    UPDATE Warehouse.StockItems 
+    UPDATE Warehouse.StockItems
     SET CustomFields = JSON_MODIFY(CustomFields, N''append $.Tags'', N''Vintage''),
-        ValidFrom = @StartingWhen 
+        ValidFrom = @StartingWhen
     WHERE StockItemName LIKE N''%vintage%'';
-           
+
     SET @StartingWhen = DATEADD(minute, 1, @StartingWhen);
 
-    UPDATE Warehouse.StockItems 
+    UPDATE Warehouse.StockItems
     SET CustomFields = JSON_MODIFY(CustomFields, N''append $.Tags'', N''Halloween Fun''),
-        ValidFrom = @StartingWhen 
+        ValidFrom = @StartingWhen
     WHERE StockItemName LIKE N''%halloween%'';
-           
+
     SET @StartingWhen = DATEADD(minute, 1, @StartingWhen);
 
-    UPDATE Warehouse.StockItems 
+    UPDATE Warehouse.StockItems
     SET CustomFields = JSON_MODIFY(CustomFields, N''append $.Tags'', N''Super Value''),
-        ValidFrom = @StartingWhen 
+        ValidFrom = @StartingWhen
     WHERE StockItemName LIKE N''%pack of%'';
 
     SET @StartingWhen = DATEADD(minute, 1, @StartingWhen);
-           
-    UPDATE Warehouse.StockItems 
+
+    UPDATE Warehouse.StockItems
     SET CustomFields = JSON_MODIFY(CustomFields, N''append $.Tags'', N''So Realistic''),
-        ValidFrom = @StartingWhen 
+        ValidFrom = @StartingWhen
     WHERE StockItemName LIKE N''%ride on%'';
 
     SET @StartingWhen = DATEADD(minute, 1, @StartingWhen);
-           
-    UPDATE Warehouse.StockItems 
+
+    UPDATE Warehouse.StockItems
     SET CustomFields = JSON_MODIFY(CustomFields, N''append $.Tags'', N''Comfortable''),
-        ValidFrom = @StartingWhen 
+        ValidFrom = @StartingWhen
     WHERE StockItemName LIKE N''%slipper%'';
-           
+
     SET @StartingWhen = DATEADD(minute, 1, @StartingWhen);
 
-    UPDATE Warehouse.StockItems 
+    UPDATE Warehouse.StockItems
     SET CustomFields = JSON_MODIFY(CustomFields, N''append $.Tags'', N''Long Battery Life''),
-        ValidFrom = @StartingWhen 
+        ValidFrom = @StartingWhen
     WHERE StockItemName LIKE N''%slipper%'';
-           
+
     SET @StartingWhen = DATEADD(minute, 1, @StartingWhen);
 
-    UPDATE Warehouse.StockItems 
+    UPDATE Warehouse.StockItems
     SET CustomFields = JSON_MODIFY(CustomFields, N''append $.Tags'', CASE WHEN StockItemID % 2 = 0 THEN N''32GB'' ELSE N''16GB'' END),
-        ValidFrom = @StartingWhen 
+        ValidFrom = @StartingWhen
     WHERE StockItemName LIKE N''%USB food%'';
-    
+
     SET @StartingWhen = DATEADD(minute, 1, @StartingWhen);
 
-    UPDATE Warehouse.StockItems 
+    UPDATE Warehouse.StockItems
     SET CustomFields = JSON_MODIFY(CustomFields, N''append $.Tags'', N''Comedy''),
         ValidFrom = @StartingWhen
     WHERE StockItemName LIKE N''%joke%'';
-    
+
     SET @StartingWhen = DATEADD(minute, 1, @StartingWhen);
 
-    UPDATE Warehouse.StockItems 
+    UPDATE Warehouse.StockItems
     SET CustomFields = JSON_MODIFY(CustomFields, N''append $.Tags'', N''USB Powered''),
-        ValidFrom = @StartingWhen 
+        ValidFrom = @StartingWhen
     WHERE StockItemName LIKE N''%USB%'';
-    
+
     SET @StartingWhen = DATEADD(minute, 1, @StartingWhen);
 
-    UPDATE si 
+    UPDATE si
     SET si.CustomFields = JSON_MODIFY(si.CustomFields, N''append $.Tags'', N''Limited Stock''),
-        ValidFrom = @StartingWhen 
-    FROM Warehouse.StockItems AS si 
-    WHERE EXISTS (SELECT 1 
-                  FROM Warehouse.StockItemStockGroups AS sisg 
+        ValidFrom = @StartingWhen
+    FROM Warehouse.StockItems AS si
+    WHERE EXISTS (SELECT 1
+                  FROM Warehouse.StockItemStockGroups AS sisg
                   INNER JOIN Warehouse.StockGroups AS sg
                   ON sisg.StockGroupID = sg.StockGroupID
                   WHERE si.StockItemID = sisg.StockItemID
@@ -2796,12 +2796,12 @@ BEGIN
 
     SET @StartingWhen = DATEADD(minute, 1, @StartingWhen);
 
-    DECLARE EmployeeList CURSOR FAST_FORWARD READ_ONLY 
+    DECLARE EmployeeList CURSOR FAST_FORWARD READ_ONLY
     FOR
-    SELECT PersonID, IsSalesperson 
-    FROM [Application].People 
+    SELECT PersonID, IsSalesperson
+    FROM [Application].People
     WHERE IsEmployee <> 0;
-    
+
     DECLARE @EmployeeID int;
     DECLARE @IsSalesperson bit;
     DECLARE @CustomFields nvarchar(max);
@@ -2810,22 +2810,22 @@ BEGIN
     DECLARE @LanguageCounter int;
     DECLARE @OtherLanguages TABLE ( LanguageName nvarchar(50) );
     DECLARE @LanguageName nvarchar(50);
-    
+
     OPEN EmployeeList;
     FETCH NEXT FROM EmployeeList INTO @EmployeeID, @IsSalesperson;
-    
+
     WHILE @@FETCH_STATUS = 0
     BEGIN
         SET @CustomFields = N''{ "OtherLanguages": [] }'';
-    
+
         SET @NumberOfAdditionalLanguages = FLOOR(RAND() * 4);
         DELETE @OtherLanguages;
         SET @LanguageCounter = 0;
         WHILE @LanguageCounter < @NumberOfAdditionalLanguages
         BEGIN
-            SET @LanguageName = (SELECT TOP(1) alias 
-                                 FROM sys.syslanguages 
-                                 WHERE alias NOT LIKE N''%English%'' 
+            SET @LanguageName = (SELECT TOP(1) alias
+                                 FROM sys.syslanguages
+                                 WHERE alias NOT LIKE N''%English%''
                                  AND alias NOT LIKE N''%Brazil%''
                                  ORDER BY NEWID());
             IF @LanguageName LIKE N''%Chinese%'' SET @LanguageName = N''Chinese'';
@@ -2836,10 +2836,10 @@ BEGIN
             END;
             SET @LanguageCounter += 1;
         END;
-        
-        SET @CustomFields = JSON_MODIFY(@CustomFields, N''$.HireDate'', 
+
+        SET @CustomFields = JSON_MODIFY(@CustomFields, N''$.HireDate'',
                                         CONVERT(nvarchar(20), DATEADD(day, 0 - CEILING(RAND() * 2000) - 100, ''20130101''), 126));
-        
+
         SET @JobTitle = N''Team Member'';
         SET @JobTitle = CASE WHEN RAND() < 0.05 THEN N''General Manager''
                              WHEN RAND() < 0.1 THEN N''Manager''
@@ -2848,23 +2848,23 @@ BEGIN
                              ELSE @JobTitle
                         END;
         SET @CustomFields = JSON_MODIFY(@CustomFields, N''$.Title'', @JobTitle);
-    
+
         IF @IsSalesperson <> 0
         BEGIN
-            SET @CustomFields = JSON_MODIFY(@CustomFields, N''$.PrimarySalesTerritory'', 
+            SET @CustomFields = JSON_MODIFY(@CustomFields, N''$.PrimarySalesTerritory'',
                                             (SELECT TOP(1) SalesTerritory FROM [Application].StateProvinces ORDER BY NEWID()));
             SET @CustomFields = JSON_MODIFY(@CustomFields, N''$.CommissionRate'',
                                             CAST(CAST(RAND() * 5 AS decimal(18,2)) AS nvarchar(20)));
         END;
 
-        UPDATE [Application].People 
+        UPDATE [Application].People
         SET CustomFields = @CustomFields,
-            ValidFrom = @StartingWhen  
+            ValidFrom = @StartingWhen
         WHERE PersonID = @EmployeeID;
 
         FETCH NEXT FROM EmployeeList INTO @EmployeeID, @IsSalesperson;
     END;
-    
+
     CLOSE EmployeeList;
     DEALLOCATE EmployeeList;
 
@@ -2893,7 +2893,7 @@ BEGIN
                                                     WHEN 6 THEN ''mm/dd/yy''
                                                     ELSE ''mm/dd/yy''
                                                 END
-                        + N''","timeZone": "PST"'' 
+                        + N''","timeZone": "PST"''
                         + N'',"table":{"pagingType":"'' + CASE (PersonID % 5)
                                                             WHEN 0 THEN ''numbers''
                                                             WHEN 1 THEN ''full_numbers''
@@ -2908,7 +2908,7 @@ BEGIN
                                                     WHEN 3 THEN ''10''
                                                     ELSE ''10''
                                                 END + N''},"favoritesOnDashboard":true}'',
-        ValidFrom = @StartingWhen 
+        ValidFrom = @StartingWhen
     WHERE UserPreferences IS NOT NULL;
 END;';
 		EXECUTE (@SQL);
@@ -2961,52 +2961,52 @@ BEGIN
         SET @IsMonday = 0;
         SET @IsWeekday = 1;
 
-        IF @Weekday = 7 
+        IF @Weekday = 7
         BEGIN
             SET @IsSaturday = 1;
             SET @IsWeekday = 0;
         END;
-        IF @Weekday = 1 
+        IF @Weekday = 1
         BEGIN
             SET @IsSunday = 1;
             SET @IsWeekday = 0;
         END;
         IF @Weekday = 2 SET @IsMonday = 1;
-         
+
     -- Purchase orders
         IF @IsWeekday <> 0
         BEGIN
             -- Start receiving purchase orders at 7AM on weekdays
-            SET @StartingWhen = DATEADD(hour, 7, @CurrentDateTime); 
+            SET @StartingWhen = DATEADD(hour, 7, @CurrentDateTime);
             EXEC DataLoadSimulation.ReceivePurchaseOrders @CurrentDateTime, @StartingWhen, @EndOfTime, @IsSilentMode;
         END;
 
     -- Password changes
-        SET @StartingWhen = DATEADD(hour, 8, @CurrentDateTime); 
+        SET @StartingWhen = DATEADD(hour, 8, @CurrentDateTime);
         EXEC DataLoadSimulation.ChangePasswords @CurrentDateTime, @StartingWhen, @EndOfTime, @IsSilentMode;
 
     -- Activate new website users
         SET @StartingWhen = DATEADD(minute, 10, DATEADD(hour, 8, @CurrentDateTime));
         EXEC DataLoadSimulation.ActivateWebsiteLogons @CurrentDateTime, @StartingWhen, @EndOfTime, @IsSilentMode;
-        
+
     -- Payments to suppliers
-        IF DATEPART(weekday, @CurrentDateTime) = 2 
+        IF DATEPART(weekday, @CurrentDateTime) = 2
         BEGIN
             SET @StartingWhen = DATEADD(hour, 9, @CurrentDateTime); -- Suppliers are paid on Monday mornings
             EXEC DataLoadSimulation.PaySuppliers @CurrentDateTime, @StartingWhen, @EndOfTime, @IsSilentMode;
         END;
-    
+
     -- Customer orders received
-        SET @StartingWhen = DATEADD(hour, 10, @CurrentDateTime); 
+        SET @StartingWhen = DATEADD(hour, 10, @CurrentDateTime);
         SET @NumberOfCustomerOrders = @AverageNumberOfCustomerOrdersPerDay / 2
                                     + CEILING(RAND() * @AverageNumberOfCustomerOrdersPerDay);
-        SET @NumberOfCustomerOrders = CASE DATEPART(weekday, @CurrentDateTime) 
-                                           WHEN 7 
+        SET @NumberOfCustomerOrders = CASE DATEPART(weekday, @CurrentDateTime)
+                                           WHEN 7
                                            THEN FLOOR(@NumberOfCustomerOrders * @SaturdayPercentageOfNormalWorkDay / 100)
                                            WHEN 1
                                            THEN FLOOR(@NumberOfCustomerOrders * @SundayPercentageOfNormalWorkDay / 100)
                                            ELSE @NumberOfCustomerOrders
-                                      END; 
+                                      END;
 		SET @NumberOfCustomerOrders = FLOOR(@NumberOfCustomerOrders * CASE WHEN YEAR(@StartingWhen) = 2013 THEN 1.0
 		                                                                   WHEN YEAR(@StartingWhen) = 2014 THEN 1.12
 																		   WHEN YEAR(@StartingWhen) = 2015 THEN 1.21
@@ -3018,7 +3018,7 @@ BEGIN
     -- Pick any customer orders that can be picked
         SET @StartingWhen = DATEADD(hour, 11, @CurrentDateTime);
         EXEC DataLoadSimulation.PickStockForCustomerOrders @CurrentDateTime, @StartingWhen, @EndOfTime, @IsSilentMode;
-        
+
     -- Process any payments from customers
         IF @Weekday <> 0
         BEGIN
@@ -3084,8 +3084,8 @@ BEGIN
         END;
 
         IF @IsSilentMode = 0
-        BEGIN               
-            PRINT N'' '';     
+        BEGIN
+            PRINT N'' '';
         END;
 
         SET @CurrentDateTime = DATEADD(day, 1, @CurrentDateTime);
@@ -3114,7 +3114,7 @@ DROP PROCEDURE IF EXISTS DataLoadSimulation.Configuration_RemoveDataLoadSimulati
 GO
 
 CREATE PROCEDURE DataLoadSimulation.Configuration_RemoveDataLoadSimulationProcedures
-WITH EXECUTE AS OWNER 
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -3166,63 +3166,63 @@ BEGIN
     DECLARE @DiscountedUnitPrice decimal(18,2);
 
     SELECT @BuyingGroupID = BuyingGroupID,
-           @CustomerCategoryID = CustomerCategoryID 
-    FROM Sales.Customers 
+           @CustomerCategoryID = CustomerCategoryID
+    FROM Sales.Customers
     WHERE CustomerID = @CustomerID;
 
-    SELECT @UnitPrice = si.UnitPrice 
-    FROM Warehouse.StockItems AS si 
+    SELECT @UnitPrice = si.UnitPrice
+    FROM Warehouse.StockItems AS si
     WHERE si.StockItemID = @StockItemID;
 
     SET @CalculatedPrice = @UnitPrice;
 
-    SET @LowestUnitPrice = (SELECT MIN(sd.UnitPrice) 
+    SET @LowestUnitPrice = (SELECT MIN(sd.UnitPrice)
                             FROM Sales.SpecialDeals AS sd
                             WHERE ((sd.StockItemID = @StockItemID) OR (sd.StockItemID IS NULL))
                             AND ((sd.CustomerID = @CustomerID) OR (sd.CustomerID IS NULL))
                             AND ((sd.BuyingGroupID = @BuyingGroupID) OR (sd.BuyingGroupID IS NULL))
                             AND ((sd.CustomerCategoryID = @CustomerCategoryID) OR (sd.CustomerCategoryID IS NULL))
                             AND ((sd.StockGroupID IS NULL) OR EXISTS (SELECT 1 FROM Warehouse.StockItemStockGroups AS sisg
-                                                                               WHERE sisg.StockItemID = @StockItemID 
+                                                                               WHERE sisg.StockItemID = @StockItemID
                                                                                AND sisg.StockGroupID = sd.StockGroupID))
                             AND sd.UnitPrice IS NOT NULL
                             AND @PricingDate BETWEEN sd.StartDate AND sd.EndDate);
 
-    IF @LowestUnitPrice IS NOT NULL AND @LowestUnitPrice < @UnitPrice 
+    IF @LowestUnitPrice IS NOT NULL AND @LowestUnitPrice < @UnitPrice
     BEGIN
         SET @CalculatedPrice = @LowestUnitPrice;
     END;
 
-    SET @HighestDiscountAmount = (SELECT MAX(sd.DiscountAmount) 
+    SET @HighestDiscountAmount = (SELECT MAX(sd.DiscountAmount)
                                   FROM Sales.SpecialDeals AS sd
                                   WHERE ((sd.StockItemID = @StockItemID) OR (sd.StockItemID IS NULL))
                                   AND ((sd.CustomerID = @CustomerID) OR (sd.CustomerID IS NULL))
                                   AND ((sd.BuyingGroupID = @BuyingGroupID) OR (sd.BuyingGroupID IS NULL))
                                   AND ((sd.CustomerCategoryID = @CustomerCategoryID) OR (sd.CustomerCategoryID IS NULL))
                                   AND ((sd.StockGroupID IS NULL) OR EXISTS (SELECT 1 FROM Warehouse.StockItemStockGroups AS sisg
-                                                                                     WHERE sisg.StockItemID = @StockItemID 
+                                                                                     WHERE sisg.StockItemID = @StockItemID
                                                                                      AND sisg.StockGroupID = sd.StockGroupID))
                                   AND sd.DiscountAmount IS NOT NULL
                                   AND @PricingDate BETWEEN sd.StartDate AND sd.EndDate);
 
-    IF @HighestDiscountAmount IS NOT NULL AND (@UnitPrice - @HighestDiscountAmount) < @CalculatedPrice 
+    IF @HighestDiscountAmount IS NOT NULL AND (@UnitPrice - @HighestDiscountAmount) < @CalculatedPrice
     BEGIN
         SET @CalculatedPrice = @UnitPrice - @HighestDiscountAmount;
     END;
 
-    SET @HighestDiscountPercentage = (SELECT MAX(sd.DiscountPercentage) 
+    SET @HighestDiscountPercentage = (SELECT MAX(sd.DiscountPercentage)
                                       FROM Sales.SpecialDeals AS sd
                                       WHERE ((sd.StockItemID = @StockItemID) OR (sd.StockItemID IS NULL))
                                       AND ((sd.CustomerID = @CustomerID) OR (sd.CustomerID IS NULL))
                                       AND ((sd.BuyingGroupID = @BuyingGroupID) OR (sd.BuyingGroupID IS NULL))
                                       AND ((sd.CustomerCategoryID = @CustomerCategoryID) OR (sd.CustomerCategoryID IS NULL))
                                       AND ((sd.StockGroupID IS NULL) OR EXISTS (SELECT 1 FROM Warehouse.StockItemStockGroups AS sisg
-                                                                                         WHERE sisg.StockItemID = @StockItemID 
+                                                                                         WHERE sisg.StockItemID = @StockItemID
                                                                                          AND sisg.StockGroupID = sd.StockGroupID))
                                       AND sd.DiscountPercentage IS NOT NULL
                                       AND @PricingDate BETWEEN sd.StartDate AND sd.EndDate);
 
-    IF @HighestDiscountPercentage IS NOT NULL  
+    IF @HighestDiscountPercentage IS NOT NULL
     BEGIN
         SET @DiscountedUnitPrice = ROUND(@UnitPrice * @HighestDiscountPercentage / 100.0, 2);
         IF @DiscountedUnitPrice < @CalculatedPrice SET @CalculatedPrice = @DiscountedUnitPrice;
@@ -3240,35 +3240,35 @@ BEGIN
         OrderID int PRIMARY KEY
     );
 END;
-GO 
+GO
 
 IF NOT EXISTS (SELECT 1 FROM sys.table_types WHERE name = N'OrderList')
 BEGIN
     CREATE TYPE Website.OrderList AS TABLE
     (
         OrderReference int PRIMARY KEY,
-        CustomerID int, 
-        ContactPersonID int, 
-        ExpectedDeliveryDate date, 
-        CustomerPurchaseOrderNumber nvarchar(20), 
-        IsUndersupplyBackordered bit, 
-        Comments nvarchar(max), 
+        CustomerID int,
+        ContactPersonID int,
+        ExpectedDeliveryDate date,
+        CustomerPurchaseOrderNumber nvarchar(20),
+        IsUndersupplyBackordered bit,
+        Comments nvarchar(max),
         DeliveryInstructions nvarchar(max)
     );
 END;
-GO 
+GO
 
 IF NOT EXISTS (SELECT 1 FROM sys.table_types WHERE name = N'OrderLineList')
 BEGIN
     CREATE TYPE Website.OrderLineList AS TABLE
     (
         OrderReference int,
-        StockItemID int, 
-        [Description] nvarchar(100), 
+        StockItemID int,
+        [Description] nvarchar(100),
         Quantity int
     );
 END;
-GO 
+GO
 
 IF NOT EXISTS (SELECT 1 FROM sys.table_types WHERE name = N'SensorDataList')
 BEGIN
@@ -3290,12 +3290,12 @@ CREATE PROCEDURE Website.InvoiceCustomerOrders
 @PackedByPersonID int,
 @InvoicedByPersonID int
 WITH EXECUTE AS OWNER
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    DECLARE @InvoicesToGenerate TABLE 
+    DECLARE @InvoicesToGenerate TABLE
     (
         OrderID int PRIMARY KEY,
         InvoiceID int NOT NULL,
@@ -3307,8 +3307,8 @@ BEGIN
 
         -- Check that all orders exist, have been fully picked, and not already invoiced. Also allocate new invoice numbers.
         INSERT @InvoicesToGenerate (OrderID, InvoiceID, TotalDryItems, TotalChillerItems)
-        SELECT oti.OrderID, 
-               NEXT VALUE FOR Sequences.InvoiceID, 
+        SELECT oti.OrderID,
+               NEXT VALUE FOR Sequences.InvoiceID,
                COALESCE((SELECT SUM(CASE WHEN si.IsChillerStock <> 0 THEN 0 ELSE 1 END)
                          FROM Sales.OrderLines AS ol
                          INNER JOIN Warehouse.StockItems AS si
@@ -3324,7 +3324,7 @@ BEGIN
         ON oti.OrderID = o.OrderID
         WHERE NOT EXISTS (SELECT 1 FROM Sales.Invoices AS i
                                    WHERE i.OrderID = oti.OrderID)
-        AND o.PickingCompletedWhen IS NOT NULL; 
+        AND o.PickingCompletedWhen IS NOT NULL;
 
         IF EXISTS (SELECT 1 FROM @OrdersToInvoice AS oti WHERE NOT EXISTS (SELECT 1 FROM @InvoicesToGenerate AS itg WHERE itg.OrderID = oti.OrderID))
         BEGIN
@@ -3334,88 +3334,86 @@ BEGIN
 
         BEGIN TRAN;
 
-        INSERT Sales.Invoices 
-            (InvoiceID, CustomerID, BillToCustomerID, OrderID, DeliveryMethodID, ContactPersonID, AccountsPersonID, 
-             SalespersonPersonID, PackedByPersonID, InvoiceDate, CustomerPurchaseOrderNumber, 
-             IsCreditNote, CreditNoteReason, Comments, DeliveryInstructions, InternalComments, 
-             TotalDryItems, TotalChillerItems,  DeliveryRun, RunPosition, 
-             ReturnedDeliveryData, 
+        INSERT Sales.Invoices
+            (InvoiceID, CustomerID, BillToCustomerID, OrderID, DeliveryMethodID, ContactPersonID, AccountsPersonID,
+             SalespersonPersonID, PackedByPersonID, InvoiceDate, CustomerPurchaseOrderNumber,
+             IsCreditNote, CreditNoteReason, Comments, DeliveryInstructions, InternalComments,
+             TotalDryItems, TotalChillerItems,  DeliveryRun, RunPosition,
+             ReturnedDeliveryData,
              LastEditedBy, LastEditedWhen)
         SELECT itg.InvoiceID, c.CustomerID, c.BillToCustomerID, itg.OrderID, c.DeliveryMethodID, o.ContactPersonID, btc.PrimaryContactPersonID,
                o.SalespersonPersonID, @PackedByPersonID, SYSDATETIME(), o.CustomerPurchaseOrderNumber,
                0, NULL, NULL, c.DeliveryAddressLine1 + N', ' + c.DeliveryAddressLine2, NULL,
-               itg.TotalDryItems, itg.TotalChillerItems, c.DeliveryRun, c.RunPosition, 
-               JSON_MODIFY(N'{"Events": []}', N'append $.Events', 
-                   JSON_MODIFY(JSON_MODIFY(JSON_MODIFY(N'{ }', N'$.Event', N'Ready for collection'), 
+               itg.TotalDryItems, itg.TotalChillerItems, c.DeliveryRun, c.RunPosition,
+               JSON_MODIFY(N'{"Events": []}', N'append $.Events',
+                   JSON_MODIFY(JSON_MODIFY(JSON_MODIFY(N'{ }', N'$.Event', N'Ready for collection'),
                    N'$.EventTime', CONVERT(nvarchar(20), SYSDATETIME(), 126)),
-                   N'$.ConNote', N'EAN-125-' + CAST(itg.InvoiceID + 1050 AS nvarchar(20)))),               
-               @InvoicedByPersonID, SYSDATETIME()  
+                   N'$.ConNote', N'EAN-125-' + CAST(itg.InvoiceID + 1050 AS nvarchar(20)))),
+               @InvoicedByPersonID, SYSDATETIME()
         FROM @InvoicesToGenerate AS itg
         INNER JOIN Sales.Orders AS o
-        ON itg.OrderID = o.OrderID 
+        ON itg.OrderID = o.OrderID
         INNER JOIN Sales.Customers AS c
         ON o.CustomerID = c.CustomerID
         INNER JOIN Sales.Customers AS btc
         ON btc.CustomerID = c.BillToCustomerID;
 
-        INSERT Sales.InvoiceLines 
-            (InvoiceID, StockItemID, [Description], PackageTypeID, 
-             Quantity, UnitPrice, TaxRate, TaxAmount, LineProfit, ExtendedPrice, 
+        INSERT Sales.InvoiceLines
+            (InvoiceID, StockItemID, [Description], PackageTypeID,
+             Quantity, UnitPrice, TaxRate, TaxAmount, LineProfit, ExtendedPrice,
              LastEditedBy, LastEditedWhen)
         SELECT itg.InvoiceID, ol.StockItemID, ol.[Description], ol.PackageTypeID,
-               ol.PickedQuantity, ol.UnitPrice, ol.TaxRate, 
+               ol.PickedQuantity, ol.UnitPrice, ol.TaxRate,
                ROUND(ol.PickedQuantity * ol.UnitPrice * ol.TaxRate / 100.0, 2),
                ROUND(ol.PickedQuantity * (ol.UnitPrice - sih.LastCostPrice), 2),
                ROUND(ol.PickedQuantity * ol.UnitPrice, 2)
                  + ROUND(ol.PickedQuantity * ol.UnitPrice * ol.TaxRate / 100.0, 2),
-               @InvoicedByPersonID, SYSDATETIME() 
+               @InvoicedByPersonID, SYSDATETIME()
         FROM @InvoicesToGenerate AS itg
         INNER JOIN Sales.OrderLines AS ol
-        ON itg.OrderID = ol.OrderID 
+        ON itg.OrderID = ol.OrderID
         INNER JOIN Warehouse.StockItems AS si
         ON ol.StockItemID = si.StockItemID
         INNER JOIN Warehouse.StockItemHoldings AS sih
-        ON si.StockItemID = sih.StockItemID
-        ORDER BY ol.OrderID, ol.OrderLineID; 
+        ON si.StockItemID = sih.StockItemID;
 
         INSERT Warehouse.StockItemTransactions
-            (StockItemID, TransactionTypeID, CustomerID, InvoiceID, SupplierID, PurchaseOrderID, 
+            (StockItemID, TransactionTypeID, CustomerID, InvoiceID, SupplierID, PurchaseOrderID,
              TransactionOccurredWhen, Quantity, LastEditedBy, LastEditedWhen)
         SELECT il.StockItemID, (SELECT TransactionTypeID FROM [Application].TransactionTypes WHERE TransactionTypeName = N'Stock Issue'),
                i.CustomerID, i.InvoiceID, NULL, NULL,
-               SYSDATETIME(), 0 - il.Quantity, @InvoicedByPersonID, SYSDATETIME() 
+               SYSDATETIME(), 0 - il.Quantity, @InvoicedByPersonID, SYSDATETIME()
         FROM @InvoicesToGenerate AS itg
         INNER JOIN Sales.InvoiceLines AS il
-        ON itg.InvoiceID = il.InvoiceID 
+        ON itg.InvoiceID = il.InvoiceID
         INNER JOIN Sales.Invoices AS i
-        ON il.InvoiceID = i.InvoiceID 
-        ORDER BY il.InvoiceID, il.InvoiceLineID;
+        ON il.InvoiceID = i.InvoiceID;
 
         WITH StockItemTotals
         AS
         (
-            SELECT il.StockItemID, SUM(il.Quantity) AS TotalQuantity 
-            FROM Sales.InvoiceLines aS il 
-            WHERE il.InvoiceID IN (SELECT InvoiceID FROM @InvoicesToGenerate) 
-            GROUP BY il.StockItemID 
+            SELECT il.StockItemID, SUM(il.Quantity) AS TotalQuantity
+            FROM Sales.InvoiceLines aS il
+            WHERE il.InvoiceID IN (SELECT InvoiceID FROM @InvoicesToGenerate)
+            GROUP BY il.StockItemID
         )
         UPDATE sih
         SET sih.QuantityOnHand -= sit.TotalQuantity,
             sih.LastEditedBy = @InvoicedByPersonID,
-            sih.LastEditedWhen = SYSDATETIME() 
+            sih.LastEditedWhen = SYSDATETIME()
         FROM Warehouse.StockItemHoldings AS sih
-        INNER JOIN StockItemTotals AS sit 
+        INNER JOIN StockItemTotals AS sit
         ON sih.StockItemID = sit.StockItemID;
 
-        INSERT Sales.CustomerTransactions 
-            (CustomerID, TransactionTypeID, InvoiceID, PaymentMethodID, 
-             TransactionDate, AmountExcludingTax, TaxAmount, TransactionAmount, 
+        INSERT Sales.CustomerTransactions
+            (CustomerID, TransactionTypeID, InvoiceID, PaymentMethodID,
+             TransactionDate, AmountExcludingTax, TaxAmount, TransactionAmount,
              OutstandingBalance, FinalizationDate, LastEditedBy, LastEditedWhen)
-        SELECT i.BillToCustomerID, 
+        SELECT i.BillToCustomerID,
                (SELECT TransactionTypeID FROM [Application].TransactionTypes WHERE TransactionTypeName = N'Customer Invoice'),
                itg.InvoiceID,
                NULL,
-               SYSDATETIME(), 
+               SYSDATETIME(),
                (SELECT SUM(il.ExtendedPrice - il.TaxAmount) FROM Sales.InvoiceLines AS il WHERE il.InvoiceID = itg.InvoiceID),
                (SELECT SUM(il.TaxAmount) FROM Sales.InvoiceLines AS il WHERE il.InvoiceID = itg.InvoiceID),
                (SELECT SUM(il.ExtendedPrice) FROM Sales.InvoiceLines AS il WHERE il.InvoiceID = itg.InvoiceID),
@@ -3423,12 +3421,12 @@ BEGIN
                NULL,
                @InvoicedByPersonID,
                SYSDATETIME()
-        FROM @InvoicesToGenerate AS itg 
+        FROM @InvoicesToGenerate AS itg
         INNER JOIN Sales.Invoices AS i
-        ON itg.InvoiceID = i.InvoiceID; 
+        ON itg.InvoiceID = i.InvoiceID;
 
         COMMIT;
-        
+
     END TRY
     BEGIN CATCH
         IF XACT_STATE() <> 0 ROLLBACK;
@@ -3452,7 +3450,7 @@ BEGIN
     SET XACT_ABORT ON;
 
     BEGIN TRY
-        
+
         BEGIN TRAN;
 
 		DECLARE @NumberOfReadings int = (SELECT MAX(SensorDataListID) FROM @SensorReadings);
@@ -3468,18 +3466,18 @@ BEGIN
 		BEGIN
 			SELECT @ColdRoomSensorNumber = ColdRoomSensorNumber,
 			       @RecordedWhen = RecordedWhen,
-				   @Temperature = Temperature 
-			FROM @SensorReadings 
+				   @Temperature = Temperature
+			FROM @SensorReadings
 			WHERE SensorDataListID = @Counter;
 
-			UPDATE Warehouse.ColdRoomTemperatures 
+			UPDATE Warehouse.ColdRoomTemperatures
 				SET RecordedWhen = @RecordedWhen,
-				    Temperature = @Temperature 
+				    Temperature = @Temperature
 			WHERE ColdRoomSensorNumber = @ColdRoomSensorNumber;
 
 			IF @@ROWCOUNT = 0
 			BEGIN
-				INSERT Warehouse.ColdRoomTemperatures 
+				INSERT Warehouse.ColdRoomTemperatures
 					(ColdRoomSensorNumber, RecordedWhen, Temperature)
 				VALUES (@ColdRoomSensorNumber, @RecordedWhen, @Temperature);
 			END;
@@ -3492,7 +3490,7 @@ BEGIN
     END TRY
     BEGIN CATCH
         THROW 51000, N'Unable to apply the sensor data', 2;
-        
+
         IF XACT_STATE() <> 0 ROLLBACK TRAN;
 
         RETURN 1;
@@ -3509,7 +3507,7 @@ CREATE PROCEDURE Website.InsertCustomerOrders
 @OrdersCreatedByPersonID int,
 @SalespersonPersonID int
 WITH EXECUTE AS OWNER
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
@@ -3527,12 +3525,12 @@ BEGIN
     FROM @Orders;
 
     BEGIN TRY
-    
+
         BEGIN TRAN;
 
-        INSERT Sales.Orders 
-            (OrderID, CustomerID, SalespersonPersonID, PickedByPersonID, ContactPersonID, BackorderOrderID, OrderDate, 
-             ExpectedDeliveryDate, CustomerPurchaseOrderNumber, IsUndersupplyBackordered, Comments, DeliveryInstructions, InternalComments, 
+        INSERT Sales.Orders
+            (OrderID, CustomerID, SalespersonPersonID, PickedByPersonID, ContactPersonID, BackorderOrderID, OrderDate,
+             ExpectedDeliveryDate, CustomerPurchaseOrderNumber, IsUndersupplyBackordered, Comments, DeliveryInstructions, InternalComments,
              PickingCompletedWhen, LastEditedBy, LastEditedWhen)
         SELECT otg.OrderID, o.CustomerID, @SalespersonPersonID, NULL, o.ContactPersonID, NULL, SYSDATETIME(),
                o.ExpectedDeliveryDate, o.CustomerPurchaseOrderNumber, o.IsUndersupplyBackordered, o.Comments, o.DeliveryInstructions, NULL,
@@ -3541,8 +3539,8 @@ BEGIN
         INNER JOIN @Orders AS o
         ON otg.OrderReference = o.OrderReference;
 
-        INSERT Sales.OrderLines 
-            (OrderID, StockItemID, [Description], PackageTypeID, Quantity, UnitPrice, 
+        INSERT Sales.OrderLines
+            (OrderID, StockItemID, [Description], PackageTypeID, Quantity, UnitPrice,
              TaxRate, PickedQuantity, PickingCompletedWhen, LastEditedBy, LastEditedWhen)
         SELECT otg.OrderID, ol.StockItemID, ol.[Description], si.UnitPackageID, ol.Quantity,
                Website.CalculateCustomerPrice(o.CustomerID, ol.StockItemID, SYSDATETIME()),
@@ -3556,7 +3554,7 @@ BEGIN
         ON ol.StockItemID = si.StockItemID;
 
         COMMIT;
-    
+
     END TRY
     BEGIN CATCH
         IF XACT_STATE() <> 0 ROLLBACK;
@@ -3585,36 +3583,36 @@ BEGIN
 
         SET @SQL = N'DROP SECURITY POLICY IF EXISTS [Application].FilterCustomersBySalesTerritoryRole;';
         EXECUTE (@SQL);
-    
+
         SET @SQL = N'DROP FUNCTION IF EXISTS [Application].DetermineCustomerAccess;';
         EXECUTE (@SQL);
-        
+
         SET @SQL = N'
 CREATE FUNCTION [Application].DetermineCustomerAccess(@CityID int)
 RETURNS TABLE
-WITH SCHEMABINDING 
-AS 
-RETURN (SELECT 1 AS AccessResult 
-        WHERE IS_ROLEMEMBER(N''db_owner'') <> 0 
-        OR IS_ROLEMEMBER((SELECT sp.SalesTerritory 
+WITH SCHEMABINDING
+AS
+RETURN (SELECT 1 AS AccessResult
+        WHERE IS_ROLEMEMBER(N''db_owner'') <> 0
+        OR IS_ROLEMEMBER((SELECT sp.SalesTerritory
                           FROM [Application].Cities AS c
                           INNER JOIN [Application].StateProvinces AS sp
                           ON c.StateProvinceID = sp.StateProvinceID
                           WHERE c.CityID = @CityID) + N'' Sales'') <> 0
-	    OR (ORIGINAL_LOGIN() = N''Website'' 
-		    AND EXISTS (SELECT 1 
+	    OR (ORIGINAL_LOGIN() = N''Website''
+		    AND EXISTS (SELECT 1
 		                FROM [Application].Cities AS c
 				        INNER JOIN [Application].StateProvinces AS sp
 				        ON c.StateProvinceID = sp.StateProvinceID
-				        WHERE c.CityID = @CityID 
+				        WHERE c.CityID = @CityID
 				        AND sp.SalesTerritory = SESSION_CONTEXT(N''SalesTerritory''))));';
         EXECUTE (@SQL);
 
         SET @SQL = N'
 CREATE SECURITY POLICY [Application].FilterCustomersBySalesTerritoryRole
-ADD FILTER PREDICATE [Application].DetermineCustomerAccess(DeliveryCityID) 
+ADD FILTER PREDICATE [Application].DetermineCustomerAccess(DeliveryCityID)
 ON Sales.Customers,
-ADD BLOCK PREDICATE [Application].DetermineCustomerAccess(DeliveryCityID)  
+ADD BLOCK PREDICATE [Application].DetermineCustomerAccess(DeliveryCityID)
 ON Sales.Customers AFTER UPDATE;';
         EXECUTE (@SQL);
 
@@ -3640,7 +3638,7 @@ BEGIN
     DECLARE @AreDatabaseAuditSpecificationsSupported bit = 0;
     DECLARE @SQL nvarchar(max);
 
-    -- TODO !! - currently no separate test for audit 
+    -- TODO !! - currently no separate test for audit
     -- but same editions with XTP support database audit specs
     IF SERVERPROPERTY(N'IsXTPSupported') <> 0 SET @AreDatabaseAuditSpecificationsSupported = 1;
 
@@ -3649,12 +3647,12 @@ BEGIN
         IF NOT EXISTS (SELECT 1 FROM sys.server_audits WHERE name = N'WWI_Audit')
         BEGIN
             SET @SQL = N'
-USE master; 
+USE master;
 
 CREATE SERVER AUDIT [WWI_Audit]
 TO APPLICATION_LOG
 WITH
-(	
+(
     QUEUE_DELAY = 1000,
 	ON_FAILURE = CONTINUE
 );';
@@ -3721,7 +3719,7 @@ BEGIN
     DECLARE @AreDatabaseAuditSpecificationsSupported bit = 0;
     DECLARE @SQL nvarchar(max);
 
-    -- TODO !! - currently no separate test for audit 
+    -- TODO !! - currently no separate test for audit
     -- but same editions with XTP support database audit specs
     IF SERVERPROPERTY(N'IsXTPSupported') <> 0 SET @AreDatabaseAuditSpecificationsSupported = 1;
 
@@ -3749,7 +3747,7 @@ DROP SERVER AUDIT SPECIFICATION WWI_ServerAuditSpecification;';
         IF EXISTS (SELECT 1 FROM sys.server_audits WHERE name = N'WWI_Audit')
         BEGIN
             SET @SQL = N'
-USE master; 
+USE master;
 
 DROP SERVER AUDIT [WWI_Audit];';
             EXECUTE (@SQL);
@@ -3785,8 +3783,8 @@ BEGIN
     DECLARE @CurrentMaximumDate date = COALESCE((SELECT MAX(OrderDate) FROM Sales.Orders), '20121231');
     DECLARE @StartingDate date = DATEADD(day, 1, @CurrentMaximumDate);
     DECLARE @EndingDate date = CAST(DATEADD(day, -1, SYSDATETIME()) AS date);
-    
-    EXEC DataLoadSimulation.DailyProcessToCreateHistory 
+
+    EXEC DataLoadSimulation.DailyProcessToCreateHistory
         @StartDate = @StartingDate,
         @EndDate = @EndingDate,
         @AverageNumberOfCustomerOrdersPerDay = @AverageNumberOfCustomerOrdersPerDay,
@@ -3810,14 +3808,23 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    IF SERVERPROPERTY(N'IsXTPSupported') = 0 -- TODO !! - currently no separate test for columnstore 
+    IF SERVERPROPERTY(N'IsXTPSupported') = 0 -- TODO !! - currently no separate test for columnstore
     BEGIN                                    -- but same editions with XTP support columnstore
         PRINT N'Warning: Columnstore indexes cannot be created on this edition.';
     END ELSE BEGIN -- if columnstore can be created
         DECLARE @SQL nvarchar(max) = N'';
 
         BEGIN TRY;
+
             BEGIN TRAN;
+
+            -- enable page compression on archive tables
+            SET @SQL = N''
+            SELECT @SQL +=N'
+ALTER INDEX [' + i.name + N'] ON [' + schema_name(o.schema_id) + N'].[' + o.name + N'] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, DATA_COMPRESSION = PAGE);  '
+            FROM sys.indexes i JOIN sys.tables o ON i.object_id=o.object_id
+            WHERE o.temporal_type = 1 AND i.type=1
+            EXECUTE (@SQL);
 
             IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'NCCX_Sales_OrderLines')
             BEGIN
@@ -3856,12 +3863,12 @@ ON Sales.InvoiceLines
             IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'CCX_Warehouse_StockItemTransactions')
             BEGIN
                 SET @SQL = N'
-ALTER TABLE Warehouse.StockItemTransactions 
+ALTER TABLE Warehouse.StockItemTransactions
 DROP CONSTRAINT PK_Warehouse_StockItemTransactions;';
                 EXECUTE (@SQL);
 
                 SET @SQL = N'
-ALTER TABLE Warehouse.StockItemTransactions 
+ALTER TABLE Warehouse.StockItemTransactions
 ADD CONSTRAINT PK_Warehouse_StockItemTransactions PRIMARY KEY NONCLUSTERED (StockItemTransactionID);';
                 EXECUTE (@SQL);
 
@@ -3898,9 +3905,9 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
-    
-    IF SERVERPROPERTY(N'IsXTPSupported') = 0 
-    BEGIN                                    
+
+    IF SERVERPROPERTY(N'IsXTPSupported') = 0
+    BEGIN
         PRINT N'Warning: In-memory tables cannot be created on this edition.';
     END ELSE BEGIN -- if in-memory can be created
 
@@ -3909,27 +3916,25 @@ BEGIN
 		BEGIN TRY
 			IF CAST(SERVERPROPERTY(N'EngineEdition') AS int) <> 5   -- Not an Azure SQL DB
 			BEGIN
-				DECLARE @SQLDataFolder nvarchar(max) = (SELECT SUBSTRING(df.physical_name, 1, CHARINDEX(N'WideWorldImporters.mdf', df.physical_name, 1) - 1)
-				                                        FROM sys.database_files AS df
-				                                        WHERE df.file_id = 1);
+				DECLARE @SQLDataFolder nvarchar(max) = CAST(SERVERPROPERTY('InstanceDefaultDataPath') AS nvarchar(max));
 				DECLARE @MemoryOptimizedFilegroupFolder nvarchar(max) = @SQLDataFolder + N'WideWorldImporters_InMemory_Data_1';
 
 				IF NOT EXISTS (SELECT 1 FROM sys.filegroups WHERE name = N'WWI_InMemory_Data')
 				BEGIN
 				    SET @SQL = N'
-ALTER DATABASE WideWorldImporters 
+ALTER DATABASE WideWorldImporters
 ADD FILEGROUP WWI_InMemory_Data CONTAINS MEMORY_OPTIMIZED_DATA;';
 					EXECUTE (@SQL);
 
 					SET @SQL = N'
 ALTER DATABASE WideWorldImporters
 ADD FILE (name = N''WWI_InMemory_Data_1'', filename = '''
-		                 + @MemoryOptimizedFilegroupFolder + N''') 
+		                 + @MemoryOptimizedFilegroupFolder + N''')
 TO FILEGROUP WWI_InMemory_Data;';
 					EXECUTE (@SQL);
 
 					SET @SQL = N'
-ALTER DATABASE WideWorldImporters 
+ALTER DATABASE WideWorldImporters
 SET MEMORY_OPTIMIZED_ELEVATE_TO_SNAPSHOT = ON;';
 					EXECUTE (@SQL);
 				END;
@@ -3945,50 +3950,50 @@ ALTER TABLE Warehouse.ColdRoomTemperatures DROP CONSTRAINT PK_Warehouse_ColdRoom
                 EXECUTE (@SQL);
 
                 SET @SQL = N'
-EXEC dbo.sp_rename @objname = N''Warehouse.ColdRoomTemperatures'', 
-                   @newname = N''ColdRoomTemperatures_Backup'', 
+EXEC dbo.sp_rename @objname = N''Warehouse.ColdRoomTemperatures'',
+                   @newname = N''ColdRoomTemperatures_Backup'',
                    @objtype = N''OBJECT'';';
                 EXECUTE (@SQL);
 
                 SET @SQL = N'
 CREATE TABLE Warehouse.ColdRoomTemperatures
 (
-    ColdRoomTemperatureID bigint IDENTITY(1,1) NOT NULL
-       PRIMARY KEY NONCLUSTERED,
+    ColdRoomTemperatureID bigint IDENTITY(1,1) NOT NULL,
     ColdRoomSensorNumber int NOT NULL,
     RecordedWhen datetime2(7) NOT NULL,
     Temperature decimal(10, 2) NOT NULL,
     ValidFrom datetime2(7) NOT NULL,
-    ValidTo datetime2(7) NOT NULL
+    ValidTo datetime2(7) NOT NULL,
+    CONSTRAINT PK_Warehouse_ColdRoomTemperatures PRIMARY KEY NONCLUSTERED (ColdRoomTemperatureID)
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_AND_DATA);';
                 EXECUTE (@SQL);
 
                 SET @SQL = N'
-SET IDENTITY_INSERT Warehouse.ColdRoomTemperatures ON; 
+SET IDENTITY_INSERT Warehouse.ColdRoomTemperatures ON;
 
-INSERT Warehouse.ColdRoomTemperatures (ColdRoomTemperatureID, ColdRoomSensorNumber, RecordedWhen, Temperature, 
-                                       ValidFrom, ValidTo) 
-SELECT ColdRoomTemperatureID, ColdRoomSensorNumber, RecordedWhen, Temperature, ValidFrom, ValidTo 
-FROM Warehouse.ColdRoomTemperatures_Backup; 
+INSERT Warehouse.ColdRoomTemperatures (ColdRoomTemperatureID, ColdRoomSensorNumber, RecordedWhen, Temperature,
+                                       ValidFrom, ValidTo)
+SELECT ColdRoomTemperatureID, ColdRoomSensorNumber, RecordedWhen, Temperature, ValidFrom, ValidTo
+FROM Warehouse.ColdRoomTemperatures_Backup;
 
 SET IDENTITY_INSERT Warehouse.ColdRoomTemperatures OFF;';
-                EXECUTE (@SQL); 
+                EXECUTE (@SQL);
 
                 SET @SQL = N'DROP TABLE Warehouse.ColdRoomTemperatures_Backup;';
                 EXECUTE (@SQL);
 
                 SET @SQL = N'
-ALTER TABLE Warehouse.ColdRoomTemperatures 
+ALTER TABLE Warehouse.ColdRoomTemperatures
 ADD PERIOD FOR SYSTEM_TIME(ValidFrom, ValidTo);';
                 EXECUTE (@SQL);
 
                 SET @SQL = N'
-ALTER TABLE Warehouse.ColdRoomTemperatures 
+ALTER TABLE Warehouse.ColdRoomTemperatures
 SET (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Warehouse.ColdRoomTemperatures_Archive, DATA_CONSISTENCY_CHECK = ON));';
                 EXECUTE (@SQL);
 
             END; -- of if we need to move ColdRoomTemperatures
-            
+
             IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = N'VehicleTemperatures' AND is_memory_optimized <> 0)
             BEGIN
 
@@ -3997,8 +4002,8 @@ ALTER TABLE Warehouse.VehicleTemperatures DROP CONSTRAINT PK_Warehouse_VehicleTe
                 EXECUTE (@SQL);
 
                 SET @SQL = N'
-EXEC dbo.sp_rename @objname = N''Warehouse.VehicleTemperatures'', 
-                   @newname = N''VehicleTemperatures_Backup'', 
+EXEC dbo.sp_rename @objname = N''Warehouse.VehicleTemperatures'',
+                   @newname = N''VehicleTemperatures_Backup'',
                    @objtype = N''OBJECT'';';
                 EXECUTE (@SQL);
 
@@ -4013,20 +4018,21 @@ CREATE TABLE Warehouse.VehicleTemperatures
 	Temperature decimal(10, 2) NOT NULL,
 	FullSensorData nvarchar(1000) COLLATE Latin1_General_CI_AS NULL,
     IsCompressed bit NOT NULL,
-    CompressedSensorData varbinary(max) NULL
+    CompressedSensorData varbinary(max) NULL,
+    CONSTRAINT PK_Warehouse_VehicleTemperatures PRIMARY KEY NONCLUSTERED (VehicleTemperatureID)
 ) WITH (MEMORY_OPTIMIZED = ON , DURABILITY = SCHEMA_AND_DATA);';
                 EXECUTE (@SQL);
 
                 SET @SQL = N'
-SET IDENTITY_INSERT Warehouse.VehicleTemperatures ON; 
+SET IDENTITY_INSERT Warehouse.VehicleTemperatures ON;
 
-INSERT Warehouse.VehicleTemperatures 
-    (VehicleTemperatureID, VehicleRegistration, ChillerSensorNumber, RecordedWhen, Temperature, FullSensorData, IsCompressed, CompressedSensorData) 
+INSERT Warehouse.VehicleTemperatures
+    (VehicleTemperatureID, VehicleRegistration, ChillerSensorNumber, RecordedWhen, Temperature, FullSensorData, IsCompressed, CompressedSensorData)
 SELECT VehicleTemperatureID, VehicleRegistration, ChillerSensorNumber, RecordedWhen, Temperature, FullSensorData, IsCompressed, CompressedSensorData
-FROM Warehouse.VehicleTemperatures_Backup; 
+FROM Warehouse.VehicleTemperatures_Backup;
 
-SET IDENTITY_INSERT Warehouse.VehicleTemperatures OFF;'; 
-                EXECUTE (@SQL); 
+SET IDENTITY_INSERT Warehouse.VehicleTemperatures OFF;';
+                EXECUTE (@SQL);
 
                 SET @SQL = N'DROP TABLE Warehouse.VehicleTemperatures_Backup;';
                 EXECUTE (@SQL);
@@ -4036,22 +4042,22 @@ SET IDENTITY_INSERT Warehouse.VehicleTemperatures OFF;';
             -- Drop the procedures that are used by the table types
 
             SET @SQL = N'DROP PROCEDURE IF EXISTS Website.InvoiceCustomerOrders;';
-            EXECUTE (@SQL);           
+            EXECUTE (@SQL);
             SET @SQL = N'DROP PROCEDURE IF EXISTS Website.InsertCustomerOrders;';
-            EXECUTE (@SQL);       
+            EXECUTE (@SQL);
 			SET @SQL = N'DROP PROCEDURE IF EXISTS Website.RecordColdRoomTemperatures;';
 			EXECUTE (@SQL);
 
             -- Drop the table types
 
             SET @SQL = N'DROP TYPE IF EXISTS Website.OrderIDList;';
-            EXECUTE (@SQL);           
+            EXECUTE (@SQL);
             SET @SQL = N'DROP TYPE IF EXISTS Website.OrderLineList;';
-            EXECUTE (@SQL);           
+            EXECUTE (@SQL);
             SET @SQL = N'DROP TYPE IF EXISTS Website.OrderList;';
-            EXECUTE (@SQL);           
+            EXECUTE (@SQL);
             SET @SQL = N'DROP TYPE IF EXISTS Website.SensorDataList;';
-            EXECUTE (@SQL);           
+            EXECUTE (@SQL);
 
             -- Create the new table types
 
@@ -4059,7 +4065,7 @@ SET IDENTITY_INSERT Warehouse.VehicleTemperatures OFF;';
 CREATE TYPE Website.OrderIDList AS TABLE
 (
     OrderID int PRIMARY KEY NONCLUSTERED
-) 
+)
 WITH (MEMORY_OPTIMIZED = ON);';
             EXECUTE (@SQL);
 
@@ -4067,14 +4073,14 @@ WITH (MEMORY_OPTIMIZED = ON);';
 CREATE TYPE Website.OrderList AS TABLE
 (
     OrderReference int PRIMARY KEY NONCLUSTERED,
-    CustomerID int, 
-    ContactPersonID int, 
-    ExpectedDeliveryDate date, 
-    CustomerPurchaseOrderNumber nvarchar(20), 
-    IsUndersupplyBackordered bit, 
-    Comments nvarchar(max), 
+    CustomerID int,
+    ContactPersonID int,
+    ExpectedDeliveryDate date,
+    CustomerPurchaseOrderNumber nvarchar(20),
+    IsUndersupplyBackordered bit,
+    Comments nvarchar(max),
     DeliveryInstructions nvarchar(max)
-) 
+)
 WITH (MEMORY_OPTIMIZED = ON);';
             EXECUTE (@SQL);
 
@@ -4082,11 +4088,11 @@ WITH (MEMORY_OPTIMIZED = ON);';
 CREATE TYPE Website.OrderLineList AS TABLE
 (
     OrderReference int,
-    StockItemID int, 
-    [Description] nvarchar(100), 
+    StockItemID int,
+    [Description] nvarchar(100),
     Quantity int,
     INDEX IX_Website_OrderLineList NONCLUSTERED (OrderReference)
-) 
+)
 WITH (MEMORY_OPTIMIZED = ON);';
             EXECUTE (@SQL);
 
@@ -4097,7 +4103,7 @@ CREATE TYPE Website.SensorDataList AS TABLE
 	ColdRoomSensorNumber int,
 	RecordedWhen datetime2(7),
 	Temperature decimal(18,2)
-) 
+)
 WITH (MEMORY_OPTIMIZED = ON);';
             EXECUTE (@SQL);
 
@@ -4107,12 +4113,12 @@ CREATE PROCEDURE Website.InvoiceCustomerOrders
 @PackedByPersonID int,
 @InvoicedByPersonID int
 WITH EXECUTE AS OWNER
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    DECLARE @InvoicesToGenerate TABLE 
+    DECLARE @InvoicesToGenerate TABLE
     (
         OrderID int PRIMARY KEY,
         InvoiceID int NOT NULL,
@@ -4124,8 +4130,8 @@ BEGIN
 
         -- Check that all orders exist, have been fully picked, and not already invoiced. Also allocate new invoice numbers.
         INSERT @InvoicesToGenerate (OrderID, InvoiceID, TotalDryItems, TotalChillerItems)
-        SELECT oti.OrderID, 
-               NEXT VALUE FOR Sequences.InvoiceID, 
+        SELECT oti.OrderID,
+               NEXT VALUE FOR Sequences.InvoiceID,
                COALESCE((SELECT SUM(CASE WHEN si.IsChillerStock <> 0 THEN 0 ELSE 1 END)
                          FROM Sales.OrderLines AS ol
                          INNER JOIN Warehouse.StockItems AS si
@@ -4141,7 +4147,7 @@ BEGIN
         ON oti.OrderID = o.OrderID
         WHERE NOT EXISTS (SELECT 1 FROM Sales.Invoices AS i
                                    WHERE i.OrderID = oti.OrderID)
-        AND o.PickingCompletedWhen IS NOT NULL; 
+        AND o.PickingCompletedWhen IS NOT NULL;
 
         IF EXISTS (SELECT 1 FROM @OrdersToInvoice AS oti WHERE NOT EXISTS (SELECT 1 FROM @InvoicesToGenerate AS itg WHERE itg.OrderID = oti.OrderID))
         BEGIN
@@ -4151,88 +4157,88 @@ BEGIN
 
         BEGIN TRAN;
 
-        INSERT Sales.Invoices 
-            (InvoiceID, CustomerID, BillToCustomerID, OrderID, DeliveryMethodID, ContactPersonID, AccountsPersonID, 
-             SalespersonPersonID, PackedByPersonID, InvoiceDate, CustomerPurchaseOrderNumber, 
-             IsCreditNote, CreditNoteReason, Comments, DeliveryInstructions, InternalComments, 
-             TotalDryItems, TotalChillerItems,  DeliveryRun, RunPosition, 
-             ReturnedDeliveryData, 
+        INSERT Sales.Invoices
+            (InvoiceID, CustomerID, BillToCustomerID, OrderID, DeliveryMethodID, ContactPersonID, AccountsPersonID,
+             SalespersonPersonID, PackedByPersonID, InvoiceDate, CustomerPurchaseOrderNumber,
+             IsCreditNote, CreditNoteReason, Comments, DeliveryInstructions, InternalComments,
+             TotalDryItems, TotalChillerItems,  DeliveryRun, RunPosition,
+             ReturnedDeliveryData,
              LastEditedBy, LastEditedWhen)
         SELECT itg.InvoiceID, c.CustomerID, c.BillToCustomerID, itg.OrderID, c.DeliveryMethodID, o.ContactPersonID, btc.PrimaryContactPersonID,
                o.SalespersonPersonID, @PackedByPersonID, SYSDATETIME(), o.CustomerPurchaseOrderNumber,
                0, NULL, NULL, c.DeliveryAddressLine1 + N'', '' + c.DeliveryAddressLine2, NULL,
-               itg.TotalDryItems, itg.TotalChillerItems, c.DeliveryRun, c.RunPosition, 
-               JSON_MODIFY(N''{"Events": []}'', N''append $.Events'', 
-                   JSON_MODIFY(JSON_MODIFY(JSON_MODIFY(N''{ }'', N''$.Event'', N''Ready for collection''), 
+               itg.TotalDryItems, itg.TotalChillerItems, c.DeliveryRun, c.RunPosition,
+               JSON_MODIFY(N''{"Events": []}'', N''append $.Events'',
+                   JSON_MODIFY(JSON_MODIFY(JSON_MODIFY(N''{ }'', N''$.Event'', N''Ready for collection''),
                    N''$.EventTime'', CONVERT(nvarchar(20), SYSDATETIME(), 126)),
-                   N''$.ConNote'', N''EAN-125-'' + CAST(itg.InvoiceID + 1050 AS nvarchar(20)))),               
-               @InvoicedByPersonID, SYSDATETIME()  
+                   N''$.ConNote'', N''EAN-125-'' + CAST(itg.InvoiceID + 1050 AS nvarchar(20)))),
+               @InvoicedByPersonID, SYSDATETIME()
         FROM @InvoicesToGenerate AS itg
         INNER JOIN Sales.Orders AS o
-        ON itg.OrderID = o.OrderID 
+        ON itg.OrderID = o.OrderID
         INNER JOIN Sales.Customers AS c
         ON o.CustomerID = c.CustomerID
         INNER JOIN Sales.Customers AS btc
         ON btc.CustomerID = c.BillToCustomerID;
 
-        INSERT Sales.InvoiceLines 
-            (InvoiceID, StockItemID, [Description], PackageTypeID, 
-             Quantity, UnitPrice, TaxRate, TaxAmount, LineProfit, ExtendedPrice, 
+        INSERT Sales.InvoiceLines
+            (InvoiceID, StockItemID, [Description], PackageTypeID,
+             Quantity, UnitPrice, TaxRate, TaxAmount, LineProfit, ExtendedPrice,
              LastEditedBy, LastEditedWhen)
         SELECT itg.InvoiceID, ol.StockItemID, ol.[Description], ol.PackageTypeID,
-               ol.PickedQuantity, ol.UnitPrice, ol.TaxRate, 
+               ol.PickedQuantity, ol.UnitPrice, ol.TaxRate,
                ROUND(ol.PickedQuantity * ol.UnitPrice * ol.TaxRate / 100.0, 2),
                ROUND(ol.PickedQuantity * (ol.UnitPrice - sih.LastCostPrice), 2),
                ROUND(ol.PickedQuantity * ol.UnitPrice, 2)
                  + ROUND(ol.PickedQuantity * ol.UnitPrice * ol.TaxRate / 100.0, 2),
-               @InvoicedByPersonID, SYSDATETIME() 
+               @InvoicedByPersonID, SYSDATETIME()
         FROM @InvoicesToGenerate AS itg
         INNER JOIN Sales.OrderLines AS ol
-        ON itg.OrderID = ol.OrderID 
+        ON itg.OrderID = ol.OrderID
         INNER JOIN Warehouse.StockItems AS si
         ON ol.StockItemID = si.StockItemID
         INNER JOIN Warehouse.StockItemHoldings AS sih
         ON si.StockItemID = sih.StockItemID
-        ORDER BY ol.OrderID, ol.OrderLineID; 
+        ORDER BY ol.OrderID, ol.OrderLineID;
 
         INSERT Warehouse.StockItemTransactions
-            (StockItemID, TransactionTypeID, CustomerID, InvoiceID, SupplierID, PurchaseOrderID, 
+            (StockItemID, TransactionTypeID, CustomerID, InvoiceID, SupplierID, PurchaseOrderID,
              TransactionOccurredWhen, Quantity, LastEditedBy, LastEditedWhen)
         SELECT il.StockItemID, (SELECT TransactionTypeID FROM [Application].TransactionTypes WHERE TransactionTypeName = N''Stock Issue''),
                i.CustomerID, i.InvoiceID, NULL, NULL,
-               SYSDATETIME(), 0 - il.Quantity, @InvoicedByPersonID, SYSDATETIME() 
+               SYSDATETIME(), 0 - il.Quantity, @InvoicedByPersonID, SYSDATETIME()
         FROM @InvoicesToGenerate AS itg
         INNER JOIN Sales.InvoiceLines AS il
-        ON itg.InvoiceID = il.InvoiceID 
+        ON itg.InvoiceID = il.InvoiceID
         INNER JOIN Sales.Invoices AS i
-        ON il.InvoiceID = i.InvoiceID 
+        ON il.InvoiceID = i.InvoiceID
         ORDER BY il.InvoiceID, il.InvoiceLineID;
 
         WITH StockItemTotals
         AS
         (
-            SELECT il.StockItemID, SUM(il.Quantity) AS TotalQuantity 
-            FROM Sales.InvoiceLines aS il 
-            WHERE il.InvoiceID IN (SELECT InvoiceID FROM @InvoicesToGenerate) 
-            GROUP BY il.StockItemID 
+            SELECT il.StockItemID, SUM(il.Quantity) AS TotalQuantity
+            FROM Sales.InvoiceLines aS il
+            WHERE il.InvoiceID IN (SELECT InvoiceID FROM @InvoicesToGenerate)
+            GROUP BY il.StockItemID
         )
         UPDATE sih
         SET sih.QuantityOnHand -= sit.TotalQuantity,
             sih.LastEditedBy = @InvoicedByPersonID,
-            sih.LastEditedWhen = SYSDATETIME() 
+            sih.LastEditedWhen = SYSDATETIME()
         FROM Warehouse.StockItemHoldings AS sih
-        INNER JOIN StockItemTotals AS sit 
+        INNER JOIN StockItemTotals AS sit
         ON sih.StockItemID = sit.StockItemID;
 
-        INSERT Sales.CustomerTransactions 
-            (CustomerID, TransactionTypeID, InvoiceID, PaymentMethodID, 
-             TransactionDate, AmountExcludingTax, TaxAmount, TransactionAmount, 
+        INSERT Sales.CustomerTransactions
+            (CustomerID, TransactionTypeID, InvoiceID, PaymentMethodID,
+             TransactionDate, AmountExcludingTax, TaxAmount, TransactionAmount,
              OutstandingBalance, FinalizationDate, LastEditedBy, LastEditedWhen)
-        SELECT i.BillToCustomerID, 
+        SELECT i.BillToCustomerID,
                (SELECT TransactionTypeID FROM [Application].TransactionTypes WHERE TransactionTypeName = N''Customer Invoice''),
                itg.InvoiceID,
                NULL,
-               SYSDATETIME(), 
+               SYSDATETIME(),
                (SELECT SUM(il.ExtendedPrice - il.TaxAmount) FROM Sales.InvoiceLines AS il WHERE il.InvoiceID = itg.InvoiceID),
                (SELECT SUM(il.TaxAmount) FROM Sales.InvoiceLines AS il WHERE il.InvoiceID = itg.InvoiceID),
                (SELECT SUM(il.ExtendedPrice) FROM Sales.InvoiceLines AS il WHERE il.InvoiceID = itg.InvoiceID),
@@ -4240,12 +4246,12 @@ BEGIN
                NULL,
                @InvoicedByPersonID,
                SYSDATETIME()
-        FROM @InvoicesToGenerate AS itg 
+        FROM @InvoicesToGenerate AS itg
         INNER JOIN Sales.Invoices AS i
-        ON itg.InvoiceID = i.InvoiceID; 
+        ON itg.InvoiceID = i.InvoiceID;
 
         COMMIT;
-        
+
     END TRY
     BEGIN CATCH
         IF XACT_STATE() <> 0 ROLLBACK;
@@ -4269,7 +4275,7 @@ BEGIN ATOMIC WITH
 	LANGUAGE = N''English''
 )
     BEGIN TRY
-        
+
 		DECLARE @NumberOfReadings int = (SELECT MAX(SensorDataListID) FROM @SensorReadings);
 		DECLARE @Counter int = (SELECT MIN(SensorDataListID) FROM @SensorReadings);
 
@@ -4283,18 +4289,18 @@ BEGIN ATOMIC WITH
 		BEGIN
 			SELECT @ColdRoomSensorNumber = ColdRoomSensorNumber,
 			       @RecordedWhen = RecordedWhen,
-				   @Temperature = Temperature 
-			FROM @SensorReadings 
+				   @Temperature = Temperature
+			FROM @SensorReadings
 			WHERE SensorDataListID = @Counter;
 
-			UPDATE Warehouse.ColdRoomTemperatures 
+			UPDATE Warehouse.ColdRoomTemperatures
 				SET RecordedWhen = @RecordedWhen,
-				    Temperature = @Temperature 
+				    Temperature = @Temperature
 			WHERE ColdRoomSensorNumber = @ColdRoomSensorNumber;
 
 			IF @@ROWCOUNT = 0
 			BEGIN
-				INSERT Warehouse.ColdRoomTemperatures 
+				INSERT Warehouse.ColdRoomTemperatures
 					(ColdRoomSensorNumber, RecordedWhen, Temperature)
 				VALUES (@ColdRoomSensorNumber, @RecordedWhen, @Temperature);
 			END;
@@ -4305,7 +4311,7 @@ BEGIN ATOMIC WITH
     END TRY
     BEGIN CATCH
         THROW 51000, N''Unable to apply the sensor data'', 2;
-        
+
         RETURN 1;
     END CATCH;
 END;';
@@ -4318,7 +4324,7 @@ CREATE PROCEDURE Website.InsertCustomerOrders
 @OrdersCreatedByPersonID int,
 @SalespersonPersonID int
 WITH EXECUTE AS OWNER
-AS 
+AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
@@ -4336,12 +4342,12 @@ BEGIN
     FROM @Orders;
 
     BEGIN TRY
-    
+
         BEGIN TRAN;
 
-        INSERT Sales.Orders 
-            (OrderID, CustomerID, SalespersonPersonID, PickedByPersonID, ContactPersonID, BackorderOrderID, OrderDate, 
-             ExpectedDeliveryDate, CustomerPurchaseOrderNumber, IsUndersupplyBackordered, Comments, DeliveryInstructions, InternalComments, 
+        INSERT Sales.Orders
+            (OrderID, CustomerID, SalespersonPersonID, PickedByPersonID, ContactPersonID, BackorderOrderID, OrderDate,
+             ExpectedDeliveryDate, CustomerPurchaseOrderNumber, IsUndersupplyBackordered, Comments, DeliveryInstructions, InternalComments,
              PickingCompletedWhen, LastEditedBy, LastEditedWhen)
         SELECT otg.OrderID, o.CustomerID, @SalespersonPersonID, NULL, o.ContactPersonID, NULL, SYSDATETIME(),
                o.ExpectedDeliveryDate, o.CustomerPurchaseOrderNumber, o.IsUndersupplyBackordered, o.Comments, o.DeliveryInstructions, NULL,
@@ -4350,8 +4356,8 @@ BEGIN
         INNER JOIN @Orders AS o
         ON otg.OrderReference = o.OrderReference;
 
-        INSERT Sales.OrderLines 
-            (OrderID, StockItemID, [Description], PackageTypeID, Quantity, UnitPrice, 
+        INSERT Sales.OrderLines
+            (OrderID, StockItemID, [Description], PackageTypeID, Quantity, UnitPrice,
              TaxRate, PickedQuantity, PickingCompletedWhen, LastEditedBy, LastEditedWhen)
         SELECT otg.OrderID, ol.StockItemID, ol.[Description], si.UnitPackageID, ol.Quantity,
                Website.CalculateCustomerPrice(o.CustomerID, ol.StockItemID, SYSDATETIME()),
@@ -4365,7 +4371,7 @@ BEGIN
         ON ol.StockItemID = si.StockItemID;
 
         COMMIT;
-    
+
     END TRY
     BEGIN CATCH
         IF XACT_STATE() <> 0 ROLLBACK;
@@ -4411,7 +4417,7 @@ BEGIN
             SET @SQL = N'
 CREATE FULLTEXT INDEX
 ON [Application].People (SearchName, CustomFields, OtherLanguages)
-KEY INDEX PK_Application_People 
+KEY INDEX PK_Application_People
 WITH CHANGE_TRACKING AUTO;';
             EXECUTE (@SQL);
         END;
@@ -4421,7 +4427,7 @@ WITH CHANGE_TRACKING AUTO;';
             SET @SQL = N'
 CREATE FULLTEXT INDEX
 ON Sales.Customers (CustomerName)
-KEY INDEX PK_Sales_Customers 
+KEY INDEX PK_Sales_Customers
 WITH CHANGE_TRACKING AUTO;';
             EXECUTE (@SQL);
         END;
@@ -4455,8 +4461,8 @@ CREATE PROCEDURE Website.SearchForPeople
 @MaximumRowsToReturn int
 AS
 BEGIN
-    SELECT p.PersonID, 
-           p.FullName, 
+    SELECT p.PersonID,
+           p.FullName,
            p.PreferredName,
            CASE WHEN p.IsSalesperson <> 0 THEN N''Salesperson''
                 WHEN p.IsEmployee <> 0 THEN N''Employee''
@@ -4469,11 +4475,11 @@ BEGIN
     INNER JOIN FREETEXTTABLE([Application].People, SearchName, @SearchText, @MaximumRowsToReturn) AS ft
     ON p.PersonID = ft.[KEY]
     LEFT OUTER JOIN Sales.Customers AS c
-    ON c.PrimaryContactPersonID = p.PersonID 
+    ON c.PrimaryContactPersonID = p.PersonID
     LEFT OUTER JOIN Purchasing.Suppliers AS sp
-    ON sp.PrimaryContactPersonID = p.PersonID 
+    ON sp.PrimaryContactPersonID = p.PersonID
     LEFT OUTER JOIN Purchasing.Suppliers AS sa
-    ON sa.AlternateContactPersonID = p.PersonID 
+    ON sa.AlternateContactPersonID = p.PersonID
     ORDER BY ft.[RANK]
     FOR JSON AUTO, ROOT(N''People'');
 END;';
@@ -4488,10 +4494,10 @@ CREATE PROCEDURE Website.SearchForSuppliers
 @MaximumRowsToReturn int
 AS
 BEGIN
-    SELECT s.SupplierID, 
-           s.SupplierName, 
-           c.CityName, 
-           s.PhoneNumber, 
+    SELECT s.SupplierID,
+           s.SupplierName,
+           c.CityName,
+           s.PhoneNumber,
            s.FaxNumber ,
            p.FullName AS PrimaryContactFullName,
            p.PreferredName AS PrimaryContactPreferredName
@@ -4499,9 +4505,9 @@ BEGIN
     INNER JOIN FREETEXTTABLE(Purchasing.Suppliers, SupplierName, @SearchText, @MaximumRowsToReturn) AS ft
     ON s.SupplierID = ft.[KEY]
     INNER JOIN [Application].Cities AS c
-    ON s.DeliveryCityID = c.CityID 
+    ON s.DeliveryCityID = c.CityID
     LEFT OUTER JOIN [Application].People AS p
-    ON s.PrimaryContactPersonID = p.PersonID 
+    ON s.PrimaryContactPersonID = p.PersonID
     ORDER BY ft.[RANK]
     FOR JSON AUTO, ROOT(N''Suppliers'');
 END;';
@@ -4517,20 +4523,20 @@ CREATE PROCEDURE Website.SearchForCustomers
 WITH EXECUTE AS OWNER
 AS
 BEGIN
-    SELECT c.CustomerID, 
-           c.CustomerName, 
-           ct.CityName, 
-           c.PhoneNumber, 
-           c.FaxNumber, 
+    SELECT c.CustomerID,
+           c.CustomerName,
+           ct.CityName,
+           c.PhoneNumber,
+           c.FaxNumber,
            p.FullName AS PrimaryContactFullName,
            p.PreferredName AS PrimaryContactPreferredName
     FROM Sales.Customers AS c
     INNER JOIN FREETEXTTABLE(Sales.Customers, CustomerName, @SearchText, @MaximumRowsToReturn) AS ft
     ON c.CustomerID = ft.[KEY]
     INNER JOIN [Application].Cities AS ct
-    ON c.DeliveryCityID = ct.CityID 
+    ON c.DeliveryCityID = ct.CityID
     LEFT OUTER JOIN [Application].People AS p
-    ON c.PrimaryContactPersonID = p.PersonID 
+    ON c.PrimaryContactPersonID = p.PersonID
     ORDER BY ft.[RANK]
     FOR JSON AUTO, ROOT(N''Customers'');
 END;';
@@ -4546,7 +4552,7 @@ CREATE PROCEDURE Website.SearchForStockItems
 WITH EXECUTE AS OWNER
 AS
 BEGIN
-    SELECT si.StockItemID, 
+    SELECT si.StockItemID,
            si.StockItemName
     FROM Warehouse.StockItems AS si
     INNER JOIN FREETEXTTABLE(Warehouse.StockItems, SearchDetails, @SearchText, @MaximumRowsToReturn) AS ft
@@ -4566,7 +4572,7 @@ CREATE PROCEDURE Website.SearchForStockItemsByTags
 WITH EXECUTE AS OWNER
 AS
 BEGIN
-    SELECT si.StockItemID, 
+    SELECT si.StockItemID,
            si.StockItemName
     FROM Warehouse.StockItems AS si
     INNER JOIN FREETEXTTABLE(Warehouse.StockItems, Tags, @SearchText, @MaximumRowsToReturn) AS ft
@@ -4603,8 +4609,8 @@ BEGIN
         IF NOT EXISTS (SELECT 1 FROM sys.partition_functions WHERE name = N'PF_TransactionDateTime')
         BEGIN
             SET @SQL =  N'
-CREATE PARTITION FUNCTION PF_TransactionDateTime(datetime) 
-AS RANGE RIGHT 
+CREATE PARTITION FUNCTION PF_TransactionDateTime(datetime)
+AS RANGE RIGHT
 FOR VALUES (N''20140101'', N''20150101'', N''20160101'', N''20170101'');';
             EXECUTE (@SQL);
         END;
@@ -4612,18 +4618,18 @@ FOR VALUES (N''20140101'', N''20150101'', N''20160101'', N''20170101'');';
         IF NOT EXISTS (SELECT 1 FROM sys.partition_functions WHERE name = N'PF_TransactionDate')
         BEGIN
             SET @SQL =  N'
-CREATE PARTITION FUNCTION PF_TransactionDate(date)  
-AS RANGE RIGHT 
+CREATE PARTITION FUNCTION PF_TransactionDate(date)
+AS RANGE RIGHT
 FOR VALUES (N''20140101'', N''20150101'', N''20160101'', N''20170101'');';
             EXECUTE (@SQL);
-        END;       
+        END;
 
         IF NOT EXISTS (SELECT * FROM sys.partition_schemes WHERE name = N'PS_TransactionDateTime')
         BEGIN
             SET @SQL =  N'
-CREATE PARTITION SCHEME PS_TransactionDateTime 
-AS PARTITION PF_TransactionDateTime 
-ALL TO ([PRIMARY]);';
+CREATE PARTITION SCHEME PS_TransactionDateTime
+AS PARTITION PF_TransactionDateTime
+ALL TO ([USERDATA]);';
             EXECUTE (@SQL);
         END;
 
@@ -4631,28 +4637,28 @@ ALL TO ([PRIMARY]);';
         BEGIN
             SET @SQL =  N'
 CREATE PARTITION SCHEME PS_TransactionDate
-AS PARTITION PF_TransactionDate 
-ALL TO ([PRIMARY]);';
+AS PARTITION PF_TransactionDate
+ALL TO ([USERDATA]]);';
             EXECUTE (@SQL);
-        END;       
+        END;
 
         IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'CX_Sales_CustomerTransactions')
         BEGIN
             SET @SQL =  N'
-ALTER TABLE Sales.CustomerTransactions 
+ALTER TABLE Sales.CustomerTransactions
 DROP CONSTRAINT PK_Sales_CustomerTransactions;';
             EXECUTE (@SQL);
 
             SET @SQL = N'
 ALTER TABLE Sales.CustomerTransactions
-ADD CONSTRAINT PK_Sales_CustomerTransactions PRIMARY KEY NONCLUSTERED 
+ADD CONSTRAINT PK_Sales_CustomerTransactions PRIMARY KEY NONCLUSTERED
 (
 	CustomerTransactionID
 );';
             EXECUTE (@SQL);
 
             SET @SQL = N'
-CREATE CLUSTERED INDEX CX_Sales_CustomerTransactions 
+CREATE CLUSTERED INDEX CX_Sales_CustomerTransactions
 ON Sales.CustomerTransactions
 (
 	TransactionDate
@@ -4709,25 +4715,25 @@ ON Sales.CustomerTransactions
 WITH (DROP_EXISTING = ON)
 ON PS_TransactionDate(TransactionDate);';
             EXECUTE (@SQL);
-        END;       
+        END;
 
         IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'CX_Purchasing_SupplierTransactions')
         BEGIN
             SET @SQL =  N'
-ALTER TABLE Purchasing.SupplierTransactions 
+ALTER TABLE Purchasing.SupplierTransactions
 DROP CONSTRAINT PK_Purchasing_SupplierTransactions;';
             EXECUTE (@SQL);
 
             SET @SQL =  N'
 ALTER TABLE Purchasing.SupplierTransactions
-ADD CONSTRAINT PK_Purchasing_SupplierTransactions PRIMARY KEY NONCLUSTERED 
+ADD CONSTRAINT PK_Purchasing_SupplierTransactions PRIMARY KEY NONCLUSTERED
 (
 	SupplierTransactionID
 );';
             EXECUTE (@SQL);
 
             SET @SQL =  N'
-CREATE CLUSTERED INDEX CX_Purchasing_SupplierTransactions 
+CREATE CLUSTERED INDEX CX_Purchasing_SupplierTransactions
 ON Purchasing.SupplierTransactions
 (
 	TransactionDate
@@ -4806,7 +4812,7 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    UPDATE [Application].People 
+    UPDATE [Application].People
     SET IsPermittedToLogon = 1,
         LogonName = @LogonName,
         HashedPassword = HASHBYTES(N'SHA2_256', @InitialPassword + FullName),
@@ -4814,7 +4820,7 @@ BEGIN
     WHERE PersonID = @PersonID
     AND PersonID <> 1
     AND IsPermittedToLogon = 0;
-    
+
     IF @@ROWCOUNT = 0
     BEGIN
         PRINT N'The PersonID must be valid, must not be person 1, and must not already be enabled';
@@ -4837,13 +4843,13 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    UPDATE [Application].People 
+    UPDATE [Application].People
     SET IsPermittedToLogon = 1,
         HashedPassword = HASHBYTES(N'SHA2_256', @NewPassword + FullName)
     WHERE PersonID = @PersonID
     AND PersonID <> 1
     AND HashedPassword = HASHBYTES(N'SHA2_256', @OldPassword + FullName);
-    
+
     IF @@ROWCOUNT = 0
     BEGIN
         PRINT N'The PersonID must be valid, and the old password must be valid.';
@@ -4865,23 +4871,23 @@ SELECT s.SupplierID,
        pp.FullName AS PrimaryContact,
        ap.FullName AS AlternateContact,
        s.PhoneNumber,
-       s.FaxNumber, 
+       s.FaxNumber,
        s.WebsiteURL,
        dm.DeliveryMethodName AS DeliveryMethod,
        c.CityName AS CityName,
        s.DeliveryLocation AS DeliveryLocation,
        s.SupplierReference
 FROM Purchasing.Suppliers AS s
-LEFT OUTER JOIN Purchasing.SupplierCategories AS sc 
+LEFT OUTER JOIN Purchasing.SupplierCategories AS sc
 ON s.SupplierCategoryID = sc.SupplierCategoryID
 LEFT OUTER JOIN [Application].People AS pp
-ON s.PrimaryContactPersonID = pp.PersonID 
+ON s.PrimaryContactPersonID = pp.PersonID
 LEFT OUTER JOIN [Application].People AS ap
-ON s.AlternateContactPersonID = ap.PersonID 
+ON s.AlternateContactPersonID = ap.PersonID
 LEFT OUTER JOIN [Application].DeliveryMethods AS dm
 ON s.DeliveryMethodID = dm.DeliveryMethodID
 LEFT OUTER JOIN [Application].Cities AS c
-ON s.DeliveryCityID = c.CityID 
+ON s.DeliveryCityID = c.CityID
 GO
 
 DROP VIEW IF EXISTS Website.Customers;
@@ -4896,7 +4902,7 @@ SELECT s.CustomerID,
        ap.FullName AS AlternateContact,
        s.PhoneNumber,
        s.FaxNumber,
-       bg.BuyingGroupName, 
+       bg.BuyingGroupName,
        s.WebsiteURL,
        dm.DeliveryMethodName AS DeliveryMethod,
        c.CityName AS CityName,
@@ -4904,18 +4910,18 @@ SELECT s.CustomerID,
        s.DeliveryRun,
        s.RunPosition
 FROM Sales.Customers AS s
-LEFT OUTER JOIN Sales.CustomerCategories AS sc 
+LEFT OUTER JOIN Sales.CustomerCategories AS sc
 ON s.CustomerCategoryID = sc.CustomerCategoryID
 LEFT OUTER JOIN [Application].People AS pp
-ON s.PrimaryContactPersonID = pp.PersonID 
+ON s.PrimaryContactPersonID = pp.PersonID
 LEFT OUTER JOIN [Application].People AS ap
-ON s.AlternateContactPersonID = ap.PersonID 
+ON s.AlternateContactPersonID = ap.PersonID
 LEFT OUTER JOIN Sales.BuyingGroups AS bg
 ON s.BuyingGroupID = bg.BuyingGroupID
 LEFT OUTER JOIN [Application].DeliveryMethods AS dm
 ON s.DeliveryMethodID = dm.DeliveryMethodID
 LEFT OUTER JOIN [Application].Cities AS c
-ON s.DeliveryCityID = c.CityID 
+ON s.DeliveryCityID = c.CityID
 GO
 
 DROP VIEW IF EXISTS Website.VehicleTemperatures;
@@ -4928,9 +4934,9 @@ SELECT vt.VehicleTemperatureID,
        vt.ChillerSensorNumber,
        vt.RecordedWhen,
        vt.Temperature,
-       CASE WHEN vt.IsCompressed <> 0 
+       CASE WHEN vt.IsCompressed <> 0
             THEN CAST(DECOMPRESS(vt.CompressedSensorData) AS nvarchar(1000))
-            ELSE vt.FullSensorData 
+            ELSE vt.FullSensorData
        END AS FullSensorData
 FROM Warehouse.VehicleTemperatures AS vt;
 GO
@@ -4951,10 +4957,10 @@ BEGIN
 
         SET @SQL = N'DROP SECURITY POLICY IF EXISTS [Application].FilterCustomersBySalesTerritoryRole;';
         EXECUTE (@SQL);
-    
+
         SET @SQL = N'DROP FUNCTION IF EXISTS [Application].DetermineCustomerAccess;';
         EXECUTE (@SQL);
-        
+
         PRINT N'Successfully removed row level security';
     END TRY
     BEGIN CATCH
@@ -5026,124 +5032,124 @@ BEGIN
     DECLARE CountryChangeList CURSOR FAST_FORWARD READ_ONLY
     FOR
     SELECT co.CountryID,
-           co.ValidFrom 
+           co.ValidFrom
     FROM [Application].Countries_Archive AS co
-    WHERE co.ValidFrom > @LastCutoff 
-    AND co.ValidFrom <= @NewCutoff 
+    WHERE co.ValidFrom > @LastCutoff
+    AND co.ValidFrom <= @NewCutoff
     AND co.ValidFrom <> @InitialLoadDate
     UNION ALL
     SELECT co.CountryID,
-           co.ValidFrom 
+           co.ValidFrom
     FROM [Application].Countries AS co
-    WHERE co.ValidFrom > @LastCutoff 
+    WHERE co.ValidFrom > @LastCutoff
     AND co.ValidFrom <= @NewCutoff
     AND co.ValidFrom <> @InitialLoadDate
     ORDER BY ValidFrom;
 
     OPEN CountryChangeList;
     FETCH NEXT FROM CountryChangeList INTO @CountryID, @ValidFrom;
-    
+
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        INSERT #CityChanges 
+        INSERT #CityChanges
             ([WWI City ID], City, [State Province], Country, Continent, [Sales Territory], Region, Subregion,
              [Location], [Latest Recorded Population], [Valid From], [Valid To])
         SELECT c.CityID, c.CityName, sp.StateProvinceName, co.CountryName, co.Continent, sp.SalesTerritory, co.Region, co.Subregion,
-               c.[Location], COALESCE(c.LatestRecordedPopulation, 0), @ValidFrom, NULL 
+               c.[Location], COALESCE(c.LatestRecordedPopulation, 0), @ValidFrom, NULL
         FROM [Application].Cities FOR SYSTEM_TIME AS OF @ValidFrom AS c
         INNER JOIN [Application].StateProvinces FOR SYSTEM_TIME AS OF @ValidFrom AS sp
         ON c.StateProvinceID = sp.StateProvinceID
         INNER JOIN [Application].Countries FOR SYSTEM_TIME AS OF @ValidFrom AS co
-        ON sp.CountryID = co.CountryID 
+        ON sp.CountryID = co.CountryID
         WHERE co.CountryID = @CountryID;
-        
+
         FETCH NEXT FROM CountryChangeList INTO @CountryID, @ValidFrom;
     END;
-    
+
     CLOSE CountryChangeList;
-    DEALLOCATE CountryChangeList; 
+    DEALLOCATE CountryChangeList;
 
     -- next need to find any stateprovince changes that have occurred since initial load
 
     DECLARE StateProvinceChangeList CURSOR FAST_FORWARD READ_ONLY
     FOR
     SELECT sp.StateProvinceID,
-           sp.ValidFrom 
+           sp.ValidFrom
     FROM [Application].StateProvinces_Archive AS sp
-    WHERE sp.ValidFrom > @LastCutoff 
-    AND sp.ValidFrom <= @NewCutoff 
+    WHERE sp.ValidFrom > @LastCutoff
+    AND sp.ValidFrom <= @NewCutoff
     AND sp.ValidFrom <> @InitialLoadDate
     UNION ALL
     SELECT sp.StateProvinceID,
-           sp.ValidFrom 
+           sp.ValidFrom
     FROM [Application].StateProvinces AS sp
-    WHERE sp.ValidFrom > @LastCutoff 
-    AND sp.ValidFrom <= @NewCutoff 
+    WHERE sp.ValidFrom > @LastCutoff
+    AND sp.ValidFrom <= @NewCutoff
     AND sp.ValidFrom <> @InitialLoadDate
     ORDER BY ValidFrom;
 
     OPEN StateProvinceChangeList;
     FETCH NEXT FROM StateProvinceChangeList INTO @StateProvinceID, @ValidFrom;
-    
+
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        INSERT #CityChanges 
+        INSERT #CityChanges
             ([WWI City ID], City, [State Province], Country, Continent, [Sales Territory], Region, Subregion,
              [Location], [Latest Recorded Population], [Valid From], [Valid To])
         SELECT c.CityID, c.CityName, sp.StateProvinceName, co.CountryName, co.Continent, sp.SalesTerritory, co.Region, co.Subregion,
-               c.[Location], COALESCE(c.LatestRecordedPopulation, 0), @ValidFrom, NULL 
+               c.[Location], COALESCE(c.LatestRecordedPopulation, 0), @ValidFrom, NULL
         FROM [Application].Cities FOR SYSTEM_TIME AS OF @ValidFrom AS c
         INNER JOIN [Application].StateProvinces FOR SYSTEM_TIME AS OF @ValidFrom AS sp
         ON c.StateProvinceID = sp.StateProvinceID
         INNER JOIN [Application].Countries FOR SYSTEM_TIME AS OF @ValidFrom AS co
-        ON sp.CountryID = co.CountryID 
-        WHERE sp.StateProvinceID = @StateProvinceID;  
-        
+        ON sp.CountryID = co.CountryID
+        WHERE sp.StateProvinceID = @StateProvinceID;
+
         FETCH NEXT FROM StateProvinceChangeList INTO @StateProvinceID, @ValidFrom;
     END;
-    
+
     CLOSE StateProvinceChangeList;
-    DEALLOCATE StateProvinceChangeList; 
+    DEALLOCATE StateProvinceChangeList;
 
     -- finally need to find any city changes that have occurred, including during the initial load
 
     DECLARE CityChangeList CURSOR FAST_FORWARD READ_ONLY
     FOR
     SELECT c.CityID,
-           c.ValidFrom 
+           c.ValidFrom
     FROM [Application].Cities_Archive AS c
-    WHERE c.ValidFrom > @LastCutoff 
-    AND c.ValidFrom <= @NewCutoff 
+    WHERE c.ValidFrom > @LastCutoff
+    AND c.ValidFrom <= @NewCutoff
     UNION ALL
     SELECT c.CityID,
-           c.ValidFrom 
+           c.ValidFrom
     FROM [Application].Cities AS c
-    WHERE c.ValidFrom > @LastCutoff 
-    AND c.ValidFrom <= @NewCutoff 
+    WHERE c.ValidFrom > @LastCutoff
+    AND c.ValidFrom <= @NewCutoff
     ORDER BY ValidFrom;
 
     OPEN CityChangeList;
     FETCH NEXT FROM CityChangeList INTO @CityID, @ValidFrom;
-    
+
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        INSERT #CityChanges 
+        INSERT #CityChanges
             ([WWI City ID], City, [State Province], Country, Continent, [Sales Territory], Region, Subregion,
              [Location], [Latest Recorded Population], [Valid From], [Valid To])
         SELECT c.CityID, c.CityName, sp.StateProvinceName, co.CountryName, co.Continent, sp.SalesTerritory, co.Region, co.Subregion,
-               c.[Location], COALESCE(c.LatestRecordedPopulation, 0), @ValidFrom, NULL 
+               c.[Location], COALESCE(c.LatestRecordedPopulation, 0), @ValidFrom, NULL
         FROM [Application].Cities FOR SYSTEM_TIME AS OF @ValidFrom AS c
         INNER JOIN [Application].StateProvinces FOR SYSTEM_TIME AS OF @ValidFrom AS sp
         ON c.StateProvinceID = sp.StateProvinceID
         INNER JOIN [Application].Countries FOR SYSTEM_TIME AS OF @ValidFrom AS co
-        ON sp.CountryID = co.CountryID 
-        WHERE c.CityID = @CityID;  
-        
+        ON sp.CountryID = co.CountryID
+        WHERE c.CityID = @CityID;
+
         FETCH NEXT FROM CityChangeList INTO @CityID, @ValidFrom;
     END;
-    
+
     CLOSE CityChangeList;
-    DEALLOCATE CityChangeList; 
+    DEALLOCATE CityChangeList;
 
     -- add an index to make lookups faster
 
@@ -5152,16 +5158,16 @@ BEGIN
     -- work out the [Valid To] value by taking the [Valid From] of any row that's for the same city but later
     -- otherwise take the end of time
 
-    UPDATE cc 
-    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #CityChanges AS cc2 
-                                                        WHERE cc2.[WWI City ID] = cc.[WWI City ID] 
+    UPDATE cc
+    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #CityChanges AS cc2
+                                                        WHERE cc2.[WWI City ID] = cc.[WWI City ID]
                                                         AND cc2.[Valid From] > cc.[Valid From]), @EndOfTime)
     FROM #CityChanges AS cc;
 
     SELECT [WWI City ID], City, [State Province], Country, Continent, [Sales Territory],
            Region, Subregion, [Location] geography, [Latest Recorded Population], [Valid From],
            [Valid To]
-    FROM #CityChanges 
+    FROM #CityChanges
     ORDER BY [Valid From];
 
     DROP TABLE #CityChanges;
@@ -5208,32 +5214,32 @@ BEGIN
     DECLARE BuyingGroupChangeList CURSOR FAST_FORWARD READ_ONLY
     FOR
     SELECT bg.BuyingGroupID,
-           bg.ValidFrom 
+           bg.ValidFrom
     FROM Sales.BuyingGroups_Archive AS bg
-    WHERE bg.ValidFrom > @LastCutoff 
-    AND bg.ValidFrom <= @NewCutoff 
+    WHERE bg.ValidFrom > @LastCutoff
+    AND bg.ValidFrom <= @NewCutoff
     AND bg.ValidFrom <> @InitialLoadDate
     UNION ALL
     SELECT bg.BuyingGroupID,
-           bg.ValidFrom 
+           bg.ValidFrom
     FROM Sales.BuyingGroups AS bg
-    WHERE bg.ValidFrom > @LastCutoff 
-    AND bg.ValidFrom <= @NewCutoff 
+    WHERE bg.ValidFrom > @LastCutoff
+    AND bg.ValidFrom <= @NewCutoff
     AND bg.ValidFrom <> @InitialLoadDate
     ORDER BY ValidFrom;
 
     OPEN BuyingGroupChangeList;
     FETCH NEXT FROM BuyingGroupChangeList INTO @BuyingGroupID, @ValidFrom;
-    
+
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        INSERT #CustomerChanges 
+        INSERT #CustomerChanges
             ([WWI Customer ID], Customer, [Bill To Customer], Category,
              [Buying Group], [Primary Contact], [Postal Code],
              [Valid From], [Valid To])
         SELECT c.CustomerID, c.CustomerName, bt.CustomerName, cc.CustomerCategoryName,
                bg.BuyingGroupName, p.FullName, c.DeliveryPostalCode,
-               c.ValidFrom, c.ValidTo 
+               c.ValidFrom, c.ValidTo
         FROM Sales.Customers FOR SYSTEM_TIME AS OF @ValidFrom AS c
         INNER JOIN Sales.BuyingGroups FOR SYSTEM_TIME AS OF @ValidFrom AS bg
         ON c.BuyingGroupID = bg.BuyingGroupID
@@ -5242,46 +5248,46 @@ BEGIN
         INNER JOIN Sales.Customers FOR SYSTEM_TIME AS OF @ValidFrom AS bt
         ON c.BillToCustomerID = bt.CustomerID
         INNER JOIN [Application].People FOR SYSTEM_TIME AS OF @ValidFrom AS p
-        ON c.PrimaryContactPersonID = p.PersonID 
+        ON c.PrimaryContactPersonID = p.PersonID
         WHERE c.BuyingGroupID = @BuyingGroupID;
 
         FETCH NEXT FROM BuyingGroupChangeList INTO @BuyingGroupID, @ValidFrom;
     END;
-    
+
     CLOSE BuyingGroupChangeList;
-    DEALLOCATE BuyingGroupChangeList; 
+    DEALLOCATE BuyingGroupChangeList;
 
     -- next need to find any customer category changes that have occurred since initial load
 
     DECLARE CustomerCategoryChangeList CURSOR FAST_FORWARD READ_ONLY
     FOR
     SELECT cc.CustomerCategoryID,
-           cc.ValidFrom 
+           cc.ValidFrom
     FROM Sales.CustomerCategories_Archive AS cc
-    WHERE cc.ValidFrom > @LastCutoff 
-    AND cc.ValidFrom <= @NewCutoff 
+    WHERE cc.ValidFrom > @LastCutoff
+    AND cc.ValidFrom <= @NewCutoff
     AND cc.ValidFrom <> @InitialLoadDate
     UNION ALL
     SELECT cc.CustomerCategoryID,
-           cc.ValidFrom 
+           cc.ValidFrom
     FROM Sales.CustomerCategories AS cc
-    WHERE cc.ValidFrom > @LastCutoff 
-    AND cc.ValidFrom <= @NewCutoff 
+    WHERE cc.ValidFrom > @LastCutoff
+    AND cc.ValidFrom <= @NewCutoff
     AND cc.ValidFrom <> @InitialLoadDate
     ORDER BY ValidFrom;
 
     OPEN CustomerCategoryChangeList;
     FETCH NEXT FROM CustomerCategoryChangeList INTO @CustomerCategoryID, @ValidFrom;
-    
+
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        INSERT #CustomerChanges 
+        INSERT #CustomerChanges
             ([WWI Customer ID], Customer, [Bill To Customer], Category,
              [Buying Group], [Primary Contact], [Postal Code],
              [Valid From], [Valid To])
         SELECT c.CustomerID, c.CustomerName, bt.CustomerName, cc.CustomerCategoryName,
                bg.BuyingGroupName, p.FullName, c.DeliveryPostalCode,
-               c.ValidFrom, c.ValidTo 
+               c.ValidFrom, c.ValidTo
         FROM Sales.Customers FOR SYSTEM_TIME AS OF @ValidFrom AS c
         INNER JOIN Sales.BuyingGroups FOR SYSTEM_TIME AS OF @ValidFrom AS bg
         ON c.BuyingGroupID = bg.BuyingGroupID
@@ -5290,44 +5296,44 @@ BEGIN
         INNER JOIN Sales.Customers FOR SYSTEM_TIME AS OF @ValidFrom AS bt
         ON c.BillToCustomerID = bt.CustomerID
         INNER JOIN [Application].People FOR SYSTEM_TIME AS OF @ValidFrom AS p
-        ON c.PrimaryContactPersonID = p.PersonID 
+        ON c.PrimaryContactPersonID = p.PersonID
         WHERE cc.CustomerCategoryID = @CustomerCategoryID;
-        
+
         FETCH NEXT FROM CustomerCategoryChangeList INTO @CustomerCategoryID, @ValidFrom;
     END;
-    
+
     CLOSE CustomerCategoryChangeList;
-    DEALLOCATE CustomerCategoryChangeList; 
+    DEALLOCATE CustomerCategoryChangeList;
 
     -- finally need to find any customer changes that have occurred, including during the initial load
 
     DECLARE CustomerChangeList CURSOR FAST_FORWARD READ_ONLY
     FOR
     SELECT c.CustomerID,
-           c.ValidFrom 
+           c.ValidFrom
     FROM Sales.Customers_Archive AS c
-    WHERE c.ValidFrom > @LastCutoff 
-    AND c.ValidFrom <= @NewCutoff 
+    WHERE c.ValidFrom > @LastCutoff
+    AND c.ValidFrom <= @NewCutoff
     UNION ALL
     SELECT c.CustomerID,
-           c.ValidFrom 
+           c.ValidFrom
     FROM Sales.Customers AS c
-    WHERE c.ValidFrom > @LastCutoff 
-    AND c.ValidFrom <= @NewCutoff 
+    WHERE c.ValidFrom > @LastCutoff
+    AND c.ValidFrom <= @NewCutoff
     ORDER BY ValidFrom;
 
     OPEN CustomerChangeList;
     FETCH NEXT FROM CustomerChangeList INTO @CustomerID, @ValidFrom;
-    
+
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        INSERT #CustomerChanges 
+        INSERT #CustomerChanges
             ([WWI Customer ID], Customer, [Bill To Customer], Category,
              [Buying Group], [Primary Contact], [Postal Code],
              [Valid From], [Valid To])
         SELECT c.CustomerID, c.CustomerName, bt.CustomerName, cc.CustomerCategoryName,
                bg.BuyingGroupName, p.FullName, c.DeliveryPostalCode,
-               c.ValidFrom, c.ValidTo 
+               c.ValidFrom, c.ValidTo
         FROM Sales.Customers FOR SYSTEM_TIME AS OF @ValidFrom AS c
         INNER JOIN Sales.BuyingGroups FOR SYSTEM_TIME AS OF @ValidFrom AS bg
         ON c.BuyingGroupID = bg.BuyingGroupID
@@ -5336,14 +5342,14 @@ BEGIN
         INNER JOIN Sales.Customers FOR SYSTEM_TIME AS OF @ValidFrom AS bt
         ON c.BillToCustomerID = bt.CustomerID
         INNER JOIN [Application].People FOR SYSTEM_TIME AS OF @ValidFrom AS p
-        ON c.PrimaryContactPersonID = p.PersonID 
+        ON c.PrimaryContactPersonID = p.PersonID
         WHERE c.CustomerID = @CustomerID;
-        
+
         FETCH NEXT FROM CustomerChangeList INTO @CustomerID, @ValidFrom;
     END;
-    
+
     CLOSE CustomerChangeList;
-    DEALLOCATE CustomerChangeList; 
+    DEALLOCATE CustomerChangeList;
 
     -- add an index to make lookups faster
 
@@ -5352,16 +5358,16 @@ BEGIN
     -- work out the [Valid To] value by taking the [Valid From] of any row that's for the same customer but later
     -- otherwise take the end of time
 
-    UPDATE cc 
-    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #CustomerChanges AS cc2 
-                                                        WHERE cc2.[WWI Customer ID] = cc.[WWI Customer ID] 
+    UPDATE cc
+    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #CustomerChanges AS cc2
+                                                        WHERE cc2.[WWI Customer ID] = cc.[WWI Customer ID]
                                                         AND cc2.[Valid From] > cc.[Valid From]), @EndOfTime)
     FROM #CustomerChanges AS cc;
 
     SELECT [WWI Customer ID], Customer, [Bill To Customer], Category,
            [Buying Group], [Primary Contact], [Postal Code],
            [Valid From], [Valid To]
-    FROM #CustomerChanges 
+    FROM #CustomerChanges
     ORDER BY [Valid From];
 
     DROP TABLE #CustomerChanges;
@@ -5383,16 +5389,15 @@ BEGIN
     SET XACT_ABORT ON;
 
     DECLARE @EndOfTime datetime2(7) = '99991231 23:59:59.9999999';
-    DECLARE @InitialLoadDate date = '20130101';
 
     CREATE TABLE #EmployeeChanges
     (
-        [WWI Employee ID] int, 
-        Employee nvarchar(50), 
-        [Preferred Name] nvarchar(50), 
-        [Is Salesperson] bit, 
-        Photo varbinary(max), 
-        [Valid From] datetime2(7), 
+        [WWI Employee ID] int,
+        Employee nvarchar(50),
+        [Preferred Name] nvarchar(50),
+        [Is Salesperson] bit,
+        Photo varbinary(max),
+        [Valid From] datetime2(7),
         [Valid To] datetime2(7)
     );
 
@@ -5404,38 +5409,38 @@ BEGIN
     DECLARE EmployeeChangeList CURSOR FAST_FORWARD READ_ONLY
     FOR
     SELECT p.PersonID,
-           p.ValidFrom 
+           p.ValidFrom
     FROM [Application].People_Archive AS p
-    WHERE p.ValidFrom > @LastCutoff 
-    AND p.ValidFrom <= @NewCutoff 
+    WHERE p.ValidFrom > @LastCutoff
+    AND p.ValidFrom <= @NewCutoff
     AND p.IsEmployee <> 0
     UNION ALL
     SELECT p.PersonID,
-           p.ValidFrom 
+           p.ValidFrom
     FROM [Application].People AS p
-    WHERE p.ValidFrom > @LastCutoff 
-    AND p.ValidFrom <= @NewCutoff 
+    WHERE p.ValidFrom > @LastCutoff
+    AND p.ValidFrom <= @NewCutoff
     AND p.IsEmployee <> 0
     ORDER BY ValidFrom;
 
     OPEN EmployeeChangeList;
     FETCH NEXT FROM EmployeeChangeList INTO @PersonID, @ValidFrom;
-    
+
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        INSERT #EmployeeChanges 
-            ([WWI Employee ID], Employee, [Preferred Name], [Is Salesperson], Photo, 
+        INSERT #EmployeeChanges
+            ([WWI Employee ID], Employee, [Preferred Name], [Is Salesperson], Photo,
              [Valid From], [Valid To])
         SELECT p.PersonID, p.FullName, p.PreferredName, p.IsSalesperson, p.Photo,
                p.ValidFrom, p.ValidTo
         FROM [Application].People FOR SYSTEM_TIME AS OF @ValidFrom AS p
         WHERE p.PersonID = @PersonID;
-        
+
         FETCH NEXT FROM EmployeeChangeList INTO @PersonID, @ValidFrom;
     END;
-    
+
     CLOSE EmployeeChangeList;
-    DEALLOCATE EmployeeChangeList; 
+    DEALLOCATE EmployeeChangeList;
 
     -- add an index to make lookups faster
 
@@ -5444,15 +5449,15 @@ BEGIN
     -- work out the [Valid To] value by taking the [Valid From] of any row that's for the same entry but later
     -- otherwise take the end of time
 
-    UPDATE cc 
-    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #EmployeeChanges AS cc2 
-                                                        WHERE cc2.[WWI Employee ID] = cc.[WWI Employee ID] 
+    UPDATE cc
+    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #EmployeeChanges AS cc2
+                                                        WHERE cc2.[WWI Employee ID] = cc.[WWI Employee ID]
                                                         AND cc2.[Valid From] > cc.[Valid From]), @EndOfTime)
     FROM #EmployeeChanges AS cc;
 
-    SELECT [WWI Employee ID], Employee, [Preferred Name], [Is Salesperson], Photo, 
+    SELECT [WWI Employee ID], Employee, [Preferred Name], [Is Salesperson], Photo,
            [Valid From], [Valid To]
-    FROM #EmployeeChanges 
+    FROM #EmployeeChanges
     ORDER BY [Valid From];
 
     DROP TABLE #EmployeeChanges;
@@ -5474,13 +5479,12 @@ BEGIN
     SET XACT_ABORT ON;
 
     DECLARE @EndOfTime datetime2(7) = '99991231 23:59:59.9999999';
-    DECLARE @InitialLoadDate date = '20130101';
 
     CREATE TABLE #PaymentMethodChanges
     (
         [WWI Payment Method ID] int,
         [Payment Method] nvarchar(50),
-        [Valid From] datetime2(7), 
+        [Valid From] datetime2(7),
         [Valid To] datetime2(7)
     );
 
@@ -5492,34 +5496,34 @@ BEGIN
     DECLARE ChangeList CURSOR FAST_FORWARD READ_ONLY
     FOR
     SELECT p.PaymentMethodID,
-           p.ValidFrom 
+           p.ValidFrom
     FROM [Application].PaymentMethods_Archive AS p
-    WHERE p.ValidFrom > @LastCutoff 
-    AND p.ValidFrom <= @NewCutoff 
+    WHERE p.ValidFrom > @LastCutoff
+    AND p.ValidFrom <= @NewCutoff
     UNION ALL
     SELECT p.PaymentMethodID,
-           p.ValidFrom 
+           p.ValidFrom
     FROM [Application].PaymentMethods AS p
-    WHERE p.ValidFrom > @LastCutoff 
-    AND p.ValidFrom <= @NewCutoff 
+    WHERE p.ValidFrom > @LastCutoff
+    AND p.ValidFrom <= @NewCutoff
     ORDER BY ValidFrom;
 
     OPEN ChangeList;
     FETCH NEXT FROM ChangeList INTO @PaymentMethodID, @ValidFrom;
-    
+
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        INSERT #PaymentMethodChanges 
+        INSERT #PaymentMethodChanges
             ([WWI Payment Method ID], [Payment Method], [Valid From], [Valid To])
         SELECT p.PaymentMethodID, p.PaymentMethodName, p.ValidFrom, p.ValidTo
         FROM [Application].PaymentMethods FOR SYSTEM_TIME AS OF @ValidFrom AS p
         WHERE p.PaymentMethodID = @PaymentMethodID;
-        
+
         FETCH NEXT FROM ChangeList INTO @PaymentMethodID, @ValidFrom;
     END;
-    
+
     CLOSE ChangeList;
-    DEALLOCATE ChangeList; 
+    DEALLOCATE ChangeList;
 
     -- add an index to make lookups faster
 
@@ -5528,14 +5532,14 @@ BEGIN
     -- work out the [Valid To] value by taking the [Valid From] of any row that's for the same entry but later
     -- otherwise take the end of time
 
-    UPDATE cc 
-    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #PaymentMethodChanges AS cc2 
-                                                        WHERE cc2.[WWI Payment Method ID] = cc.[WWI Payment Method ID] 
+    UPDATE cc
+    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #PaymentMethodChanges AS cc2
+                                                        WHERE cc2.[WWI Payment Method ID] = cc.[WWI Payment Method ID]
                                                         AND cc2.[Valid From] > cc.[Valid From]), @EndOfTime)
     FROM #PaymentMethodChanges AS cc;
 
     SELECT [WWI Payment Method ID], [Payment Method], [Valid From], [Valid To]
-    FROM #PaymentMethodChanges 
+    FROM #PaymentMethodChanges
     ORDER BY [Valid From];
 
     DROP TABLE #PaymentMethodChanges;
@@ -5557,27 +5561,26 @@ BEGIN
     SET XACT_ABORT ON;
 
     DECLARE @EndOfTime datetime2(7) = '99991231 23:59:59.9999999';
-    DECLARE @InitialLoadDate date = '20130101';
 
     CREATE TABLE #StockItemChanges
     (
-        [WWI Stock Item ID] int, 
-        [Stock Item] nvarchar(100), 
-        Color nvarchar(20), 
-        [Selling Package] nvarchar(50), 
-        [Buying Package] nvarchar(50), 
-        Brand nvarchar(50), 
-        Size nvarchar(20), 
-        [Lead Time Days] int, 
-        [Quantity Per Outer] int, 
-        [Is Chiller Stock] bit, 
-        Barcode nvarchar(50), 
-        [Tax Rate] decimal(18,3), 
-        [Unit Price] decimal(18,2), 
-        [Recommended Retail Price] decimal(18,2), 
-        [Typical Weight Per Unit] decimal(18,3), 
-        Photo varbinary(max), 
-        [Valid From] datetime2(7), 
+        [WWI Stock Item ID] int,
+        [Stock Item] nvarchar(100),
+        Color nvarchar(20),
+        [Selling Package] nvarchar(50),
+        [Buying Package] nvarchar(50),
+        Brand nvarchar(50),
+        Size nvarchar(20),
+        [Lead Time Days] int,
+        [Quantity Per Outer] int,
+        [Is Chiller Stock] bit,
+        Barcode nvarchar(50),
+        [Tax Rate] decimal(18,3),
+        [Unit Price] decimal(18,2),
+        [Recommended Retail Price] decimal(18,2),
+        [Typical Weight Per Unit] decimal(18,3),
+        Photo varbinary(max),
+        [Valid From] datetime2(7),
         [Valid To] datetime2(7)
     );
 
@@ -5589,32 +5592,32 @@ BEGIN
     DECLARE StockItemChangeList CURSOR FAST_FORWARD READ_ONLY
     FOR
     SELECT c.StockItemID,
-           c.ValidFrom 
+           c.ValidFrom
     FROM Warehouse.StockItems_Archive AS c
-    WHERE c.ValidFrom > @LastCutoff 
-    AND c.ValidFrom <= @NewCutoff 
+    WHERE c.ValidFrom > @LastCutoff
+    AND c.ValidFrom <= @NewCutoff
     UNION ALL
     SELECT c.StockItemID,
-           c.ValidFrom 
+           c.ValidFrom
     FROM Warehouse.StockItems AS c
-    WHERE c.ValidFrom > @LastCutoff 
-    AND c.ValidFrom <= @NewCutoff 
+    WHERE c.ValidFrom > @LastCutoff
+    AND c.ValidFrom <= @NewCutoff
     ORDER BY ValidFrom;
 
     OPEN StockItemChangeList;
     FETCH NEXT FROM StockItemChangeList INTO @StockItemID, @ValidFrom;
-    
+
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        INSERT #StockItemChanges 
-            ([WWI Stock Item ID], [Stock Item], Color, [Selling Package], 
-             [Buying Package], Brand, Size, [Lead Time Days], [Quantity Per Outer], 
-             [Is Chiller Stock], Barcode, [Tax Rate], [Unit Price], [Recommended Retail Price], 
+        INSERT #StockItemChanges
+            ([WWI Stock Item ID], [Stock Item], Color, [Selling Package],
+             [Buying Package], Brand, Size, [Lead Time Days], [Quantity Per Outer],
+             [Is Chiller Stock], Barcode, [Tax Rate], [Unit Price], [Recommended Retail Price],
              [Typical Weight Per Unit], Photo, [Valid From], [Valid To])
         SELECT si.StockItemID, si.StockItemName, c.ColorName, spt.PackageTypeName,
                bpt.PackageTypeName, si.Brand, si.Size, si.LeadTimeDays, si.QuantityPerOuter,
                si.IsChillerStock, si.Barcode, si.LeadTimeDays, si.UnitPrice, si.RecommendedRetailPrice,
-               si.TypicalWeightPerUnit, si.Photo, si.ValidFrom, si.ValidTo 
+               si.TypicalWeightPerUnit, si.Photo, si.ValidFrom, si.ValidTo
         FROM Warehouse.StockItems FOR SYSTEM_TIME AS OF @ValidFrom AS si
         INNER JOIN Warehouse.PackageTypes FOR SYSTEM_TIME AS OF @ValidFrom AS spt
         ON si.UnitPackageID = spt.PackageTypeID
@@ -5623,12 +5626,12 @@ BEGIN
         LEFT OUTER JOIN Warehouse.Colors FOR SYSTEM_TIME AS OF @ValidFrom AS c
         ON si.ColorID = c.ColorID
         WHERE si.StockItemID = @StockItemID;
-        
+
         FETCH NEXT FROM StockItemChangeList INTO @StockItemID, @ValidFrom;
     END;
-    
+
     CLOSE StockItemChangeList;
-    DEALLOCATE StockItemChangeList; 
+    DEALLOCATE StockItemChangeList;
 
     -- add an index to make lookups faster
 
@@ -5637,22 +5640,22 @@ BEGIN
     -- work out the [Valid To] value by taking the [Valid From] of any row that's for the same StockItem but later
     -- otherwise take the end of time
 
-    UPDATE cc 
-    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #StockItemChanges AS cc2 
-                                                        WHERE cc2.[WWI Stock Item ID] = cc.[WWI Stock Item ID] 
+    UPDATE cc
+    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #StockItemChanges AS cc2
+                                                        WHERE cc2.[WWI Stock Item ID] = cc.[WWI Stock Item ID]
                                                         AND cc2.[Valid From] > cc.[Valid From]), @EndOfTime)
     FROM #StockItemChanges AS cc;
 
-    SELECT [WWI Stock Item ID], [Stock Item], 
-           ISNULL(Color, N'N/A') AS Color, 
-           [Selling Package], [Buying Package], 
-           ISNULL(Brand, N'N/A') AS Brand, 
-           ISNULL(Size, N'N/A') AS Size, 
-           [Lead Time Days], [Quantity Per Outer], [Is Chiller Stock], 
-           ISNULL(Barcode, N'N/A') AS Barcode, 
-           [Tax Rate], [Unit Price], [Recommended Retail Price], [Typical Weight Per Unit], 
+    SELECT [WWI Stock Item ID], [Stock Item],
+           ISNULL(Color, N'N/A') AS Color,
+           [Selling Package], [Buying Package],
+           ISNULL(Brand, N'N/A') AS Brand,
+           ISNULL(Size, N'N/A') AS Size,
+           [Lead Time Days], [Quantity Per Outer], [Is Chiller Stock],
+           ISNULL(Barcode, N'N/A') AS Barcode,
+           [Tax Rate], [Unit Price], [Recommended Retail Price], [Typical Weight Per Unit],
            Photo, [Valid From], [Valid To]
-    FROM #StockItemChanges 
+    FROM #StockItemChanges
     ORDER BY [Valid From];
 
     DROP TABLE #StockItemChanges;
@@ -5698,82 +5701,82 @@ BEGIN
     DECLARE SupplierCategoryChangeList CURSOR FAST_FORWARD READ_ONLY
     FOR
     SELECT cc.SupplierCategoryID,
-           cc.ValidFrom 
+           cc.ValidFrom
     FROM Purchasing.SupplierCategories_Archive AS cc
-    WHERE cc.ValidFrom > @LastCutoff 
-    AND cc.ValidFrom <= @NewCutoff 
+    WHERE cc.ValidFrom > @LastCutoff
+    AND cc.ValidFrom <= @NewCutoff
     AND cc.ValidFrom <> @InitialLoadDate
     UNION ALL
     SELECT cc.SupplierCategoryID,
-           cc.ValidFrom 
+           cc.ValidFrom
     FROM Purchasing.SupplierCategories AS cc
-    WHERE cc.ValidFrom > @LastCutoff 
-    AND cc.ValidFrom <= @NewCutoff 
+    WHERE cc.ValidFrom > @LastCutoff
+    AND cc.ValidFrom <= @NewCutoff
     AND cc.ValidFrom <> @InitialLoadDate
     ORDER BY ValidFrom;
 
     OPEN SupplierCategoryChangeList;
     FETCH NEXT FROM SupplierCategoryChangeList INTO @SupplierCategoryID, @ValidFrom;
-    
+
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        INSERT #SupplierChanges 
-            ([WWI Supplier ID], Supplier, Category, [Primary Contact], [Supplier Reference], 
+        INSERT #SupplierChanges
+            ([WWI Supplier ID], Supplier, Category, [Primary Contact], [Supplier Reference],
              [Payment Days], [Postal Code], [Valid From], [Valid To])
-        SELECT s.SupplierID, s.SupplierName, sc.SupplierCategoryName, p.FullName, s.SupplierReference, 
-               s.PaymentDays, s.DeliveryPostalCode, s.ValidFrom, s.ValidTo 
+        SELECT s.SupplierID, s.SupplierName, sc.SupplierCategoryName, p.FullName, s.SupplierReference,
+               s.PaymentDays, s.DeliveryPostalCode, s.ValidFrom, s.ValidTo
         FROM Purchasing.Suppliers FOR SYSTEM_TIME AS OF @ValidFrom AS s
         INNER JOIN Purchasing.SupplierCategories FOR SYSTEM_TIME AS OF @ValidFrom AS sc
         ON s.SupplierCategoryID = sc.SupplierCategoryID
         INNER JOIN [Application].People FOR SYSTEM_TIME AS OF @ValidFrom AS p
-        ON s.PrimaryContactPersonID = p.PersonID 
+        ON s.PrimaryContactPersonID = p.PersonID
         WHERE sc.SupplierCategoryID = @SupplierCategoryID;
-        
+
         FETCH NEXT FROM SupplierCategoryChangeList INTO @SupplierCategoryID, @ValidFrom;
     END;
-    
+
     CLOSE SupplierCategoryChangeList;
-    DEALLOCATE SupplierCategoryChangeList; 
+    DEALLOCATE SupplierCategoryChangeList;
 
     -- finally need to find any Supplier changes that have occurred, including during the initial load
 
     DECLARE SupplierChangeList CURSOR FAST_FORWARD READ_ONLY
     FOR
     SELECT c.SupplierID,
-           c.ValidFrom 
+           c.ValidFrom
     FROM Purchasing.Suppliers_Archive AS c
-    WHERE c.ValidFrom > @LastCutoff 
-    AND c.ValidFrom <= @NewCutoff 
+    WHERE c.ValidFrom > @LastCutoff
+    AND c.ValidFrom <= @NewCutoff
     UNION ALL
     SELECT c.SupplierID,
-           c.ValidFrom 
+           c.ValidFrom
     FROM Purchasing.Suppliers AS c
-    WHERE c.ValidFrom > @LastCutoff 
-    AND c.ValidFrom <= @NewCutoff 
+    WHERE c.ValidFrom > @LastCutoff
+    AND c.ValidFrom <= @NewCutoff
     ORDER BY ValidFrom;
 
     OPEN SupplierChangeList;
     FETCH NEXT FROM SupplierChangeList INTO @SupplierID, @ValidFrom;
-    
+
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        INSERT #SupplierChanges 
-            ([WWI Supplier ID], Supplier, Category, [Primary Contact], [Supplier Reference], 
+        INSERT #SupplierChanges
+            ([WWI Supplier ID], Supplier, Category, [Primary Contact], [Supplier Reference],
              [Payment Days], [Postal Code], [Valid From], [Valid To])
-        SELECT s.SupplierID, s.SupplierName, sc.SupplierCategoryName, p.FullName, s.SupplierReference, 
-               s.PaymentDays, s.DeliveryPostalCode, s.ValidFrom, s.ValidTo 
+        SELECT s.SupplierID, s.SupplierName, sc.SupplierCategoryName, p.FullName, s.SupplierReference,
+               s.PaymentDays, s.DeliveryPostalCode, s.ValidFrom, s.ValidTo
         FROM Purchasing.Suppliers FOR SYSTEM_TIME AS OF @ValidFrom AS s
         INNER JOIN Purchasing.SupplierCategories FOR SYSTEM_TIME AS OF @ValidFrom AS sc
         ON s.SupplierCategoryID = sc.SupplierCategoryID
         INNER JOIN [Application].People FOR SYSTEM_TIME AS OF @ValidFrom AS p
-        ON s.PrimaryContactPersonID = p.PersonID 
+        ON s.PrimaryContactPersonID = p.PersonID
         WHERE s.SupplierID = @SupplierID;
-        
+
         FETCH NEXT FROM SupplierChangeList INTO @SupplierID, @ValidFrom;
     END;
-    
+
     CLOSE SupplierChangeList;
-    DEALLOCATE SupplierChangeList; 
+    DEALLOCATE SupplierChangeList;
 
     -- add an index to make lookups faster
 
@@ -5782,16 +5785,16 @@ BEGIN
     -- work out the [Valid To] value by taking the [Valid From] of any row that's for the same Supplier but later
     -- otherwise take the end of time
 
-    UPDATE cc 
-    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #SupplierChanges AS cc2 
-                                                        WHERE cc2.[WWI Supplier ID] = cc.[WWI Supplier ID] 
+    UPDATE cc
+    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #SupplierChanges AS cc2
+                                                        WHERE cc2.[WWI Supplier ID] = cc.[WWI Supplier ID]
                                                         AND cc2.[Valid From] > cc.[Valid From]), @EndOfTime)
     FROM #SupplierChanges AS cc;
 
     SELECT [WWI Supplier ID], Supplier, Category, [Primary Contact],
-           [Supplier Reference], [Payment Days], [Postal Code], 
+           [Supplier Reference], [Payment Days], [Postal Code],
            [Valid From], [Valid To]
-    FROM #SupplierChanges 
+    FROM #SupplierChanges
     ORDER BY [Valid From];
 
     DROP TABLE #SupplierChanges;
@@ -5813,13 +5816,12 @@ BEGIN
     SET XACT_ABORT ON;
 
     DECLARE @EndOfTime datetime2(7) = '99991231 23:59:59.9999999';
-    DECLARE @InitialLoadDate date = '20130101';
 
     CREATE TABLE #TransactionTypeChanges
     (
         [WWI Transaction Type ID] int,
         [Transaction Type] nvarchar(50),
-        [Valid From] datetime2(7), 
+        [Valid From] datetime2(7),
         [Valid To] datetime2(7)
     );
 
@@ -5831,34 +5833,34 @@ BEGIN
     DECLARE ChangeList CURSOR FAST_FORWARD READ_ONLY
     FOR
     SELECT tt.TransactionTypeID,
-           tt.ValidFrom 
+           tt.ValidFrom
     FROM [Application].TransactionTypes_Archive AS tt
-    WHERE tt.ValidFrom > @LastCutoff 
-    AND tt.ValidFrom <= @NewCutoff 
+    WHERE tt.ValidFrom > @LastCutoff
+    AND tt.ValidFrom <= @NewCutoff
     UNION ALL
     SELECT tt.TransactionTypeID,
-           tt.ValidFrom 
+           tt.ValidFrom
     FROM [Application].TransactionTypes AS tt
-    WHERE tt.ValidFrom > @LastCutoff 
-    AND tt.ValidFrom <= @NewCutoff 
+    WHERE tt.ValidFrom > @LastCutoff
+    AND tt.ValidFrom <= @NewCutoff
     ORDER BY ValidFrom;
 
     OPEN ChangeList;
     FETCH NEXT FROM ChangeList INTO @TransactionTypeID, @ValidFrom;
-    
+
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        INSERT #TransactionTypeChanges 
+        INSERT #TransactionTypeChanges
             ([WWI Transaction Type ID], [Transaction Type], [Valid From], [Valid To])
         SELECT p.TransactionTypeID, p.TransactionTypeName, p.ValidFrom, p.ValidTo
         FROM [Application].TransactionTypes FOR SYSTEM_TIME AS OF @ValidFrom AS p
         WHERE p.TransactionTypeID = @TransactionTypeID;
-        
+
         FETCH NEXT FROM ChangeList INTO @TransactionTypeID, @ValidFrom;
     END;
-    
+
     CLOSE ChangeList;
-    DEALLOCATE ChangeList; 
+    DEALLOCATE ChangeList;
 
     -- add an index to make lookups faster
 
@@ -5867,14 +5869,14 @@ BEGIN
     -- work out the [Valid To] value by taking the [Valid From] of any row that's for the same entry but later
     -- otherwise take the end of time
 
-    UPDATE cc 
-    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #TransactionTypeChanges AS cc2 
-                                                        WHERE cc2.[WWI Transaction Type ID] = cc.[WWI Transaction Type ID] 
+    UPDATE cc
+    SET [Valid To] = COALESCE((SELECT MIN([Valid From]) FROM #TransactionTypeChanges AS cc2
+                                                        WHERE cc2.[WWI Transaction Type ID] = cc.[WWI Transaction Type ID]
                                                         AND cc2.[Valid From] > cc.[Valid From]), @EndOfTime)
     FROM #TransactionTypeChanges AS cc;
 
     SELECT [WWI Transaction Type ID], [Transaction Type], [Valid From], [Valid To]
-    FROM #TransactionTypeChanges 
+    FROM #TransactionTypeChanges
     ORDER BY [Valid From];
 
     DROP TABLE #TransactionTypeChanges;
@@ -5895,9 +5897,6 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    DECLARE @EndOfTime datetime2(7) = '99991231 23:59:59.9999999';
-    DECLARE @InitialLoadDate date = '20130101';
-
     SELECT CAST(sit.TransactionOccurredWhen AS date) AS [Date Key],
            sit.StockItemTransactionID AS [WWI Stock Item Transaction ID],
            sit.InvoiceID AS [WWI Invoice ID],
@@ -5909,7 +5908,7 @@ BEGIN
            sit.TransactionTypeID AS [WWI Transaction Type ID],
            sit.TransactionOccurredWhen AS [Transaction Occurred When]
     FROM Warehouse.StockItemTransactions AS sit
-    WHERE sit.LastEditedWhen > @LastCutoff 
+    WHERE sit.LastEditedWhen > @LastCutoff
     AND sit.LastEditedWhen <= @NewCutoff
     ORDER BY sit.StockItemTransactionID;
 
@@ -5928,9 +5927,6 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
-
-    DECLARE @EndOfTime datetime2(7) = '99991231 23:59:59.9999999';
-    DECLARE @InitialLoadDate date = '20130101';
 
 
     SELECT CAST(o.OrderDate AS date) AS [Order Date Key],
@@ -5955,10 +5951,10 @@ BEGIN
     INNER JOIN Sales.OrderLines AS ol
     ON o.OrderID = ol.OrderID
     INNER JOIN Warehouse.PackageTypes AS pt
-    ON ol.PackageTypeID = pt.PackageTypeID  
+    ON ol.PackageTypeID = pt.PackageTypeID
     INNER JOIN Sales.Customers AS c
-    ON c.CustomerID = o.CustomerID 
-    WHERE CASE WHEN ol.LastEditedWhen > o.LastEditedWhen THEN ol.LastEditedWhen ELSE o.LastEditedWhen END > @LastCutoff 
+    ON c.CustomerID = o.CustomerID
+    WHERE CASE WHEN ol.LastEditedWhen > o.LastEditedWhen THEN ol.LastEditedWhen ELSE o.LastEditedWhen END > @LastCutoff
     AND CASE WHEN ol.LastEditedWhen > o.LastEditedWhen THEN ol.LastEditedWhen ELSE o.LastEditedWhen END <= @NewCutoff
     ORDER BY o.OrderID;
 
@@ -5978,8 +5974,6 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    DECLARE @EndOfTime datetime2(7) = '99991231 23:59:59.9999999';
-    DECLARE @InitialLoadDate date = '20130101';
 
     SELECT CAST(po.OrderDate AS date) AS [Date Key],
            po.PurchaseOrderID AS [WWI Purchase Order ID],
@@ -5995,10 +5989,10 @@ BEGIN
     INNER JOIN Purchasing.PurchaseOrderLines AS pol
     ON po.PurchaseOrderID = pol.PurchaseOrderID
     INNER JOIN Warehouse.StockItems AS si
-    ON pol.StockItemID = si.StockItemID 
+    ON pol.StockItemID = si.StockItemID
     INNER JOIN Warehouse.PackageTypes AS pt
-    ON pol.PackageTypeID = pt.PackageTypeID  
-    WHERE CASE WHEN pol.LastEditedWhen > po.LastEditedWhen THEN pol.LastEditedWhen ELSE po.LastEditedWhen END > @LastCutoff 
+    ON pol.PackageTypeID = pt.PackageTypeID
+    WHERE CASE WHEN pol.LastEditedWhen > po.LastEditedWhen THEN pol.LastEditedWhen ELSE po.LastEditedWhen END > @LastCutoff
     AND CASE WHEN pol.LastEditedWhen > po.LastEditedWhen THEN pol.LastEditedWhen ELSE po.LastEditedWhen END <= @NewCutoff
     ORDER BY po.PurchaseOrderID;
 
@@ -6017,9 +6011,6 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
-
-    DECLARE @EndOfTime datetime2(7) = '99991231 23:59:59.9999999';
-    DECLARE @InitialLoadDate date = '20130101';
 
     SELECT CAST(i.InvoiceDate AS date) AS [Invoice Date Key],
            CAST(i.ConfirmedDeliveryTime AS date) AS [Delivery Date Key],
@@ -6043,16 +6034,16 @@ BEGIN
            CASE WHEN il.LastEditedWhen > i.LastEditedWhen THEN il.LastEditedWhen ELSE i.LastEditedWhen END AS [Last Modified When]
     FROM Sales.Invoices AS i
     INNER JOIN Sales.InvoiceLines AS il
-    ON i.InvoiceID = il.InvoiceID 
+    ON i.InvoiceID = il.InvoiceID
     INNER JOIN Warehouse.StockItems AS si
-    ON il.StockItemID = si.StockItemID 
+    ON il.StockItemID = si.StockItemID
     INNER JOIN Warehouse.PackageTypes AS pt
-    ON il.PackageTypeID = pt.PackageTypeID  
+    ON il.PackageTypeID = pt.PackageTypeID
     INNER JOIN Sales.Customers AS c
-    ON i.CustomerID = c.CustomerID 
+    ON i.CustomerID = c.CustomerID
     INNER JOIN Sales.Customers AS bt
-    ON i.BillToCustomerID = bt.CustomerID 
-    WHERE CASE WHEN il.LastEditedWhen > i.LastEditedWhen THEN il.LastEditedWhen ELSE i.LastEditedWhen END > @LastCutoff 
+    ON i.BillToCustomerID = bt.CustomerID
+    WHERE CASE WHEN il.LastEditedWhen > i.LastEditedWhen THEN il.LastEditedWhen ELSE i.LastEditedWhen END > @LastCutoff
     AND CASE WHEN il.LastEditedWhen > i.LastEditedWhen THEN il.LastEditedWhen ELSE i.LastEditedWhen END <= @NewCutoff
     ORDER BY i.InvoiceID, il.InvoiceLineID;
 
@@ -6096,9 +6087,6 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    DECLARE @EndOfTime datetime2(7) = '99991231 23:59:59.9999999';
-    DECLARE @InitialLoadDate date = '20130101';
-
     SELECT CAST(ct.TransactionDate AS date) AS [Date Key],
            ct.CustomerTransactionID AS [WWI Customer Transaction ID],
            CAST(NULL AS int) AS [WWI Supplier Transaction ID],
@@ -6118,9 +6106,9 @@ BEGIN
            ct.LastEditedWhen AS [Last Modified When]
     FROM Sales.CustomerTransactions AS ct
     LEFT OUTER JOIN Sales.Invoices AS i
-    ON ct.InvoiceID = i.InvoiceID 
-    WHERE ct.LastEditedWhen > @LastCutoff 
-    AND ct.LastEditedWhen <= @NewCutoff 
+    ON ct.InvoiceID = i.InvoiceID
+    WHERE ct.LastEditedWhen > @LastCutoff
+    AND ct.LastEditedWhen <= @NewCutoff
 
     UNION ALL
 
@@ -6142,8 +6130,8 @@ BEGIN
            st.PaymentMethodID AS [WWI Payment Method ID],
            st.LastEditedWhen AS [Last Modified When]
     FROM Purchasing.SupplierTransactions AS st
-    WHERE st.LastEditedWhen > @LastCutoff 
-    AND st.LastEditedWhen <= @NewCutoff; 
+    WHERE st.LastEditedWhen > @LastCutoff
+    AND st.LastEditedWhen <= @NewCutoff;
 
     RETURN 0;
 END;
@@ -6157,7 +6145,7 @@ GO
 -- initial data population to ship date
 
 EXEC WideWorldImporters.DataLoadSimulation.Configuration_ApplyDataLoadSimulationProcedures;
-EXEC WideWorldImporters.DataLoadSimulation.DailyProcessToCreateHistory 
+EXEC WideWorldImporters.DataLoadSimulation.DailyProcessToCreateHistory
     @StartDate = '20130101',
     @EndDate = '20160331',
     @AverageNumberOfCustomerOrdersPerDay = 60,
@@ -6170,7 +6158,7 @@ EXEC WideWorldImporters.DataLoadSimulation.Configuration_RemoveDataLoadSimulatio
 
 -- roll data up to current date
 
-EXEC WideWorldImporters.DataLoadSimulation.PopulateDataToCurrentDate 
+EXEC WideWorldImporters.DataLoadSimulation.PopulateDataToCurrentDate
     @AverageNumberOfCustomerOrdersPerDay = 60,
     @SaturdayPercentageOfNormalWorkDay = 50,
     @SundayPercentageOfNormalWorkDay = 0,
