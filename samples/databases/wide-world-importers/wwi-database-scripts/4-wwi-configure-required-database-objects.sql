@@ -4637,7 +4637,7 @@ ALL TO ([USERDATA]);';
             SET @SQL =  N'
 CREATE PARTITION SCHEME PS_TransactionDate
 AS PARTITION PF_TransactionDate
-ALL TO ([USERDATA]]);';
+ALL TO ([USERDATA]);';
             EXECUTE (@SQL);
         END;
 
