@@ -38,7 +38,7 @@ WideWorldImportersDW has the following dimension tables. The description include
 WideWorldImportersDW has the following fact tables. The description includes the relationship with the source tables in the WideWorldImporters database, as well as the classes of analytics/reporting queries each fact table is typically used with.
 
 |Table|Source tables|Sample Analytics|
-|-----------------------------|---------------------|
+|-----------------------------|---------------------|---------------------|
 |Order|`Sales.Orders` and `Sales.OrderLines`|Sales people, picker/packer productivity, and on time to pick orders. In addition, low stock situations leading to back orders.|
 |Sale|`Sales.Invoices` and `Sales.InvoiceLines`|Sales dates, delivery dates, profitability over time, profitability by sales person.|
 |Purchase|`Purchasing.PurchaseOrderLines`|Expected vs actual lead times|
