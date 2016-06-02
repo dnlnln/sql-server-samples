@@ -35,7 +35,7 @@ WideWorldImportersDW has the following dimension tables. The description include
 
 ### Fact tables
 
-WideWorldImportersDW has the following dimension tables. The description includes the relationship with the source tables in the WideWorldImporters database, as well as the classes of analytics/reporting queries each fact table is typically used with.
+WideWorldImportersDW has the following fact tables. The description includes the relationship with the source tables in the WideWorldImporters database, as well as the classes of analytics/reporting queries each fact table is typically used with.
 
 |Table|Source tables|Sample Analytics|
 |-----------------------------|---------------------|
@@ -44,7 +44,8 @@ WideWorldImportersDW has the following dimension tables. The description include
 |Purchase|`Purchasing.PurchaseOrderLines`|Expected vs actual lead times|
 |Transaction|`Sales.CustomerTransactions` and `Purchasing.SupplierTransactions`|Measuring issue dates vs finalization dates, and amounts.|
 |Movement|`Warehouse.StockTransactions`|Movements over time.|
-|Stock Holding|`Warehouse.StockItemHoldings`|On-hand stock levels and value|
+|Stock Holding|`Warehouse.StockItemHoldings`|On-hand stock levels and value.|
+
 
 ## Stored procedures
 
