@@ -129,3 +129,74 @@ The database schema has been code-generated based on a series of metadata tables
 For security, WideWorldImporters does not allow external applications to access data schemas directly. To isolate access, WideWorldImporters uses security-access schemas that do not hold data, but contain views and stored procedures. External applications use the security schemas to retrieve the data that they are allowed to view.  This way, users can only run the views and stored procedures in the secure-access schemas
 
 For example, this sample includes Power BI dashboards. An external application accesses these Power BI dashboards from the Power BI gateway as a user that has read-only permission on the PowerBI schema.  For read-only permission, the user only needs SELECT and EXECUTE permission on the PowerBI schema. A database administrator at WWI assigns these permissions as needed.
+
+## Stored Procedures
+
+Stored procedures are organized in schemas. Most of the schemas are used for configuration or sample purposes.
+
+The `Website` schema contains the stored procedures that can be used by a Web front-end.
+
+The `Reports` and `PowerBI` schemas are meant for reporting services and PowerBI purposes. Any extensions of the sample are encouraged to use these schemas for reporting purposes.
+
+### Website schema
+
+These are the procedures used by a client application, such as a Web front-end.
+
+|Procedure|Purpose|
+|-----------------------------|---------------------|
+|ActivateWebsiteLogon|Allows a person (from `Application.People`) to have access to the website.|
+|ChangePassword|Changes a user’s password (for users that are not using external authentication mechanisms).|
+|InsertCustomerOrders|Allows inserting one or more customer orders (including the order lines).|
+|InvoiceCustomerOrders|Takes a list of orders to be invoiced and processes the invoices.|
+|RecordColdRoomTemperatures|Takes a sensor data list, as a table-valued parameter (TVP), and applies the data to the `Warehouse.ColdRoomTemperatures` temporal table.|
+|RecordVehicleTemperature|Takes a JSON array and uses it to update `Warehouse.VehicleTemperatures`.|
+|SearchForCustomers|Searches for customers by name or part of name (either the company name or the person name).|
+|SearchForPeople|Searches for people by name or part of name.|
+|SearchForStockItems|Searches for stock items by name or part of name or marketing comments.|
+|SearchForStockItemsByTags|Searches for stock items by tags.|
+|SearchForSuppliers|Searches for suppliers by name or part of name (either the company name or the person name).|
+
+### Integration Schema
+
+The stored procedures in this schema are used by the ETL process. They obtain the data needed from various tables for the timeframe required by the [ETL package](wwi-etl.md).
+
+### DataLoadSimulation Schema
+
+Simulates a workload that inserts sales and purchases. The main stored procedure is `PopulateDataToCurrentDate`, which is used to insert sample data up to the current date.
+
+|Procedure|Purpose|
+|-----------------------------|---------------------|
+|Configuration_ApplyDataLoadSimulationProcedures|Recreates the procedures needed for data load simulation. This is needed for bringing data up to the current date.|
+|Configuration_RemoveDataLoadSimulationProcedures|This removes the procedures again after data simulation is complete.|
+|DeactiveTemporalTablesBeforeDataLoad|Removes the temporal nature of all temporal tables and where applicable, applies a trigger so that changes can be made as though they were being applied at an earlier date than the sys-temporal tables allow.|
+|PopulateDataToCurrentDate|Used to bring the data up to the current date. Should be run before any other configuration options after restoring the database from an initial backup.|
+|ReactivateTemporalTablesAfterDataLoad|Re-establishes the temporal tables, including checking for data consistency. (Removes the associated triggers).|
+
+
+### Application Schema
+
+These procedures are used to configure the sample. They are used to apply enterprise edition features to the standard edition version of the sample, and also to add auditing and full-text indexing.
+
+|Procedure|Purpose|
+|-----------------------------|---------------------|
+|AddRoleMemberIfNonexistant|Adds a member to a role if the member isn’t already in the role|
+|Configuration_ApplyAuditing|Adds auditing. Server auditing is applied for standard edition databases; additional database auditing is added for enterprise edition.|
+|Configuration_ApplyColumnstoreIndexing|Applies columnstore indexing to `Sales.OrderLines` and `Sales.InvoiceLines` and reindexes appropriately.|
+|Configuration_ApplyFullTextIndexing|Applies fulltext indexes to `Application.People`, `Sales.Customers`, `Purchasing.Suppliers`, and `Warehouse.StockItems`. Replaces `Website.SearchForPeople`, `Website.SearchForSuppliers`, `Website.SearchForCustomers`, `Website.SearchForStockItems`, `Website.SearchForStockItemsByTags` with replacement procedures that use fulltext indexing.|
+|Configuration_ApplyPartitioning|Applies table partitioning to `Sales.CustomerTransactions and `Purchasing.SupplierTransactions`, and rearranges the indexes to suit.|
+|Configuration_ApplyRowLevelSecurity|Applies row level security to filter customers by sales territory related roles.|
+|Configuration_ConfigureForEnterpriseEdition|Applies columnstore indexing, full text, in-memory, polybase, and partitioning.|
+|Configuration_EnableInMemory|Adds a memory-optimized filegroup (when not working in Azure), replaces `Warehouse.ColdRoomTemperatures`, `Warehouse.VehicleTemperatures` with in-memory equivalents, and migrates the data, recreates the `Website.OrderIDList`, `Website.OrderList`, `Website.OrderLineList`, `Website.SensorDataList` table types with memory-optimized equivalents, drops and recreates the procedures `Website.InvoiceCustomerOrders`, `Website.InsertCustomerOrders`, and `Website.RecordColdRoomTemperatures` that uses these table types.|
+|Configuration_RemoveAuditing|Removes the auditing configuration.|
+|Configuration_RemoveRowLevelSecurity|Removes the row level security configuration (this is needed for changes to the associated tables).|
+|CreateRoleIfNonExistant|Creates a database role if it doesn’t already exist.|
+
+
+### Sequences Schema
+
+Procedures to configure the sequences in the database.
+
+|Procedure|Purpose|
+|-----------------------------|---------------------|
+|ReseedAllSequences|Calls the procedure ReseedSequenceBeyondTableValue for all sequences.|
+|ReseedSequenceBeyondTableValue|Used to reposition the next sequence value beyond the value in any table that uses the same sequence. (Like a DBCC CHECKIDENT for identity columns equivalent for sequences but across potentially multiple tables).|
