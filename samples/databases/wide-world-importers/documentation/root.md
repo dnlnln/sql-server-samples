@@ -4,11 +4,11 @@ Wide World Importers is a comprehensive database sample that both illustrates da
 
 Note that the sample is meant to be representative of a typical database. It does not include every feature of SQL Server. The design of the database follows one common set of standards, but there are many ways one might build a database.
 
-The source code for the sample can be found on the SQL Server Samples GitHub repository:
-[wide-world-importers](https://github.com/Microsoft/sql-server-samples/tree/master/samples/databases/wide-world-importers).
-
-The latest released version of the sample:
+**Latest release**:
 [wide-world-importers-v0.1](https://github.com/Microsoft/sql-server-samples/releases/tag/wide-world-importers-v0.1)
+
+**Source code for the sample**:
+[wide-world-importers](https://github.com/Microsoft/sql-server-samples/tree/master/samples/databases/wide-world-importers).
 
 The documentation for the sample is organized as follows:
 
