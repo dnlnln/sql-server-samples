@@ -46,7 +46,6 @@ WideWorldImportersDW has the following fact tables. The description includes the
 |Movement|`Warehouse.StockTransactions`|Movements over time.|
 |Stock Holding|`Warehouse.StockItemHoldings`|On-hand stock levels and value.|
 
-
 ## Stored procedures
 
 The stored procedures are used primarily for the ETL process and for configuration purposes.
