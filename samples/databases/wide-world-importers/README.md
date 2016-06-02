@@ -6,9 +6,9 @@ WideWorldImporters is a wholesale company. Transactions and real-time analytics 
 
 The sample includes the databases that can be explored, as well as sample applications and sample scripts that can be used to explore the use of individual SQL Server features in the sample database.
 
-**Latest release**: [wide-world-importers-v0.1](https://github.com/Microsoft/sql-server-samples/releases/tag/wide-world-importers-v0.1)
+**Latest release**: [wide-world-importers-release](http://go.microsoft.com/fwlink/?LinkID=800630)
 
-**Documentation**: [root.md](documentation/root.md)
+**Documentation**: [root.md](http://go.microsoft.com/fwlink/?LinkID=800631)
 
 ### Contents
 
