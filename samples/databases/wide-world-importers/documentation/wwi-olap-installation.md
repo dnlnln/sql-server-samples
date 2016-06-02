@@ -8,7 +8,7 @@
 
 The latest release of the sample:
 
-[wide-world-importers-v0.1](https://github.com/Microsoft/sql-server-samples/releases/tag/wide-world-importers-v0.1)
+[wide-world-importers-release](http://go.microsoft.com/fwlink/?LinkID=800630)
 
 Download the sample WideWorldImportersDW database backup/bacpac that corresponds to your edition of SQL Server or Azure SQL Database.
 
