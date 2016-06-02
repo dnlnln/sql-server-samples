@@ -1,5 +1,3 @@
--- Recreate database - this script is generated in step 2
-
 USE master;
  
 IF EXISTS(SELECT 1 FROM sys.databases WHERE name = N'WideWorldImportersDW')
@@ -10,10 +8,37 @@ END;
 GO
  
 CREATE DATABASE WideWorldImportersDW
+ON PRIMARY
+(
+    NAME = WWI_Primary,
+    FILENAME = 'D:\Data\WideWorldImportersDW.mdf',
+    SIZE = 2GB,
+    MAXSIZE = UNLIMITED,
+    FILEGROWTH = 64MB
+),
+FILEGROUP USERDATA DEFAULT
+(
+    NAME = WWI_UserData,
+    FILENAME = 'D:\Data\WideWorldImportersDW_UserData.ndf',
+    SIZE = 2GB,
+    MAXSIZE = UNLIMITED,
+    FILEGROWTH = 64MB
+)
+LOG ON
+(
+    NAME = WWI_Log,
+    FILENAME = 'E:\Log\WideWorldImportersDW.ldf',
+    SIZE = 100MB,
+    MAXSIZE = UNLIMITED,
+    FILEGROWTH = 64MB
+)
 COLLATE Latin1_General_100_CI_AS;
 GO
  
 ALTER DATABASE WideWorldImportersDW SET RECOVERY SIMPLE;
+GO
+ 
+ALTER DATABASE WideWorldImporters SET AUTO_UPDATE_STATISTICS_ASYNC ON;
 GO
  
 ALTER AUTHORIZATION ON DATABASE::WideWorldImportersDW to sa;

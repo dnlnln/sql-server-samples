@@ -359,8 +359,8 @@ BEGIN
 	    SET @SQL += @CrLf + N'WITH ' + @CrLf + N'(' + @CrLf
                   + @Indent + N'SYSTEM_VERSIONING = ON (HISTORY_TABLE = '
 				  + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + N')' + @CrLf
-                  + N');' + @CrLf;
-                  + N'ALTER INDEX ix_' + @TableName + N'_' + @TemporalTableSuffix + N'ON ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + N' REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE)'
+                  + N');' + @CrLf
+                  + N'ALTER INDEX ix_' + @TableName + N'_' + @TemporalTableSuffix + N' ON ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + N' REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE)';
     END;
 
 	SET @SQL += N';' + @CrLf + @GO;

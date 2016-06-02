@@ -4010,8 +4010,7 @@ EXEC dbo.sp_rename @objname = N''Warehouse.VehicleTemperatures'',
                 SET @SQL = N'
 CREATE TABLE Warehouse.VehicleTemperatures
 (
-	VehicleTemperatureID bigint IDENTITY(1,1) NOT NULL
-        PRIMARY KEY NONCLUSTERED,
+	VehicleTemperatureID bigint IDENTITY(1,1) NOT NULL,
 	VehicleRegistration nvarchar(20) COLLATE Latin1_General_CI_AS NOT NULL,
 	ChillerSensorNumber int NOT NULL,
 	RecordedWhen datetime2(7) NOT NULL,
@@ -4638,7 +4637,7 @@ ALL TO ([USERDATA]);';
             SET @SQL =  N'
 CREATE PARTITION SCHEME PS_TransactionDate
 AS PARTITION PF_TransactionDate
-ALL TO ([USERDATA]]);';
+ALL TO ([USERDATA]);';
             EXECUTE (@SQL);
         END;
 
@@ -6135,9 +6134,6 @@ BEGIN
 
     RETURN 0;
 END;
-GO
-
-USE tempdb;
 GO
 
 /*
