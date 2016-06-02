@@ -102,6 +102,34 @@ Details of stock items, their holdings and transactions.
 |VehicleTemperatures|Regularly recorded temperatures of vehicle chillers|
 |ColdRoomTemperatures|Regularly recorded temperatures of cold room chillers|
 
+
+## Design considerations
+
+Database design is subjective and there is no right or wrong way to design a database. The schemas and tables in this database show ideas for how you can design your own database.
+
+### Schema design
+
+WideWorldImporters uses a small number of schemas so that it is easy to understand the database system and demonstrate database principles.  
+
+Wherever possible, the database collocates tables that are commonly queried together into the same schema to minimize join complexity.
+
+The database schema has been code-generated based on a series of metadata tables in another database WWI_Preparation. This gives WideWorldImporters a very high degree of design consistency, naming consistency, and completeness. For details on how the schema has been generated see the source code: [wide-world-importers/wwi-database-scripts](https://github.com/Microsoft/sql-server-samples/tree/master/samples/databases/wide-world-importers/wwi-database-scripts)
+
+### Table design
+
+- All tables have single column primary keys for join simplicity.
+- All schemas, tables, columns, indexes, and check constraints have a Description extended property that can be used to identify the purpose of the object or column. Memory-optimized tables are an exception to this since they don’t currently support extended properties.
+- All foreign keys are automatically indexed unless there is another non-clustered index that has the same left-hand component.
+- Auto-numbering in tables is based on sequences. These sequences are easier to work with across linked servers and similar environments than IDENTITY columns. Memory-optimized tables use IDENTITY columns since they don’t support in SQL Server 2016.
+- A single sequence (TransactionID) is used for these tables: CustomerTransactions, SupplierTransactions, and StockItemTransactions. This demonstrates how a set of tables can have a single sequence.
+- Some columns have appropriate default values.
+
+### Security schemas
+
+For security, WideWorldImporters does not allow external applications to access data schemas directly. To isolate access, WideWorldImporters uses security-access schemas that do not hold data, but contain views and stored procedures. External applications use the security schemas to retrieve the data that they are allowed to view.  This way, users can only run the views and stored procedures in the secure-access schemas
+
+For example, this sample includes Power BI dashboards. An external application accesses these Power BI dashboards from the Power BI gateway as a user that has read-only permission on the PowerBI schema.  For read-only permission, the user only needs SELECT and EXECUTE permission on the PowerBI schema. A database administrator at WWI assigns these permissions as needed.
+
 ## Stored Procedures
 
 Stored procedures are organized in schemas. Most of the schemas are used for configuration or sample purposes.
@@ -156,7 +184,6 @@ These procedures are used to configure the sample. They are used to apply enterp
 |Configuration_ApplyColumnstoreIndexing|Applies columnstore indexing to `Sales.OrderLines` and `Sales.InvoiceLines` and reindexes appropriately.|
 |Configuration_ApplyFullTextIndexing|Applies fulltext indexes to `Application.People`, `Sales.Customers`, `Purchasing.Suppliers`, and `Warehouse.StockItems`. Replaces `Website.SearchForPeople`, `Website.SearchForSuppliers`, `Website.SearchForCustomers`, `Website.SearchForStockItems`, `Website.SearchForStockItemsByTags` with replacement procedures that use fulltext indexing.|
 |Configuration_ApplyPartitioning|Applies table partitioning to `Sales.CustomerTransactions and `Purchasing.SupplierTransactions`, and rearranges the indexes to suit.|
-|Configuration_ApplyPolybase|Configures an external data source, file format, and table.|
 |Configuration_ApplyRowLevelSecurity|Applies row level security to filter customers by sales territory related roles.|
 |Configuration_ConfigureForEnterpriseEdition|Applies columnstore indexing, full text, in-memory, polybase, and partitioning.|
 |Configuration_EnableInMemory|Adds a memory-optimized filegroup (when not working in Azure), replaces `Warehouse.ColdRoomTemperatures`, `Warehouse.VehicleTemperatures` with in-memory equivalents, and migrates the data, recreates the `Website.OrderIDList`, `Website.OrderList`, `Website.OrderLineList`, `Website.SensorDataList` table types with memory-optimized equivalents, drops and recreates the procedures `Website.InvoiceCustomerOrders`, `Website.InsertCustomerOrders`, and `Website.RecordColdRoomTemperatures` that uses these table types.|
@@ -173,31 +200,3 @@ Procedures to configure the sequences in the database.
 |-----------------------------|---------------------|
 |ReseedAllSequences|Calls the procedure ReseedSequenceBeyondTableValue for all sequences.|
 |ReseedSequenceBeyondTableValue|Used to reposition the next sequence value beyond the value in any table that uses the same sequence. (Like a DBCC CHECKIDENT for identity columns equivalent for sequences but across potentially multiple tables).|
-
-
-## Design considerations
-
-Database design is subjective and there is no right or wrong way to design a database. The schemas and tables in this database show ideas for how you can design your own database.
-
-### Schema design
-
-WideWorldImporters uses a small number of schemas so that it is easy to understand the database system and demonstrate database principles.  
-
-Wherever possible, the database collocates tables that are commonly queried together into the same schema to minimize join complexity.
-
-The database schema has been code-generated based on a series of metadata tables in another database WWI_Preparation. This gives WideWorldImporters a very high degree of design consistency, naming consistency, and completeness. For details on how the schema has been generated see the source code: [wide-world-importers/wwi-database-scripts](https://github.com/Microsoft/sql-server-samples/tree/master/samples/databases/wide-world-importers/wwi-database-scripts)
-
-### Table design
-
-- All tables have single column primary keys for join simplicity.
-- All schemas, tables, columns, indexes, and check constraints have a Description extended property that can be used to identify the purpose of the object or column. Memory-optimized tables are an exception to this since they don’t currently support extended properties.
-- All foreign keys are automatically indexed unless there is another non-clustered index that has the same left-hand component.
-- Auto-numbering in tables is based on sequences. These sequences are easier to work with across linked servers and similar environments than IDENTITY columns. Memory-optimized tables use IDENTITY columns since they don’t support in SQL Server 2016.
-- A single sequence (TransactionID) is used for these tables: CustomerTransactions, SupplierTransactions, and StockItemTransactions. This demonstrates how a set of tables can have a single sequence.
-- Some columns have appropriate default values.
-
-### Security schemas
-
-For security, WideWorldImporters does not allow external applications to access data schemas directly. To isolate access, WideWorldImporters uses security-access schemas that do not hold data, but contain views and stored procedures. External applications use the security schemas to retrieve the data that they are allowed to view.  This way, users can only run the views and stored procedures in the secure-access schemas
-
-For example, this sample includes Power BI dashboards. An external application accesses these Power BI dashboards from the Power BI gateway as a user that has read-only permission on the PowerBI schema.  For read-only permission, the user only needs SELECT and EXECUTE permission on the PowerBI schema. A database administrator at WWI assigns these permissions as needed.
