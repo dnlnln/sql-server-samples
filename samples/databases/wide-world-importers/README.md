@@ -28,7 +28,7 @@ The sample includes the databases that can be explored, as well as sample applic
 1. **Key features:** Core database features
 1. **Workload:** OLTP, OLAP, IoT
 1. **Programming Language:** T-SQL, C#
-1. **Authors:** Greg Low, Jos de Bruijn
+1. **Authors:** Greg Low, Denzil Ribeiro, Jos de Bruijn
 1. **Update history:** 25 May 2016 - initial revision
 
 <a name=before-you-begin></a>
