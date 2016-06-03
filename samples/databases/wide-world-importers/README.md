@@ -10,6 +10,8 @@ The sample includes the databases that can be explored, as well as sample applic
 
 **Documentation**: [root.md](http://go.microsoft.com/fwlink/?LinkID=800631)
 
+**Feedback on the sample**: send to [sqlserversamples@microsoft.com](mailto:sqlserversamples@microsoft.com)
+
 ### Contents
 
 [About this sample](#about-this-sample)<br/>
