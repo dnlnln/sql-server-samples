@@ -21,7 +21,7 @@ This SSIS project performs ETL from the transactional database WideWorldImporter
 1. **Key features:** Core database features
 1. **Workload:** ETL
 1. **Programming Language:**
-1. **Authors:** Greg Low, Jos de Bruijn
+1. **Authors:** Greg Low, Denzil Ribeiro, Jos de Bruijn
 1. **Update history:** 25 May 2016 - initial revision
 
 <a name=before-you-begin></a>
