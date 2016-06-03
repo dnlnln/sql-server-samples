@@ -23,6 +23,7 @@ Source code to recreate the sample database is available from the following loca
 ### SQL Server
 
 To restore a backup to a SQL Server instance, you can use Management Studio.
+
 1. Open SQL Server Management Studio and connect to the target SQL Server instance.
 2. Right-click on the **Databases** node, and select **Restore Database**.
 3. Select **Device** and click on the button **...**
@@ -33,6 +34,7 @@ To restore a backup to a SQL Server instance, you can use Management Studio.
 ### Azure SQL Database
 
 To import a bacpac into a new SQL Database, you can use Management Studio.
+
 1. (optional) If you do not yet have a SQL Server in Azure, navigate to the [Azure portal](https://portal.azure.com/) and create a new SQL Database. In the process of create a database, you will create a server. Make note of the server.
   - See [this tutorial](https://azure.microsoft.com/documentation/articles/sql-database-get-started/) to create a database in minutes
 2. Open SQL Server Management Studio and connect to your server in Azure.
