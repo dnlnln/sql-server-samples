@@ -8,11 +8,11 @@ WideWorldImportersDW is designed to showcase many of the key features of SQL Ser
 
 PolyBase is used to combine sales information from WideWorldImportersDW with a public data set about demographics to understand which cities might be of interest for further expansion of sales.
 
-To enable the use of PolyBase in the sample database, make sure it is installed, and run the following statement in the database:
+To enable the use of PolyBase in the sample database, make sure it is installed, and run the following stored procedure in the database:
 
     EXEC [Application].[Configuration_ApplyPolybase]
 
-This will create an external table `dbo.CityPopulationStatistics` that references a public data set that contains population data for cities in the United States, hosted in Azure blob storage. The following query returns the data from that external data set:
+This will create an external table `dbo.CityPopulationStatistics` that references a public data set that contains population data for cities in the United States, hosted in Azure blob storage. You are encouraged to review the code in the stored procedure to understand the configuration process. If you want to host your own data in Azure blob storage and keep it secure from general public access, you will need to undertake additional configuration steps. The following query returns the data from that external data set:
 
     SELECT CityID, StateProvinceCode, CityName, YearNumber, LatestRecordedPopulation FROM dbo.CityPopulationStatistics;
 
