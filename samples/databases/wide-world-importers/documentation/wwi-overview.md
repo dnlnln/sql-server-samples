@@ -38,10 +38,6 @@ These are additional workflows.
 - Cold room temperatures. Perishable goods are stored in refrigerated rooms. Sensor data from these rooms is ingested into the database for monitoring and analytics purposes.
 - Vehicle location tracking. Vehicles that transport goods for WWI include sensors that track the location. This location is again ingested into the database for monitoring and further analytics.
 
-## Version of the application
-
-World Wide Importers has migrated from their previous system to this new SQL Server WWI database system starting January 1, 2013. They migrated to the latest version of SQL Server and started leveraging Azure SQL Database in 2016 to benefit from all the new capabilities.
-
 ## Fiscal year
 
 The company operates with a financial year that starts on November 1st.
