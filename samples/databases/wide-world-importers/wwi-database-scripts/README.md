@@ -1,6 +1,8 @@
 # Construct WideWorldImporters OLTP Database
 
-The scripts in this folder are used to construct the WideWorldImporters database from scratch on SQL Server or Azure SQL Database.
+The scripts in this folder are used to construct the WideWorldImporters database from scratch on SQL Server or Azure SQL Database. It is possible to vary the data size (see step 6 in the instructions below).
+
+A pre-created version of the database is available for download as part of the latest release of the sample: [wide-world-importers-release](http://go.microsoft.com/fwlink/?LinkID=800630).
 
 ### Contents
 
@@ -33,7 +35,7 @@ To run this sample, you need the following prerequisites.
 
 <!-- Examples -->
 1. SQL Server 2016 (or higher) or an Azure SQL Database. 
-2. SQL Server Management Studio, preferably 2016 April Preview or later (version >= 13.0.14000.36)
+2. SQL Server Management Studio, 2016 June release or later (version >= 13.0.15000.23)
 
 
 <a name=run-this-sample></a>
