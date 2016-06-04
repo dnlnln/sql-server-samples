@@ -2,6 +2,8 @@
 
 The scripts in this folder are used to construct the WideWorldImportersDW database from scratch on SQL Server or Azure SQL Database.
 
+A pre-created version of the database is available for download as part of the latest release of the sample: [wide-world-importers-release](http://go.microsoft.com/fwlink/?LinkID=800630).
+
 ### Contents
 
 [About this sample](#about-this-sample)<br/>
