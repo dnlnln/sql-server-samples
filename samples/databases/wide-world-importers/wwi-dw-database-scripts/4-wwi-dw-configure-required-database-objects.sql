@@ -574,8 +574,6 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    DECLARE @EndOfTime datetime2(7) =  '99991231 23:59:59.9999999';
-
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
@@ -591,22 +589,26 @@ BEGIN
                                            FROM Dimension.[Stock Item] AS si
                                            WHERE si.[WWI Stock Item ID] = m.[WWI Stock Item ID]
                                            AND m.[Last Modifed When] > si.[Valid From]
-                                           AND m.[Last Modifed When] <= si.[Valid To]), 0),
+                                           AND m.[Last Modifed When] <= si.[Valid To]
+									       ORDER BY si.[Valid From]), 0),
             m.[Customer Key] = COALESCE((SELECT TOP(1) c.[Customer Key]
                                          FROM Dimension.Customer AS c
                                          WHERE c.[WWI Customer ID] = m.[WWI Customer ID]
                                          AND m.[Last Modifed When] > c.[Valid From]
-                                         AND m.[Last Modifed When] <= c.[Valid To]), 0),
+                                         AND m.[Last Modifed When] <= c.[Valid To]
+									     ORDER BY c.[Valid From]), 0),
             m.[Supplier Key] = COALESCE((SELECT TOP(1) s.[Supplier Key]
                                          FROM Dimension.Supplier AS s
                                          WHERE s.[WWI Supplier ID] = m.[WWI Supplier ID]
                                          AND m.[Last Modifed When] > s.[Valid From]
-                                         AND m.[Last Modifed When] <= s.[Valid To]), 0),
+                                         AND m.[Last Modifed When] <= s.[Valid To]
+									     ORDER BY s.[Valid From]), 0),
             m.[Transaction Type Key] = COALESCE((SELECT TOP(1) tt.[Transaction Type Key]
                                                  FROM Dimension.[Transaction Type] AS tt
                                                  WHERE tt.[WWI Transaction Type ID] = m.[WWI Transaction Type ID]
                                                  AND m.[Last Modifed When] > tt.[Valid From]
-                                                 AND m.[Last Modifed When] <= tt.[Valid To]), 0)
+                                                 AND m.[Last Modifed When] <= tt.[Valid To]
+									             ORDER BY tt.[Valid From]), 0)
     FROM Integration.Movement_Staging AS m;
 
     -- Merge the data into the fact table
@@ -658,8 +660,6 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    DECLARE @EndOfTime datetime2(7) =  '99991231 23:59:59.9999999';
-
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
@@ -675,27 +675,32 @@ BEGIN
                                      FROM Dimension.City AS c
                                      WHERE c.[WWI City ID] = o.[WWI City ID]
                                      AND o.[Last Modified When] > c.[Valid From]
-                                     AND o.[Last Modified When] <= c.[Valid To]), 0),
+                                     AND o.[Last Modified When] <= c.[Valid To]
+									 ORDER BY c.[Valid From]), 0),
             o.[Customer Key] = COALESCE((SELECT TOP(1) c.[Customer Key]
                                          FROM Dimension.Customer AS c
                                          WHERE c.[WWI Customer ID] = o.[WWI Customer ID]
                                          AND o.[Last Modified When] > c.[Valid From]
-                                         AND o.[Last Modified When] <= c.[Valid To]), 0),
+                                         AND o.[Last Modified When] <= c.[Valid To]
+    									 ORDER BY c.[Valid From]), 0),
             o.[Stock Item Key] = COALESCE((SELECT TOP(1) si.[Stock Item Key]
                                            FROM Dimension.[Stock Item] AS si
                                            WHERE si.[WWI Stock Item ID] = o.[WWI Stock Item ID]
                                            AND o.[Last Modified When] > si.[Valid From]
-                                           AND o.[Last Modified When] <= si.[Valid To]), 0),
+                                           AND o.[Last Modified When] <= si.[Valid To]
+					                       ORDER BY si.[Valid From]), 0),
             o.[Salesperson Key] = COALESCE((SELECT TOP(1) e.[Employee Key]
                                          FROM Dimension.Employee AS e
                                          WHERE e.[WWI Employee ID] = o.[WWI Salesperson ID]
                                          AND o.[Last Modified When] > e.[Valid From]
-                                         AND o.[Last Modified When] <= e.[Valid To]), 0),
+                                         AND o.[Last Modified When] <= e.[Valid To]
+									     ORDER BY e.[Valid From]), 0),
             o.[Picker Key] = COALESCE((SELECT TOP(1) e.[Employee Key]
                                        FROM Dimension.Employee AS e
                                        WHERE e.[WWI Employee ID] = o.[WWI Picker ID]
                                        AND o.[Last Modified When] > e.[Valid From]
-                                       AND o.[Last Modified When] <= e.[Valid To]), 0)
+                                       AND o.[Last Modified When] <= e.[Valid To]
+									   ORDER BY e.[Valid From]), 0)
     FROM Integration.Order_Staging AS o;
 
     -- Remove any existing entries for any of these orders
@@ -745,8 +750,6 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    DECLARE @EndOfTime datetime2(7) =  '99991231 23:59:59.9999999';
-
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
@@ -762,12 +765,14 @@ BEGIN
                                      FROM Dimension.Supplier AS s
                                      WHERE s.[WWI Supplier ID] = p.[WWI Supplier ID]
                                      AND p.[Last Modified When] > s.[Valid From]
-                                     AND p.[Last Modified When] <= s.[Valid To]), 0),
+                                     AND p.[Last Modified When] <= s.[Valid To]
+									 ORDER BY s.[Valid From]), 0),
             p.[Stock Item Key] = COALESCE((SELECT TOP(1) si.[Stock Item Key]
                                            FROM Dimension.[Stock Item] AS si
                                            WHERE si.[WWI Stock Item ID] = p.[WWI Stock Item ID]
                                            AND p.[Last Modified When] > si.[Valid From]
-                                           AND p.[Last Modified When] <= si.[Valid To]), 0)
+                                           AND p.[Last Modified When] <= si.[Valid To]
+									       ORDER BY si.[Valid From]), 0)
     FROM Integration.Purchase_Staging AS p;
 
     -- Remove any existing entries for any of these purchase orders
@@ -813,8 +818,6 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    DECLARE @EndOfTime datetime2(7) =  '99991231 23:59:59.9999999';
-
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
@@ -830,27 +833,32 @@ BEGIN
                                      FROM Dimension.City AS c
                                      WHERE c.[WWI City ID] = s.[WWI City ID]
                                      AND s.[Last Modified When] > c.[Valid From]
-                                     AND s.[Last Modified When] <= c.[Valid To]), 0),
+                                     AND s.[Last Modified When] <= c.[Valid To]
+									 ORDER BY c.[Valid From]), 0),
             s.[Customer Key] = COALESCE((SELECT TOP(1) c.[Customer Key]
                                            FROM Dimension.Customer AS c
                                            WHERE c.[WWI Customer ID] = s.[WWI Customer ID]
                                            AND s.[Last Modified When] > c.[Valid From]
-                                           AND s.[Last Modified When] <= c.[Valid To]), 0),
+                                           AND s.[Last Modified When] <= c.[Valid To]
+									       ORDER BY c.[Valid From]), 0),
             s.[Bill To Customer Key] = COALESCE((SELECT TOP(1) c.[Customer Key]
                                                  FROM Dimension.Customer AS c
                                                  WHERE c.[WWI Customer ID] = s.[WWI Bill To Customer ID]
                                                  AND s.[Last Modified When] > c.[Valid From]
-                                                 AND s.[Last Modified When] <= c.[Valid To]), 0),
+                                                 AND s.[Last Modified When] <= c.[Valid To]
+									             ORDER BY c.[Valid From]), 0),
             s.[Stock Item Key] = COALESCE((SELECT TOP(1) si.[Stock Item Key]
                                            FROM Dimension.[Stock Item] AS si
                                            WHERE si.[WWI Stock Item ID] = s.[WWI Stock Item ID]
                                            AND s.[Last Modified When] > si.[Valid From]
-                                           AND s.[Last Modified When] <= si.[Valid To]), 0),
+                                           AND s.[Last Modified When] <= si.[Valid To]
+									       ORDER BY si.[Valid From]), 0),
             s.[Salesperson Key] = COALESCE((SELECT TOP(1) e.[Employee Key]
                                             FROM Dimension.Employee AS e
                                             WHERE e.[WWI Employee ID] = s.[WWI Salesperson ID]
                                             AND s.[Last Modified When] > e.[Valid From]
-                                            AND s.[Last Modified When] <= e.[Valid To]), 0)
+                                            AND s.[Last Modified When] <= e.[Valid To]
+									        ORDER BY e.[Valid From]), 0)
     FROM Integration.Sale_Staging AS s;
 
     -- Remove any existing entries for any of these invoices
@@ -956,8 +964,6 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    DECLARE @EndOfTime datetime2(7) =  '99991231 23:59:59.9999999';
-
     BEGIN TRAN;
 
     DECLARE @LineageKey int = (SELECT TOP(1) [Lineage Key]
@@ -973,27 +979,32 @@ BEGIN
                                          FROM Dimension.Customer AS c
                                          WHERE c.[WWI Customer ID] = t.[WWI Customer ID]
                                          AND t.[Last Modified When] > c.[Valid From]
-                                         AND t.[Last Modified When] <= c.[Valid To]), 0),
+                                         AND t.[Last Modified When] <= c.[Valid To]
+									     ORDER BY c.[Valid From]), 0),
             t.[Bill To Customer Key] = COALESCE((SELECT TOP(1) c.[Customer Key]
                                                  FROM Dimension.Customer AS c
                                                  WHERE c.[WWI Customer ID] = t.[WWI Bill To Customer ID]
                                                  AND t.[Last Modified When] > c.[Valid From]
-                                                 AND t.[Last Modified When] <= c.[Valid To]), 0),
+                                                 AND t.[Last Modified When] <= c.[Valid To]
+									             ORDER BY c.[Valid From]), 0),
             t.[Supplier Key] = COALESCE((SELECT TOP(1) s.[Supplier Key]
                                          FROM Dimension.Supplier AS s
                                          WHERE s.[WWI Supplier ID] = t.[WWI Supplier ID]
                                          AND t.[Last Modified When] > s.[Valid From]
-                                         AND t.[Last Modified When] <= s.[Valid To]), 0),
+                                         AND t.[Last Modified When] <= s.[Valid To]
+									     ORDER BY s.[Valid From]), 0),
             t.[Transaction Type Key] = COALESCE((SELECT TOP(1) tt.[Transaction Type Key]
                                                  FROM Dimension.[Transaction Type] AS tt
                                                  WHERE tt.[WWI Transaction Type ID] = t.[WWI Transaction Type ID]
                                                  AND t.[Last Modified When] > tt.[Valid From]
-                                                 AND t.[Last Modified When] <= tt.[Valid To]), 0),
+                                                 AND t.[Last Modified When] <= tt.[Valid To]
+									             ORDER BY tt.[Valid From]), 0),
             t.[Payment Method Key] = COALESCE((SELECT TOP(1) pm.[Payment Method Key]
                                                  FROM Dimension.[Payment Method] AS pm
                                                  WHERE pm.[WWI Payment Method ID] = t.[WWI Payment Method ID]
                                                  AND t.[Last Modified When] > pm.[Valid From]
-                                                 AND t.[Last Modified When] <= pm.[Valid To]), 0)
+                                                 AND t.[Last Modified When] <= pm.[Valid To]
+									             ORDER BY pm.[Valid From]), 0)
     FROM Integration.Transaction_Staging AS t;
 
     -- Insert all the transactions
@@ -1165,8 +1176,7 @@ DROP TABLE IF EXISTS Integration.Customer_Staging;';
                 SET @SQL = N'
 CREATE TABLE [Integration].[Customer_Staging]
 (
-	[Customer Staging Key] [int] IDENTITY(1,1) NOT NULL
-		PRIMARY KEY NONCLUSTERED,
+	[Customer Staging Key] [int] IDENTITY(1,1) NOT NULL,
 	[WWI Customer ID] [int] NOT NULL,
 	[Customer] [nvarchar](100) NOT NULL,
 	[Bill To Customer] [nvarchar](100) NOT NULL,
@@ -1175,7 +1185,8 @@ CREATE TABLE [Integration].[Customer_Staging]
 	[Primary Contact] [nvarchar](50) NOT NULL,
 	[Postal Code] [nvarchar](10) NOT NULL,
 	[Valid From] [datetime2](7) NOT NULL,
-	[Valid To] [datetime2](7) NOT NULL
+	[Valid To] [datetime2](7) NOT NULL,
+    CONSTRAINT PK_Integration_Customer_Staging PRIMARY KEY NONCLUSTERED ([Customer Staging Key])
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_ONLY);';
                 EXECUTE (@SQL);
 			END;
@@ -1190,15 +1201,15 @@ DROP TABLE IF EXISTS Integration.Employee_Staging;';
                 SET @SQL = N'
 CREATE TABLE [Integration].[Employee_Staging]
 (
-	[Employee Staging Key] [int] IDENTITY(1,1) NOT NULL
-		PRIMARY KEY NONCLUSTERED,
+	[Employee Staging Key] [int] IDENTITY(1,1) NOT NULL,
 	[WWI Employee ID] [int] NOT NULL,
 	[Employee] [nvarchar](50) NOT NULL,
 	[Preferred Name] [nvarchar](50) NOT NULL,
 	[Is Salesperson] [bit] NOT NULL,
 	[Photo] [varbinary](max) NULL,
 	[Valid From] [datetime2](7) NOT NULL,
-	[Valid To] [datetime2](7) NOT NULL
+	[Valid To] [datetime2](7) NOT NULL,
+    CONSTRAINT PK_Integration_Employee_Staging PRIMARY KEY NONCLUSTERED ([Employee Staging Key])
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_ONLY);';
                 EXECUTE (@SQL);
 			END;
@@ -1213,8 +1224,7 @@ DROP TABLE IF EXISTS Integration.Movement_Staging;';
                 SET @SQL = N'
 CREATE TABLE [Integration].[Movement_Staging]
 (
-	[Movement Staging Key] [bigint] IDENTITY(1,1) NOT NULL
-		PRIMARY KEY NONCLUSTERED,
+	[Movement Staging Key] [bigint] IDENTITY(1,1) NOT NULL,
 	[Date Key] [date] NULL,
 	[Stock Item Key] [int] NULL,
 	[Customer Key] [int] NULL,
@@ -1228,7 +1238,8 @@ CREATE TABLE [Integration].[Movement_Staging]
 	[WWI Customer ID] [int] NULL,
 	[WWI Supplier ID] [int] NULL,
 	[WWI Transaction Type ID] [int] NULL,
-	[Last Modifed When] [datetime2](7) NULL
+	[Last Modifed When] [datetime2](7) NULL,
+    CONSTRAINT PK_Integration_Movement_Staging PRIMARY KEY NONCLUSTERED ([Movement Staging Key])
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_ONLY);';
                 EXECUTE (@SQL);
 			END;
@@ -1242,8 +1253,7 @@ DROP TABLE IF EXISTS Integration.Order_Staging;';
 
                 SET @SQL = N'
 CREATE TABLE [Integration].[Order_Staging](
-	[Order Staging Key] [bigint] IDENTITY(1,1) NOT NULL
-		PRIMARY KEY NONCLUSTERED,
+	[Order Staging Key] [bigint] IDENTITY(1,1) NOT NULL,
 	[City Key] [int] NULL,
 	[Customer Key] [int] NULL,
 	[Stock Item Key] [int] NULL,
@@ -1267,7 +1277,8 @@ CREATE TABLE [Integration].[Order_Staging](
 	[WWI Stock Item ID] [int] NULL,
 	[WWI Salesperson ID] [int] NULL,
 	[WWI Picker ID] [int] NULL,
-	[Last Modified When] [datetime2](7) NULL
+	[Last Modified When] [datetime2](7) NULL,
+    CONSTRAINT PK_Integration_Order_Staging PRIMARY KEY NONCLUSTERED ([Order Staging Key])
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_ONLY);';
                 EXECUTE (@SQL);
 			END;
@@ -1282,12 +1293,12 @@ DROP TABLE IF EXISTS Integration.PaymentMethod_Staging;';
                 SET @SQL = N'
 CREATE TABLE [Integration].[PaymentMethod_Staging]
 (
-	[Payment Method Staging Key] [int] IDENTITY(1,1) NOT NULL
-		PRIMARY KEY NONCLUSTERED,
+	[Payment Method Staging Key] [int] IDENTITY(1,1) NOT NULL,
 	[WWI Payment Method ID] [int] NOT NULL,
 	[Payment Method] [nvarchar](50) NOT NULL,
 	[Valid From] [datetime2](7) NOT NULL,
-	[Valid To] [datetime2](7) NOT NULL
+	[Valid To] [datetime2](7) NOT NULL,
+    CONSTRAINT PK_Integration_Payment_Method_Staging PRIMARY KEY NONCLUSTERED ([Payment Method Staging Key])
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_ONLY);';
                 EXECUTE (@SQL);
 			END;
@@ -1302,8 +1313,7 @@ DROP TABLE IF EXISTS Integration.Purchase_Staging;';
                 SET @SQL = N'
 CREATE TABLE [Integration].[Purchase_Staging]
 (
-	[Purchase Staging Key] [bigint] IDENTITY(1,1) NOT NULL
-		PRIMARY KEY NONCLUSTERED,
+	[Purchase Staging Key] [bigint] IDENTITY(1,1) NOT NULL,
 	[Date Key] [date] NULL,
 	[Supplier Key] [int] NULL,
 	[Stock Item Key] [int] NULL,
@@ -1315,7 +1325,8 @@ CREATE TABLE [Integration].[Purchase_Staging]
 	[Is Order Finalized] [bit] NULL,
 	[WWI Supplier ID] [int] NULL,
 	[WWI Stock Item ID] [int] NULL,
-	[Last Modified When] [datetime2](7) NULL
+	[Last Modified When] [datetime2](7) NULL,
+    CONSTRAINT PK_Integration_Purchase_Staging PRIMARY KEY NONCLUSTERED ([Purchase Staging Key])
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_ONLY);';
                 EXECUTE (@SQL);
 			END;
@@ -1330,8 +1341,7 @@ DROP TABLE IF EXISTS Integration.Sale_Staging;';
                 SET @SQL = N'
 CREATE TABLE [Integration].[Sale_Staging]
 (
-	[Sale Staging Key] [bigint] IDENTITY(1,1) NOT NULL
-		PRIMARY KEY NONCLUSTERED,
+	[Sale Staging Key] [bigint] IDENTITY(1,1) NOT NULL,
 	[City Key] [int] NULL,
 	[Customer Key] [int] NULL,
 	[Bill To Customer Key] [int] NULL,
@@ -1356,7 +1366,8 @@ CREATE TABLE [Integration].[Sale_Staging]
 	[WWI Bill To Customer ID] [int] NULL,
 	[WWI Stock Item ID] [int] NULL,
 	[WWI Salesperson ID] [int] NULL,
-	[Last Modified When] [datetime2](7) NULL
+	[Last Modified When] [datetime2](7) NULL,
+    CONSTRAINT PK_Integration_Sale_Staging PRIMARY KEY NONCLUSTERED ([Sale Staging Key])
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_ONLY);';
                 EXECUTE (@SQL);
 			END;
@@ -1371,8 +1382,7 @@ DROP TABLE IF EXISTS Integration.StockHolding_Staging;';
                 SET @SQL = N'
 CREATE TABLE [Integration].[StockHolding_Staging]
 (
-	[Stock Holding Staging Key] [bigint] IDENTITY(1,1) NOT NULL
-		PRIMARY KEY NONCLUSTERED,
+	[Stock Holding Staging Key] [bigint] IDENTITY(1,1) NOT NULL,
 	[Stock Item Key] [int] NULL,
 	[Quantity On Hand] [int] NULL,
 	[Bin Location] [nvarchar](20) NULL,
@@ -1380,7 +1390,8 @@ CREATE TABLE [Integration].[StockHolding_Staging]
 	[Last Cost Price] [decimal](18, 2) NULL,
 	[Reorder Level] [int] NULL,
 	[Target Stock Level] [int] NULL,
-	[WWI Stock Item ID] [int] NULL
+	[WWI Stock Item ID] [int] NULL,
+    CONSTRAINT PK_Integration_Stock_Holding_Staging PRIMARY KEY NONCLUSTERED ([Stock Holding Staging Key])
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_ONLY);';
                 EXECUTE (@SQL);
 			END;
@@ -1395,8 +1406,7 @@ DROP TABLE IF EXISTS Integration.StockItem_Staging;';
                 SET @SQL = N'
 CREATE TABLE [Integration].[StockItem_Staging]
 (
-	[Stock Item Staging Key] [int] IDENTITY(1,1) NOT NULL
-		PRIMARY KEY NONCLUSTERED,
+	[Stock Item Staging Key] [int] IDENTITY(1,1) NOT NULL,
 	[WWI Stock Item ID] [int] NOT NULL,
 	[Stock Item] [nvarchar](100) NOT NULL,
 	[Color] [nvarchar](20) NOT NULL,
@@ -1414,7 +1424,8 @@ CREATE TABLE [Integration].[StockItem_Staging]
 	[Typical Weight Per Unit] [decimal](18, 3) NOT NULL,
 	[Photo] [varbinary](max) NULL,
 	[Valid From] [datetime2](7) NOT NULL,
-	[Valid To] [datetime2](7) NOT NULL
+	[Valid To] [datetime2](7) NOT NULL,
+    CONSTRAINT PK_Integration_Stock_Item_Staging PRIMARY KEY NONCLUSTERED ([Stock Item Staging Key])
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_ONLY);';
                 EXECUTE (@SQL);
 			END;
@@ -1429,8 +1440,7 @@ DROP TABLE IF EXISTS Integration.Supplier_Staging;';
                 SET @SQL = N'
 CREATE TABLE [Integration].[Supplier_Staging]
 (
-	[Supplier Staging Key] [int] IDENTITY(1,1) NOT NULL
-		PRIMARY KEY NONCLUSTERED,
+	[Supplier Staging Key] [int] IDENTITY(1,1) NOT NULL,
 	[WWI Supplier ID] [int] NOT NULL,
 	[Supplier] [nvarchar](100) NOT NULL,
 	[Category] [nvarchar](50) NOT NULL,
@@ -1439,7 +1449,8 @@ CREATE TABLE [Integration].[Supplier_Staging]
 	[Payment Days] [int] NOT NULL,
 	[Postal Code] [nvarchar](10) NOT NULL,
 	[Valid From] [datetime2](7) NOT NULL,
-	[Valid To] [datetime2](7) NOT NULL
+	[Valid To] [datetime2](7) NOT NULL,
+    CONSTRAINT PK_Integration_Supplier_Staging PRIMARY KEY NONCLUSTERED ([Supplier Staging Key])
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_ONLY);';
                 EXECUTE (@SQL);
 			END;
@@ -1454,8 +1465,7 @@ DROP TABLE IF EXISTS Integration.Transaction_Staging;';
                 SET @SQL = N'
 CREATE TABLE [Integration].[Transaction_Staging]
 (
-	[Transaction Staging Key] [bigint] IDENTITY(1,1) NOT NULL
-		PRIMARY KEY NONCLUSTERED,
+	[Transaction Staging Key] [bigint] IDENTITY(1,1) NOT NULL,
 	[Date Key] [date] NULL,
 	[Customer Key] [int] NULL,
 	[Bill To Customer Key] [int] NULL,
@@ -1477,7 +1487,8 @@ CREATE TABLE [Integration].[Transaction_Staging]
 	[WWI Supplier ID] [int] NULL,
 	[WWI Transaction Type ID] [int] NULL,
 	[WWI Payment Method ID] [int] NULL,
-	[Last Modified When] [datetime2](7) NULL
+	[Last Modified When] [datetime2](7) NULL,
+    CONSTRAINT PK_Integration_Transaction_Staging PRIMARY KEY NONCLUSTERED ([Transaction Staging Key])
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_ONLY);';
                 EXECUTE (@SQL);
 			END;
@@ -1492,12 +1503,12 @@ DROP TABLE IF EXISTS Integration.TransactionType_Staging;';
                 SET @SQL = N'
 CREATE TABLE [Integration].[TransactionType_Staging]
 (
-	[Transaction Type Staging Key] [int] IDENTITY(1,1) NOT NULL
-		PRIMARY KEY NONCLUSTERED,
+	[Transaction Type Staging Key] [int] IDENTITY(1,1) NOT NULL,
 	[WWI Transaction Type ID] [int] NOT NULL,
 	[Transaction Type] [nvarchar](50) NOT NULL,
 	[Valid From] [datetime2](7) NOT NULL,
 	[Valid To] [datetime2](7) NOT NULL
+    CONSTRAINT PK_Integration_Transaction_Type_Staging PRIMARY KEY NONCLUSTERED ([Transaction Type Staging Key])
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_ONLY);';
                 EXECUTE (@SQL);
 			END;
@@ -1543,7 +1554,7 @@ FOR VALUES (N''20120101'',N''20130101'',N''20140101'', N''20150101'', N''2016010
 			BEGIN
 				SET @SQL =  N'
 CREATE PARTITION SCHEME PS_Date
-AS PARTITION PF_Date 
+AS PARTITION PF_Date
 ALL TO ([USERDATA]);';
 				EXECUTE (@SQL);
 				PRINT N'Created partition scheme PS_Date';
@@ -2058,7 +2069,6 @@ BEGIN
 	END;
 
 	DECLARE @OutputCounter varchar(20);
-	DECLARE @RowCnt int = 0;
 
 
 -- DROP CONSTRAINTS
