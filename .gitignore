@@ -20,3 +20,4 @@ samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateA
 samples/features/in-memory/ticket-reservations/DemoWorkload/obj/Release/DemoWorkload.FrmConfig.resources
 samples/features/in-memory/ticket-reservations/DemoWorkload/bin/Release/DemoWorkload.vshost.exe.config
 samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/obj/Debug/PopulateAlwaysEncryptedData.csproj.FileListAbsolute.txt
+samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/bin/Debug/PopulateAlwaysEncryptedData.vshost.exe.config

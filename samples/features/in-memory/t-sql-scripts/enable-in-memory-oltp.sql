@@ -46,17 +46,18 @@ ALTER DATABASE CURRENT
 ADD FILEGROUP ' + QUOTENAME(@MODName) + N' CONTAINS MEMORY_OPTIMIZED_DATA;';
 			EXECUTE (@SQL);
 
-			-- add container in the filegroup
-			IF NOT EXISTS (SELECT * FROM sys.database_files WHERE data_space_id IN (SELECT data_space_id FROM sys.filegroups WHERE type = N'FX'))
-			BEGIN
-				SET @SQL = N'
+		END;
+
+		-- add container in the filegroup
+		IF NOT EXISTS (SELECT * FROM sys.database_files WHERE data_space_id IN (SELECT data_space_id FROM sys.filegroups WHERE type = N'FX'))
+		BEGIN
+			SET @SQL = N'
 ALTER DATABASE CURRENT
 ADD FILE (name = N''' + @MODName + ''', filename = '''
 						+ @MemoryOptimizedFilegroupFolder + N''') 
 TO FILEGROUP ' + QUOTENAME(@MODName);
-				EXECUTE (@SQL);
-			END
-		END;
+			EXECUTE (@SQL);
+		END
 	END
 
 	-- 3. set compat level to 130 if it is lower
