@@ -242,6 +242,12 @@ WITH
 ALTER INDEX ix_ColdRoomTemperatures_Archive ON [Warehouse].[ColdRoomTemperatures_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
+CREATE INDEX [IX_Warehouse_ColdRoomTemperatures_ColdRoomSensorNumber]
+ON [Warehouse].[ColdRoomTemperatures]([ColdRoomSensorNumber]);
+GO
+ 
+EXEC sys.sp_addextendedproperty @name = N'Description', @value = 'Allows quickly locating sensors', @level0type = N'SCHEMA', @level0name = 'Warehouse', @level1type = N'TABLE',  @level1name = 'ColdRoomTemperatures', @level2type = N'INDEX', @level2name = 'IX_Warehouse_ColdRoomTemperatures_ColdRoomSensorNumber';
+ 
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = N'Regularly recorded temperatures of cold room chillers', @level0type = N'SCHEMA', @level0name = 'Warehouse', @level1type = N'TABLE',  @level1name = 'ColdRoomTemperatures';
  
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = 'Instantaneous temperature readings for cold rooms (chillers)', @level0type = N'SCHEMA', @level0name = 'Warehouse', @level1type = N'TABLE',  @level1name = 'ColdRoomTemperatures', @level2type = N'COLUMN', @level2name = 'ColdRoomTemperatureID';

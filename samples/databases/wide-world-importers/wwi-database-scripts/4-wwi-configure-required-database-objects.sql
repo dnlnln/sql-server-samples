@@ -3964,6 +3964,7 @@ CREATE TABLE Warehouse.ColdRoomTemperatures
     Temperature decimal(10, 2) NOT NULL,
     ValidFrom datetime2(7) NOT NULL,
     ValidTo datetime2(7) NOT NULL,
+    INDEX [IX_Warehouse_ColdRoomTemperatures_ColdRoomSensorNumber] NONCLUSTERED (ColdRoomSensorNumber),
     CONSTRAINT PK_Warehouse_ColdRoomTemperatures PRIMARY KEY NONCLUSTERED (ColdRoomTemperatureID)
 ) WITH (MEMORY_OPTIMIZED = ON ,DURABILITY = SCHEMA_AND_DATA);';
                 EXECUTE (@SQL);

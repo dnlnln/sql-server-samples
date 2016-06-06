@@ -8,3 +8,11 @@ samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateA
 *.Cache
 samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/bin/Debug/PopulateAlwaysEncryptedData.exe.config
 samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/obj/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
+samples/databases/wide-world-importers/workload-drivers/vehicle-location-insert/MultithreadedInMemoryTableInsert/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
+*.exe
+samples/features/in-memory/iot-smart-grid/ConsoleClient/bin/Release/DataGenerator.dll
+samples/features/in-memory/iot-smart-grid/ConsoleClient/bin/Release/Reports/PowerDashboard.pbix
+samples/databases/wide-world-importers/wwi-integration-etl/Daily ETL/bin/Development/Daily ETL.ispac
+samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/obj/Release/PopulateAlwaysEncryptedData.csproj.FileListAbsolute.txt
+samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/bin/Release/PopulateAlwaysEncryptedData.vshost.exe.config
+samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/obj/Release/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
