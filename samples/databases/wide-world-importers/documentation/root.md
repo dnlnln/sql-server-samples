@@ -10,6 +10,9 @@ Note that the sample is meant to be representative of a typical database. It doe
 **Source code for the sample**:
 [wide-world-importers](https://github.com/Microsoft/sql-server-samples/tree/master/samples/databases/wide-world-importers).
 
+**Feedback**: please send to
+[sqlserversamples@microsoft.com](mailto:sqlserversamples@microsoft.com).
+
 The documentation for the sample is organized as follows:
 
 ## Overview

@@ -11,12 +11,14 @@ To generate sample data up to the current date, follow these steps:
 1. If you have not yet done so, install a clean version of the WideWorldImporters database. For installation instructions, [WideWorldImporters Installation and Configuration](wwi-oltp-htap-installation.md).
 2. Execute the following statement in the database:
 
-    EXEC WideWorldImporters.DataLoadSimulation.PopulateDataToCurrentDate
+```
+    EXEC DataLoadSimulation.PopulateDataToCurrentDate
         @AverageNumberOfCustomerOrdersPerDay = 60,
         @SaturdayPercentageOfNormalWorkDay = 50,
         @SundayPercentageOfNormalWorkDay = 0,
         @IsSilentMode = 1,
         @AreDatesPrinted = 1;
+```
 
 This statement adds sample sales and purchase data in the database, up to the current date. It outputs the progress of the data generation day-by-day. It will take rougly 10 minutes for every year that needs data. Note that there are some differences in the data generated between runs, since there is a random factor in the data generation.
 
@@ -30,6 +32,8 @@ To import sample data up to the current date in the OLAP database WideWorldImpor
 2. If you have not yet done so, install a clean version of the WideWorldImportersDW database. For installation instructions, [WideWorldImporters Installation and Configuration](wwi-olap-installation.md).
 3. Reseed the OLAP database by executing the following statement in the database:
 
+```
     EXECUTE [Application].Configuration_ReseedETL
+```
 
 4. Run the SSIS package **Daily ETL.ispac** to import the data into the OLAP database. For instructions on how to run the ETL job, see [WideWorldImporters ETL Workflow](wwi-etl.md).
