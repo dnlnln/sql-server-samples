@@ -72,7 +72,9 @@ DECLARE @PrimaryKeyColumn nvarchar(max) = N'';
 
 SET @SQL = N'';
 
-SET @SQL += N'USE master;' + @CrLf + @CrLf
+-- when not using Azure DB, add create database statement
+IF SERVERPROPERTY('EngineEdition') != 5
+    SET @SQL += N'USE master;' + @CrLf + @CrLf
           + N'IF EXISTS(SELECT 1 FROM sys.databases WHERE name = N''WideWorldImportersDW'')' + @CrLf
           + N'BEGIN' + @CrLf
           + N'    ALTER DATABASE WideWorldImportersDW SET SINGLE_USER WITH ROLLBACK IMMEDIATE;' + @CrLf
@@ -102,24 +104,27 @@ SET @SQL += N'USE master;' + @CrLf + @CrLf
           + N'    SIZE = 100MB,' + @CrLf
           + N'    MAXSIZE = UNLIMITED,' + @CrLf
           + N'    FILEGROWTH = 64MB' + @CrLf
-          + N')' + @CrLf
-		  + N'COLLATE Latin1_General_100_CI_AS;' + @CrLf + @GO
-		  + N'ALTER DATABASE WideWorldImportersDW SET RECOVERY SIMPLE;' + @CrLf + @GO
-          + N'ALTER DATABASE WideWorldImporters SET AUTO_UPDATE_STATISTICS_ASYNC ON;' + @CrLf + @GO
-          + N'ALTER AUTHORIZATION ON DATABASE::WideWorldImportersDW to sa;' + @CrLf + @GO
-          + N'ALTER DATABASE WideWorldImportersDW' + @CrLf
-          + N'SET QUERY_STORE' + @CrLf
-          + N'(' + @CrLf
-          + @Indent + N'OPERATION_MODE = READ_WRITE,' + @CrLf
-          + @Indent + N'CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30),' + @CrLf
-          + @Indent + N'DATA_FLUSH_INTERVAL_SECONDS = 3000,' + @CrLf
-          + @Indent + N'MAX_STORAGE_SIZE_MB = 500,' + @CrLf
-          + @Indent + N'INTERVAL_LENGTH_MINUTES = 15,' + @CrLf
-          + @Indent + N'SIZE_BASED_CLEANUP_MODE = AUTO,' + @CrLf
-          + @Indent + N'QUERY_CAPTURE_MODE = AUTO,' + @CrLf
-          + @Indent + N'MAX_PLANS_PER_QUERY = 1000' + @CrLf
           + N');' + @CrLf + @GO
+          + N'ALTER AUTHORIZATION ON DATABASE::WideWorldImportersDW to sa;' + @CrLf + @GO
           + N'USE WideWorldImportersDW;' + @CrLf + @GO;
+
+
+SET @SQL += N'ALTER DATABASE CURRENT COLLATE Latin1_General_100_CI_AS;' + @CrLf + @GO
+	  + N'ALTER DATABASE CURRENT SET RECOVERY SIMPLE;' + @CrLf + @GO
+      + N'ALTER DATABASE CURRENT SET AUTO_UPDATE_STATISTICS_ASYNC ON;' + @CrLf + @GO
+      + N'ALTER DATABASE CURRENT' + @CrLf
+      + N'SET QUERY_STORE' + @CrLf
+      + N'(' + @CrLf
+      + @Indent + N'OPERATION_MODE = READ_WRITE,' + @CrLf
+      + @Indent + N'CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30),' + @CrLf
+      + @Indent + N'DATA_FLUSH_INTERVAL_SECONDS = 3000,' + @CrLf
+      + @Indent + N'MAX_STORAGE_SIZE_MB = 500,' + @CrLf
+      + @Indent + N'INTERVAL_LENGTH_MINUTES = 15,' + @CrLf
+      + @Indent + N'SIZE_BASED_CLEANUP_MODE = AUTO,' + @CrLf
+      + @Indent + N'QUERY_CAPTURE_MODE = AUTO,' + @CrLf
+      + @Indent + N'MAX_PLANS_PER_QUERY = 1000' + @CrLf
+      + N');' + @CrLf + @GO
+
 
 DECLARE SchemaList CURSOR FAST_FORWARD READ_ONLY
 FOR
