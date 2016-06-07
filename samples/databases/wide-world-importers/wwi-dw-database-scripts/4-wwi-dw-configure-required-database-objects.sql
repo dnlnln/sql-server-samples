@@ -1552,7 +1552,15 @@ FOR VALUES (N''20120101'',N''20130101'',N''20140101'', N''20150101'', N''2016010
 
 			IF NOT EXISTS (SELECT 1 FROM sys.partition_schemes WHERE name = N'PS_Date')
 			BEGIN
-				SET @SQL =  N'
+            -- for Azure DB, assign to primary filegroup
+            IF SERVERPROPERTY('EngineEdition') = 5
+                SET @SQL =  N'
+CREATE PARTITION SCHEME PS_Date
+AS PARTITION PF_Date
+ALL TO ([PRIMARY]);';
+            -- for other engine editions, assign to user data filegroup
+            IF SERVERPROPERTY('EngineEdition') != 5
+                SET @SQL =  N'
 CREATE PARTITION SCHEME PS_Date
 AS PARTITION PF_Date
 ALL TO ([USERDATA]);';

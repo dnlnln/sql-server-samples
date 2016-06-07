@@ -4626,19 +4626,38 @@ FOR VALUES (N''20140101'', N''20150101'', N''20160101'', N''20170101'');';
 
         IF NOT EXISTS (SELECT * FROM sys.partition_schemes WHERE name = N'PS_TransactionDateTime')
         BEGIN
-            SET @SQL =  N'
+
+            -- for Azure DB, assign to primary filegroup
+            IF SERVERPROPERTY('EngineEdition') = 5
+                SET @SQL =  N'
+CREATE PARTITION SCHEME PS_TransactionDateTime
+AS PARTITION PF_TransactionDateTime
+ALL TO ([PRIMARY]);';
+            -- for other engine editions, assign to user data filegroup
+            IF SERVERPROPERTY('EngineEdition') != 5
+                SET @SQL =  N'
 CREATE PARTITION SCHEME PS_TransactionDateTime
 AS PARTITION PF_TransactionDateTime
 ALL TO ([USERDATA]);';
+
             EXECUTE (@SQL);
         END;
 
         IF NOT EXISTS (SELECT 1 FROM sys.partition_schemes WHERE name = N'PS_TransactionDate')
         BEGIN
+        -- for Azure DB, assign to primary filegroup
+        IF SERVERPROPERTY('EngineEdition') = 5
+            SET @SQL =  N'
+CREATE PARTITION SCHEME PS_TransactionDate
+AS PARTITION PF_TransactionDate
+ALL TO ([PRIMARY]);';
+        -- for other engine editions, assign to user data filegroup
+        IF SERVERPROPERTY('EngineEdition') != 5
             SET @SQL =  N'
 CREATE PARTITION SCHEME PS_TransactionDate
 AS PARTITION PF_TransactionDate
 ALL TO ([USERDATA]);';
+
             EXECUTE (@SQL);
         END;
 
