@@ -43,7 +43,7 @@ To run this sample, you need the following prerequisites.
 
 <!-- Examples -->
 1. SQL Server 2016 (or higher) or an Azure SQL Database.
-2. SQL Server Management Studio, preferably 2016 April Preview or later (version >= 13.0.14000.36).
+2. SQL Server Management Studio, preferably June 2016 release or later (version >= 13.0.15000.23).
 3. (to build sample apps) Visual Studio 2015.
 4. (to run ETL jobs) SQL Server 2016 Integration Services
 
