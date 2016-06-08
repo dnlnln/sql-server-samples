@@ -22,3 +22,4 @@ samples/features/in-memory/ticket-reservations/DemoWorkload/bin/Release/DemoWork
 samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/obj/Debug/PopulateAlwaysEncryptedData.csproj.FileListAbsolute.txt
 samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/bin/Debug/PopulateAlwaysEncryptedData.vshost.exe.config
 *.zip
+samples/features/in-memory/ticket-reservations/packages/CircularGauge.1.0.0/CreatePackageFile.bat

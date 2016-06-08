@@ -3922,23 +3922,24 @@ BEGIN
 				IF NOT EXISTS (SELECT 1 FROM sys.filegroups WHERE name = N'WWI_InMemory_Data')
 				BEGIN
 				    SET @SQL = N'
-ALTER DATABASE WideWorldImporters
+ALTER DATABASE CURRENT
 ADD FILEGROUP WWI_InMemory_Data CONTAINS MEMORY_OPTIMIZED_DATA;';
 					EXECUTE (@SQL);
 
 					SET @SQL = N'
-ALTER DATABASE WideWorldImporters
+ALTER DATABASE CURRENT
 ADD FILE (name = N''WWI_InMemory_Data_1'', filename = '''
 		                 + @MemoryOptimizedFilegroupFolder + N''')
 TO FILEGROUP WWI_InMemory_Data;';
 					EXECUTE (@SQL);
 
-					SET @SQL = N'
-ALTER DATABASE WideWorldImporters
-SET MEMORY_OPTIMIZED_ELEVATE_TO_SNAPSHOT = ON;';
-					EXECUTE (@SQL);
 				END;
             END;
+
+            SET @SQL = N'
+ALTER DATABASE CURRENT
+SET MEMORY_OPTIMIZED_ELEVATE_TO_SNAPSHOT = ON;';
+            EXECUTE (@SQL);
 
             IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = N'ColdRoomTemperatures' AND is_memory_optimized <> 0)
             BEGIN
