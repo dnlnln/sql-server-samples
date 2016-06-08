@@ -1124,7 +1124,6 @@ DROP PROCEDURE IF EXISTS [Application].Configuration_EnableInMemory;
 GO
 
 CREATE PROCEDURE [Application].Configuration_EnableInMemory
-WITH EXECUTE AS OWNER
 AS
 BEGIN
     SET NOCOUNT ON;

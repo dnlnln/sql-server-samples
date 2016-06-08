@@ -3900,7 +3900,6 @@ DROP PROCEDURE IF EXISTS [Application].Configuration_EnableInMemory;
 GO
 
 CREATE PROCEDURE [Application].Configuration_EnableInMemory
-WITH EXECUTE AS OWNER
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -4999,10 +4998,7 @@ BEGIN
 
     EXEC [Application].[Configuration_ApplyColumnstoreIndexing];
 
-    IF SERVERPROPERTY(N'IsFullTextInstalled') = 0
-    BEGIN
-        EXEC [Application].[Configuration_ApplyFullTextIndexing];
-    END;
+    EXEC [Application].[Configuration_ApplyFullTextIndexing];
 
     EXEC [Application].[Configuration_EnableInMemory];
 
@@ -6161,8 +6157,8 @@ GO
 
 -- initial data population to ship date
 
-EXEC WideWorldImporters.DataLoadSimulation.Configuration_ApplyDataLoadSimulationProcedures;
-EXEC WideWorldImporters.DataLoadSimulation.DailyProcessToCreateHistory
+EXEC DataLoadSimulation.Configuration_ApplyDataLoadSimulationProcedures;
+EXEC DataLoadSimulation.DailyProcessToCreateHistory
     @StartDate = '20130101',
     @EndDate = '20160331',
     @AverageNumberOfCustomerOrdersPerDay = 60,
@@ -6171,11 +6167,11 @@ EXEC WideWorldImporters.DataLoadSimulation.DailyProcessToCreateHistory
     @UpdateCustomFields = 1,
     @IsSilentMode = 1,
     @AreDatesPrinted = 1;
-EXEC WideWorldImporters.DataLoadSimulation.Configuration_RemoveDataLoadSimulationProcedures;
+EXEC DataLoadSimulation.Configuration_RemoveDataLoadSimulationProcedures;
 
 -- roll data up to current date
 
-EXEC WideWorldImporters.DataLoadSimulation.PopulateDataToCurrentDate
+EXEC DataLoadSimulation.PopulateDataToCurrentDate
     @AverageNumberOfCustomerOrdersPerDay = 60,
     @SaturdayPercentageOfNormalWorkDay = 50,
     @SundayPercentageOfNormalWorkDay = 0,

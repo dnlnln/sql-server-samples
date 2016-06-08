@@ -23,3 +23,4 @@ samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateA
 samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/bin/Debug/PopulateAlwaysEncryptedData.vshost.exe.config
 *.zip
 samples/features/in-memory/ticket-reservations/packages/CircularGauge.1.0.0/CreatePackageFile.bat
+samples/features/in-memory/ticket-reservations/TicketReservations/TicketReservations.dbmdl
