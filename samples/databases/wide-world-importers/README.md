@@ -8,7 +8,7 @@ The sample includes the databases that can be explored, as well as sample applic
 
 **Latest release**: [wide-world-importers-release](http://go.microsoft.com/fwlink/?LinkID=800630)
 
-**Documentation**: [root.md](http://go.microsoft.com/fwlink/?LinkID=800631)
+**Documentation**: [Wide World Importers Documentation](http://go.microsoft.com/fwlink/?LinkID=800631)
 
 **Feedback on the sample**: send to [sqlserversamples@microsoft.com](mailto:sqlserversamples@microsoft.com)
 
