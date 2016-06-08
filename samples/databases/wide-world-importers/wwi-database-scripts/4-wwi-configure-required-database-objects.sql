@@ -3900,7 +3900,6 @@ DROP PROCEDURE IF EXISTS [Application].Configuration_EnableInMemory;
 GO
 
 CREATE PROCEDURE [Application].Configuration_EnableInMemory
-WITH EXECUTE AS OWNER
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -3922,23 +3921,24 @@ BEGIN
 				IF NOT EXISTS (SELECT 1 FROM sys.filegroups WHERE name = N'WWI_InMemory_Data')
 				BEGIN
 				    SET @SQL = N'
-ALTER DATABASE WideWorldImporters
+ALTER DATABASE CURRENT
 ADD FILEGROUP WWI_InMemory_Data CONTAINS MEMORY_OPTIMIZED_DATA;';
 					EXECUTE (@SQL);
 
 					SET @SQL = N'
-ALTER DATABASE WideWorldImporters
+ALTER DATABASE CURRENT
 ADD FILE (name = N''WWI_InMemory_Data_1'', filename = '''
 		                 + @MemoryOptimizedFilegroupFolder + N''')
 TO FILEGROUP WWI_InMemory_Data;';
 					EXECUTE (@SQL);
 
-					SET @SQL = N'
-ALTER DATABASE WideWorldImporters
-SET MEMORY_OPTIMIZED_ELEVATE_TO_SNAPSHOT = ON;';
-					EXECUTE (@SQL);
 				END;
             END;
+
+            SET @SQL = N'
+ALTER DATABASE CURRENT
+SET MEMORY_OPTIMIZED_ELEVATE_TO_SNAPSHOT = ON;';
+            EXECUTE (@SQL);
 
             IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = N'ColdRoomTemperatures' AND is_memory_optimized <> 0)
             BEGIN
@@ -4998,10 +4998,7 @@ BEGIN
 
     EXEC [Application].[Configuration_ApplyColumnstoreIndexing];
 
-    IF SERVERPROPERTY(N'IsFullTextInstalled') = 0
-    BEGIN
-        EXEC [Application].[Configuration_ApplyFullTextIndexing];
-    END;
+    EXEC [Application].[Configuration_ApplyFullTextIndexing];
 
     EXEC [Application].[Configuration_EnableInMemory];
 
@@ -6160,8 +6157,8 @@ GO
 
 -- initial data population to ship date
 
-EXEC WideWorldImporters.DataLoadSimulation.Configuration_ApplyDataLoadSimulationProcedures;
-EXEC WideWorldImporters.DataLoadSimulation.DailyProcessToCreateHistory
+EXEC DataLoadSimulation.Configuration_ApplyDataLoadSimulationProcedures;
+EXEC DataLoadSimulation.DailyProcessToCreateHistory
     @StartDate = '20130101',
     @EndDate = '20160331',
     @AverageNumberOfCustomerOrdersPerDay = 60,
@@ -6170,11 +6167,11 @@ EXEC WideWorldImporters.DataLoadSimulation.DailyProcessToCreateHistory
     @UpdateCustomFields = 1,
     @IsSilentMode = 1,
     @AreDatesPrinted = 1;
-EXEC WideWorldImporters.DataLoadSimulation.Configuration_RemoveDataLoadSimulationProcedures;
+EXEC DataLoadSimulation.Configuration_RemoveDataLoadSimulationProcedures;
 
 -- roll data up to current date
 
-EXEC WideWorldImporters.DataLoadSimulation.PopulateDataToCurrentDate
+EXEC DataLoadSimulation.PopulateDataToCurrentDate
     @AverageNumberOfCustomerOrdersPerDay = 60,
     @SaturdayPercentageOfNormalWorkDay = 50,
     @SundayPercentageOfNormalWorkDay = 0,
