@@ -14,4 +14,4 @@ This Solution Quick Start provides a solution for a Softwware-as-a-Solution (Saa
 
 ## Windows Containers
 This includes samples for setting up mssql-server in Windows Containers. Currently it includes the following:
-- __[windows-containers] (windows-containers /)__
+- __[windows-containers] (windows-containers/)__
