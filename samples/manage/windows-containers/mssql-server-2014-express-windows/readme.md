@@ -1,4 +1,4 @@
-# IoT Smart Grid
+# mssql-server-2014-express-windows 
 The goal of this Dockerfile is to help developers get started using SQL Server 2014 Express in Windows Containers. The Dockerfile downloads and installs SQL Server 2014 Express with the default setup parameters that could be changed (if needed) after the image is installed.
 
 Note: This dockerfile is based on Buc Rogers' work that can be found [here] (https://github.com/brogersyh/Dockerfiles-for-windows/tree/master/sqlexpress)
