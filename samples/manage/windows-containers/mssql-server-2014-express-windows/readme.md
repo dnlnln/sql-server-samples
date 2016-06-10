@@ -35,8 +35,9 @@ To run this sample, you need the following prerequisites.
 
 ## Run this sample
 Use the Dockerfile and execute the following two commands to build and run sqlexpress:
+
 1. docker build --env sa_password=<YOUR_SA_PASSWORD> <IMAGE NAME> .
-2. docker run -it -p 1433:1433 <IMAGE NAME> cmd
+2. docker run -it -p 1433:1433 <IMAGE NAME>
 
 <a name=sample-details></a>
 
