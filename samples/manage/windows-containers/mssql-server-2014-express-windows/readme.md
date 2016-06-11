@@ -1,5 +1,5 @@
 # mssql-server-2014-express-windows
-This Dockerfile helps developers to get started using SQL Server 2014 Express in Windows Containers. The Dockerfile downloads and installs SQL Server 2014 Express with the default setup parameters that could be changed (if needed) after the image is installed.
+This Dockerfile helps developers to get started using SQL Server 2014 Express in Windows Server Core Containers. The file downloads and installs SQL Server 2014 Express with the default setup parameters that could be changed (if needed).
 
 Note: This dockerfile is based on Buc Rogers' work that can be found [here] (https://github.com/brogersyh/Dockerfiles-for-windows/tree/master/sqlexpress)
 
@@ -27,13 +27,12 @@ To run this sample, you need the following prerequisites.
 
 **Software prerequisites:**
 
-1. System running Windows Server Technical Preview 4 or later.
-2. 10GB available storage for container host image, OS Base Image and setup scripts.
-3. Administrator permissions on the system.
+1. System running Windows Server Core TP5 v10.0.14300.1000.
 
 <a name=run-this-sample></a>
 
 ## Run this sample
+
 The image provides one environment variable to set the sa password: </br>
 - sa_password: Sets the sa password and enables the sa login
 
@@ -41,7 +40,6 @@ The image provides one environment variable to set the sa password: </br>
 
 ## Sample details
 
-**High Level Description**
 The Dockerfile downloads and installs SQL Server 2014 Express with the following default setup parameters that could be changed (if needed) after the image is installed.
 - Collation: SQL_Latin1_General_CP1_CI_AS
 - SQL Instance Name: SQLEXPRESS
