@@ -1,5 +1,5 @@
 # mssql-server-2014-express-windows
-This Dockerfile helps developers to get started using SQL Server 2014 Express in Windows Server Core Containers. The file downloads and installs SQL Server 2014 Express with the default setup parameters that could be changed (if needed).
+This Dockerfile helps developers to get started using SQL Server 2014 Express in Windows Server Core Containers. The file downloads and installs SQL Server 2014 Express with the default setup parameters.
 
 Note: This dockerfile is based on Buc Rogers' work that can be found [here] (https://github.com/brogersyh/Dockerfiles-for-windows/tree/master/sqlexpress)
 
