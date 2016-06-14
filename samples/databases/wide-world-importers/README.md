@@ -8,7 +8,7 @@ The sample includes the databases that can be explored, as well as sample applic
 
 **Latest release**: [wide-world-importers-release](http://go.microsoft.com/fwlink/?LinkID=800630)
 
-**Documentation**: [root.md](http://go.microsoft.com/fwlink/?LinkID=800631)
+**Documentation**: [Wide World Importers Documentation](http://go.microsoft.com/fwlink/?LinkID=800631)
 
 **Feedback on the sample**: send to [sqlserversamples@microsoft.com](mailto:sqlserversamples@microsoft.com)
 
@@ -43,7 +43,7 @@ To run this sample, you need the following prerequisites.
 
 <!-- Examples -->
 1. SQL Server 2016 (or higher) or an Azure SQL Database.
-2. SQL Server Management Studio, preferably 2016 April Preview or later (version >= 13.0.14000.36).
+2. SQL Server Management Studio, preferably June 2016 release or later (version >= 13.0.15000.23).
 3. (to build sample apps) Visual Studio 2015.
 4. (to run ETL jobs) SQL Server 2016 Integration Services
 
