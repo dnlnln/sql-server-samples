@@ -15,7 +15,7 @@ This Windows Forms sample application built on .NET Framework 4.6  demonstrates 
 * **Programming Language:** T-SQL, C#
 * **Authors:** Jos de Bruijn
 
-![Alt text](Screenshots/1.png "Ticket Reservations")
+![Alt text](/media/in-memory-oltp-performance.png "Ticket Reservations")
 
 ## Running this sample
 1. Before you can run this sample, you must have the following perquisites:
