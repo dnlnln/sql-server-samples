@@ -8,11 +8,12 @@ This Windows Forms sample application built on .NET Framework 4.6  demonstrates 
 ## About this sample
 
 <!-- Delete the ones that don't apply -->
-1. **Applies to:** SQL Server 2014 (or higher), Azure SQL Database
-1. **Key features:** In-Memory OLTP
-1. **Workload:** OLTP
-1. **Programming Language:** T-SQL, C#
-1. **Authors:** Jos de Bruijn
+* **Latest release:** [in-memory-oltp-perf-demo-v1.0](https://github.com/Microsoft/sql-server-samples/releases/tag/in-memory-oltp-demo-v1.0)
+* **Applies to:** SQL Server 2014 (or higher), Azure SQL Database
+* **Key features:** In-Memory OLTP
+* **Workload:** OLTP
+* **Programming Language:** T-SQL, C#
+* **Authors:** Jos de Bruijn
 
 ![Alt text](Screenshots/1.png "Ticket Reservations")
 
