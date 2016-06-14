@@ -6,6 +6,12 @@ WideWorldImporters is a wholesale company. Transactions and real-time analytics 
 
 The sample includes the databases that can be explored, as well as sample applications and sample scripts that can be used to explore the use of individual SQL Server features in the sample database.
 
+**Latest release**: [wide-world-importers-release](http://go.microsoft.com/fwlink/?LinkID=800630)
+
+**Documentation**: [Wide World Importers Documentation](http://go.microsoft.com/fwlink/?LinkID=800631)
+
+**Feedback on the sample**: send to [sqlserversamples@microsoft.com](mailto:sqlserversamples@microsoft.com)
+
 ### Contents
 
 [About this sample](#about-this-sample)<br/>
@@ -24,7 +30,7 @@ The sample includes the databases that can be explored, as well as sample applic
 1. **Key features:** Core database features
 1. **Workload:** OLTP, OLAP, IoT
 1. **Programming Language:** T-SQL, C#
-1. **Authors:** Greg Low, Jos de Bruijn
+1. **Authors:** Greg Low, Denzil Ribeiro, Jos de Bruijn
 1. **Update history:** 25 May 2016 - initial revision
 
 <a name=before-you-begin></a>
@@ -37,7 +43,7 @@ To run this sample, you need the following prerequisites.
 
 <!-- Examples -->
 1. SQL Server 2016 (or higher) or an Azure SQL Database.
-2. SQL Server Management Studio, preferably 2016 April Preview or later (version >= 13.0.14000.36).
+2. SQL Server Management Studio, preferably June 2016 release or later (version >= 13.0.15000.23).
 3. (to build sample apps) Visual Studio 2015.
 4. (to run ETL jobs) SQL Server 2016 Integration Services
 

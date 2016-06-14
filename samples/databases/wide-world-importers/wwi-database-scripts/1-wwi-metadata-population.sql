@@ -1,7 +1,7 @@
 -- WideWorldImporters Database Metadata Population
 --
 -- Creates the WWI_Prep Database
--- 
+--
 
 USE master;
 GO
@@ -76,7 +76,7 @@ CREATE TABLE Metadata.[Constraints]
     [ConstraintID] int IDENTITY(1,1)
         CONSTRAINT PK_Metadata_Constraints PRIMARY KEY,
     TableName sysname NOT NULL,
-    ConstraintName sysname NOT NULL,    
+    ConstraintName sysname NOT NULL,
     ConstraintDefinition nvarchar(max) NOT NULL,
     ConstraintDescription nvarchar(max) NOT NULL
 );
@@ -87,7 +87,7 @@ CREATE TABLE Metadata.[Indexes]
     [IndexID] int IDENTITY(1,1)
         CONSTRAINT PK_Metadata_Indexes PRIMARY KEY,
     TableName sysname NOT NULL,
-    IndexName sysname NOT NULL,    
+    IndexName sysname NOT NULL,
     IndexColumns nvarchar(max) NOT NULL,
     IncludedColumns nvarchar(max) NULL,
     IsUnique bit NOT NULL,
@@ -97,9 +97,9 @@ CREATE TABLE Metadata.[Indexes]
 GO
 
 -- Schemas
-INSERT Metadata.[Schemas] 
+INSERT Metadata.[Schemas]
     (SchemaName, SchemaDescription)
-VALUES 
+VALUES
     (N'Application', N'Tables common across the application. Used for categorization and lookup lists, system parameters and people (users and contacts)'),
     (N'DataLoadSimulation', N'Tables and procedures used only during simulated data loading operations'),
     (N'Integration', 'Tables and procedures required for integration with the data warehouse'),
@@ -184,7 +184,7 @@ VALUES
     (N'PaymentMethods', N'PaymentMethodName', 0, N'nvarchar', 0, 50, NULL, NULL, 0, 0, NULL, NULL, 1, 0, NULL, NULL, 0, NULL, N'Full name of ways that customers can make payments or that suppliers can be paid');
 GO
 
--- Application.People Table 
+-- Application.People Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (10, N'Application', N'People', 1, 1, N'People known to the application (staff, customer contacts, supplier contacts)');
@@ -217,25 +217,25 @@ GO
 
 INSERT Metadata.[Indexes]
     (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
-VALUES 
+VALUES
     (N'People', N'IX_Application_People_IsEmployee', N'[IsEmployee]', NULL, 0, NULL, N'Allows quickly locating employees');
 GO
 
 INSERT Metadata.[Indexes]
     (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
-VALUES 
+VALUES
     (N'People', N'IX_Application_People_IsSalesperson', N'[IsSalesperson]', NULL, 0, NULL, N'Allows quickly locating salespeople');
 GO
 
 INSERT Metadata.[Indexes]
     (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
-VALUES 
+VALUES
     (N'People', N'IX_Application_People_FullName', N'[FullName]', NULL, 0, NULL, N'Improves performance of name-related queries');
 GO
 
 INSERT Metadata.[Indexes]
     (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
-VALUES 
+VALUES
     (N'People', N'IX_Application_People_Perf_20160301_05', N'[IsPermittedToLogon],[PersonID]', N'[FullName], [EmailAddress]', 0, NULL, N'Improves performance of order picking and invoicing');
 GO
 
@@ -261,11 +261,11 @@ GO
 
 INSERT Metadata.[Indexes]
     (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
-VALUES 
+VALUES
     (N'StateProvinces', N'IX_Application_StateProvinces_SalesTerritory', N'[SalesTerritory]', NULL, 0, NULL, N'Index used to quickly locate sales territories');
 GO
 
--- Application.SystemParameters Table 
+-- Application.SystemParameters Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (190, N'Application', N'SystemParameters', 0, 1, N'Any configurable parameters for the whole system');
@@ -304,7 +304,7 @@ VALUES
     (N'TransactionTypes', N'TransactionTypeName', 0, N'nvarchar', 0, 50, NULL, NULL, 0, 0, NULL, NULL, 1, 0, NULL, NULL, 0, NULL, N'Full name of the transaction type');
 GO
 
--- Purchasing.PurchaseOrderLines Table 
+-- Purchasing.PurchaseOrderLines Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (250, N'Purchasing', N'PurchaseOrderLines', 0, 1, N'Detail lines from supplier purchase orders');
@@ -329,11 +329,11 @@ GO
 
 INSERT Metadata.[Indexes]
     (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
-VALUES 
+VALUES
     (N'PurchaseOrderLines', N'IX_Purchasing_PurchaseOrderLines_Perf_20160301_4', N'[IsOrderLineFinalized], [StockItemID]', N'[OrderedOuters], [ReceivedOuters]', 0, NULL, N'Improves performance of order picking and invoicing');
 GO
 
--- Purchasing.PurchaseOrders Table 
+-- Purchasing.PurchaseOrders Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (220, N'Purchasing', N'PurchaseOrders', 0, 1, N'Details of supplier purchase orders');
@@ -371,7 +371,7 @@ VALUES
     (N'SupplierCategories', N'SupplierCategoryName', 0, N'nvarchar', 0, 50, NULL, NULL, 0, 0, NULL, NULL, 1, 0, NULL, NULL, 0, NULL, N'Full name of the category that suppliers can be assigned to');
 GO
 
--- Purchasing.Suppliers Table 
+-- Purchasing.Suppliers Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (200, N'Purchasing', N'Suppliers', 1, 1, N'Main entity table for suppliers (organizations)');
@@ -410,7 +410,7 @@ VALUES
     (N'Suppliers', N'PostalPostalCode', 0, N'nvarchar', 0, 10, NULL, NULL, 0, 0, NULL, NULL, 0, 0, NULL, NULL, 0, NULL, N'Postal code for the supplier when sending by mail');
 GO
 
--- Purchasing.SupplierTransactions Table 
+-- Purchasing.SupplierTransactions Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (260, N'Purchasing', N'SupplierTransactions', 0, 1, N'All financial transactions that are supplier-related');
@@ -438,7 +438,7 @@ GO
 
 INSERT Metadata.[Indexes]
     (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
-VALUES 
+VALUES
     (N'SupplierTransactions', N'IX_Purchasing_SupplierTransactions_IsFinalized', N'[IsFinalized]', NULL, 0, NULL, N'Index used to quickly locate unfinalized transactions');
 GO
 
@@ -472,7 +472,7 @@ VALUES
     (N'CustomerCategories', N'CustomerCategoryName', 0, N'nvarchar', 0, 50, NULL, NULL, 0, 0, NULL, NULL, 1, 0, NULL, NULL, 0, NULL, N'Full name of the category that customers can be assigned to');
 GO
 
--- Sales.Customers Table 
+-- Sales.Customers Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (210, N'Sales', N'Customers', 1, 1, N'Main entity tables for customers (organizations or individuals)');
@@ -515,7 +515,7 @@ GO
 
 INSERT Metadata.[Indexes]
     (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
-VALUES 
+VALUES
     (N'Customers', N'IX_Sales_Customers_Perf_20160301_06', N'[IsOnCreditHold], [CustomerID], [BillToCustomerID]', N'[PrimaryContactPersonID]', 0, NULL, N'Improves performance of order picking and invoicing');
 GO
 
@@ -557,7 +557,7 @@ VALUES (N'SpecialDeals', N'CK_Sales_SpecialDeals_Unit_Price_Deal_Requires_Specia
         N'Ensures that if a specific price is allocated that it applies to a specific stock item');
 GO
 
--- Sales.CustomerTransactions Table 
+-- Sales.CustomerTransactions Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (360, N'Sales', N'CustomerTransactions', 0, 1, N'All financial transactions that are customer-related');
@@ -584,11 +584,11 @@ GO
 
 INSERT Metadata.[Indexes]
     (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
-VALUES 
+VALUES
     (N'CustomerTransactions', N'IX_Sales_CustomerTransactions_IsFinalized', N'[IsFinalized]', NULL, 0, NULL, N'Allows quick location of unfinalized transactions');
 GO
 
--- Sales.InvoiceLines Table 
+-- Sales.InvoiceLines Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (370, N'Sales', N'InvoiceLines', 0, 1, N'Detail lines from customer invoices');
@@ -612,7 +612,7 @@ VALUES
     (N'InvoiceLines', N'ExtendedPrice', 0, N'decimal', 0, NULL, 18, 2, 0, 0, NULL, NULL, 0, 0, NULL, NULL, 0, NULL, N'Extended line price charged');
 GO
 
--- Sales.Invoices Table 
+-- Sales.Invoices Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (310, N'Sales', N'Invoices', 0, 1, N'Details of customer invoices');
@@ -650,7 +650,7 @@ GO
 
 INSERT Metadata.[Indexes]
     (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
-VALUES 
+VALUES
     (N'Invoices', N'IX_Sales_Invoices_ConfirmedDeliveryTime', N'[ConfirmedDeliveryTime]', N'[ConfirmedReceivedBy]', 0, NULL, N'Allows quick retrieval of invoices confirmed to have been delivered in a given time period');
 GO
 
@@ -660,7 +660,7 @@ VALUES (N'Invoices', N'CK_Sales_Invoices_ReturnedDeliveryData_Must_Be_Valid_JSON
         N'CHECK (ReturnedDeliveryData IS NULL OR ISJSON(ReturnedDeliveryData) <> 0)',
         N'Ensures that if returned delivery data is present that it is valid JSON');
 
--- Sales.OrderLines Table 
+-- Sales.OrderLines Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (320, N'Sales', N'OrderLines', 0, 1, N'Detail lines from customer orders');
@@ -685,23 +685,23 @@ GO
 
 INSERT Metadata.[Indexes]
     (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
-VALUES 
+VALUES
     (N'OrderLines', N'IX_Sales_OrderLines_AllocatedStockItems', N'[StockItemID]', N'[PickedQuantity]', 0, NULL, N'Allows quick summation of stock item quantites already allocated to uninvoiced orders');
 GO
 
 INSERT Metadata.[Indexes]
     (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
-VALUES 
+VALUES
     (N'OrderLines', N'IX_Sales_OrderLines_Perf_20160301_01', N'[PickingCompletedWhen], [OrderID], [OrderLineID]', N'[Quantity], [StockItemID]', 0, NULL, N'Improves performance of order picking and invoicing');
 GO
 
 INSERT Metadata.[Indexes]
     (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
-VALUES 
+VALUES
     (N'OrderLines', N'IX_Sales_OrderLines_Perf_20160301_02', N'[StockItemID], [PickingCompletedWhen]', N'[OrderID], [PickedQuantity]', 0, NULL, N'Improves performance of order picking and invoicing');
 GO
 
--- Sales.Orders Table 
+-- Sales.Orders Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (230, N'Sales', N'Orders', 0, 1, N'Detail of customer orders');
@@ -743,6 +743,12 @@ VALUES
     (N'ColdRoomTemperatures', N'ColdRoomSensorNumber', 0, N'int', 0, NULL, NULL, NULL, 0, 0, NULL, NULL, 0, 0, NULL, NULL, 0, NULL, N'Cold room sensor number'),
     (N'ColdRoomTemperatures', N'RecordedWhen', 0, N'datetime2', 0, NULL, NULL, 2, 0, 0, NULL, NULL, 0, 0, NULL, NULL, 0, NULL, N'Time when this temperature recording was taken'),
     (N'ColdRoomTemperatures', N'Temperature', 0, N'decimal', 0, NULL, 10, 2, 0, 0, NULL, NULL, 0, 0, NULL, NULL, 0, NULL, N'Temperature at the time of recording');
+GO
+
+INSERT Metadata.[Indexes]
+    (TableName, IndexName, IndexColumns, IncludedColumns, IsUnique, FilterClause, IndexDescription)
+VALUES
+    (N'ColdRoomTemperatures', N'IX_Warehouse_ColdRoomTemperatures_ColdRoomSensorNumber', N'[ColdRoomSensorNumber]', NULL, 0, NULL, N'Allows quickly locating sensors');
 GO
 
 -- Warehouse.Colors Table
@@ -790,7 +796,7 @@ VALUES
     (N'StockGroups', N'StockGroupName', 0, N'nvarchar', 0, 50, NULL, NULL, 0, 0, NULL, NULL, 1, 0, NULL, NULL, 0, NULL, N'Full name of groups used to categorize stock items');
 GO
 
--- Warehouse.StockItemHoldings Table 
+-- Warehouse.StockItemHoldings Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (245, N'Warehouse', N'StockItemHoldings', 0, 1, N'Non-temporal attributes for stock items');
@@ -810,7 +816,7 @@ VALUES
     (N'StockItemHoldings', N'TargetStockLevel', 0, N'int', 0, NULL, NULL, NULL, 0, 0, NULL, NULL, 0, 0, NULL, NULL, 0, NULL, N'Typical quantity ordered');
 GO
 
--- Warehouse.StockItems Table 
+-- Warehouse.StockItems Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (240, N'Warehouse', N'StockItems', 1, 1, N'Main entity table for stock items');
@@ -845,7 +851,7 @@ VALUES
     (N'StockItems', N'SearchDetails', 0, N'AS CONCAT([StockItemName], N'' '', [MarketingComments])', 1, NULL, NULL, NULL, 0, 0, NULL, NULL, 0, 0, NULL, NULL, 0, NULL, N'Combination of columns used by full text search');
 GO
 
--- Warehouse.StockItemStockGroups Table 
+-- Warehouse.StockItemStockGroups Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (350, N'Warehouse', N'StockItemStockGroups', 0, 1, N'Which stock items are in which stock groups');
@@ -868,7 +874,7 @@ VALUES
     (N'StockItemStockGroups', N'UQ_StockItemStockGroups_StockGroupID_Lookup', N'UNIQUE(StockGroupID, StockItemID)', N'Enforces uniqueness and indexes one side of the many to many relationship');
 GO
 
--- Warehouse.StockItemTransactions Table 
+-- Warehouse.StockItemTransactions Table
 INSERT Metadata.[Tables]
     (TableCreationOrder, SchemaName, TableName, IncludeTemporalColumns, IncludeModificationTrackingColumns, TableDescription)
 VALUES (380, N'Warehouse', N'StockItemTransactions', 0, 1, N'Transactions covering all movements of all stock items');
@@ -927,7 +933,7 @@ AS BEGIN
 	DECLARE @StringToExecute nvarchar(max) = N'';
     DECLARE @NextLineEnd int;
     DECLARE @Counter int;
-    
+
     WHILE LEN(@StringToPrint) > 0
     BEGIN
         SET @NextLineEnd = CHARINDEX(NCHAR(13), @StringToPrint, 1);

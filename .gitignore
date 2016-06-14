@@ -1,3 +1,27 @@
 samples/in-memory/ticket-reservations/DemoWorkload/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
 *.nupkg
 samples/in-memory/ticket-reservations/packages/CircularGauge.1.0.0/CreatePackageFile.bat
+*.suo
+samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/bin/Debug/PopulateAlwaysEncryptedData.exe
+*.pdb
+samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/bin/Debug/PopulateAlwaysEncryptedData.vshost.exe
+*.Cache
+samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/bin/Debug/PopulateAlwaysEncryptedData.exe.config
+samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/obj/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
+samples/databases/wide-world-importers/workload-drivers/vehicle-location-insert/MultithreadedInMemoryTableInsert/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
+*.exe
+samples/features/in-memory/iot-smart-grid/ConsoleClient/bin/Release/DataGenerator.dll
+samples/features/in-memory/iot-smart-grid/ConsoleClient/bin/Release/Reports/PowerDashboard.pbix
+samples/databases/wide-world-importers/wwi-integration-etl/Daily ETL/bin/Development/Daily ETL.ispac
+samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/obj/Release/PopulateAlwaysEncryptedData.csproj.FileListAbsolute.txt
+samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/bin/Release/PopulateAlwaysEncryptedData.vshost.exe.config
+samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/obj/Release/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
+*.dll
+samples/features/in-memory/ticket-reservations/DemoWorkload/obj/Release/DemoWorkload.FrmConfig.resources
+samples/features/in-memory/ticket-reservations/DemoWorkload/bin/Release/DemoWorkload.vshost.exe.config
+samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/obj/Debug/PopulateAlwaysEncryptedData.csproj.FileListAbsolute.txt
+samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateAlwaysEncryptedData/bin/Debug/PopulateAlwaysEncryptedData.vshost.exe.config
+*.zip
+samples/features/in-memory/ticket-reservations/packages/CircularGauge.1.0.0/CreatePackageFile.bat
+samples/features/in-memory/ticket-reservations/TicketReservations/TicketReservations.dbmdl
+samples/databases/wide-world-importers/workload-drivers/vehicle-location-insert/MultithreadedInMemoryTableInsert/obj/Release/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs

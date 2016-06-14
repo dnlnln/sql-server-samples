@@ -2,6 +2,8 @@
 
 The scripts in this folder are used to construct the WideWorldImportersDW database from scratch on SQL Server or Azure SQL Database.
 
+A pre-created version of the database is available for download as part of the latest release of the sample: [wide-world-importers-release](http://go.microsoft.com/fwlink/?LinkID=800630).
+
 ### Contents
 
 [About this sample](#about-this-sample)<br/>
@@ -20,7 +22,7 @@ The scripts in this folder are used to construct the WideWorldImportersDW databa
 1. **Key features:** Core database features
 1. **Workload:** OLTP
 1. **Programming Language:** T-SQL
-1. **Authors:** Greg Low, Jos de Bruijn
+1. **Authors:** Greg Low, Denzil Ribeiro, Jos de Bruijn
 1. **Update history:** 25 May 2016 - initial revision
 
 <a name=before-you-begin></a>
@@ -33,7 +35,7 @@ To run this sample, you need the following prerequisites.
 
 <!-- Examples -->
 1. SQL Server 2016 (or higher) or an Azure SQL Database. 
-2. SQL Server Management Studio, preferably 2016 April Preview or later (version >= 13.0.14000.36)
+2. SQL Server Management Studio, preferably June 2016 release or later (version >= 13.0.15000.23)
 
 
 <a name=run-this-sample></a>
