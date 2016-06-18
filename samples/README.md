@@ -12,6 +12,6 @@ __[features] (features/)__
 
 Samples illustrating specific SQL Server and Azure SQL Database features, including In-Memory OLTP, Master Data Services (MDS), and R Services.
 
-__[management] (management/)__
+__[management] (manage/)__
 
 Samples that help with the management of SQL Server and Azure SQL Database.
