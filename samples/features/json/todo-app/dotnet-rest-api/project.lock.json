@@ -5404,8 +5404,7 @@
       "Microsoft.Extensions.Logging >= 1.0.0-rc2-final",
       "Microsoft.Extensions.Logging.Console >= 1.0.0-rc2-final",
       "Microsoft.Extensions.Logging.Debug >= 1.0.0-rc2-final",
-      "System.Data.SqlClient >= 4.1.0-rc2-24027",
-      "System.IO >= 4.1.0-rc2-24027"
+      "System.Data.SqlClient >= 4.1.0-rc2-24027"
     ],
     ".NETFramework,Version=v4.6": []
   },

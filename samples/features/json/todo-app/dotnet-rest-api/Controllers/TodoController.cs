@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Belgrade.SqlClient;
 using Microsoft.AspNetCore.Mvc;
-using Belgrade.SqlClient;
 using System.Data.SqlClient;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace TodoApp.Controllers
 {

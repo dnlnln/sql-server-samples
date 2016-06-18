@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Belgrade.SqlClient;
+using Belgrade.SqlClient.SqlDb;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Belgrade.SqlClient;
-using Belgrade.SqlClient.Common;
-using Belgrade.SqlClient.SqlDb;
 using System.Data.SqlClient;
 
 namespace TodoApp
