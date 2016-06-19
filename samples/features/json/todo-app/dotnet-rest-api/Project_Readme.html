@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Welcome to ASP.NET Core</title>
+    <title>Welcome to ASP.NET Core Web API REST Service</title>
     <style>
         html {
             background: #f1f1f1;
@@ -146,22 +146,35 @@
             </ul>
         </div>
         <div class="section">
-            <h2>Run</h2>
+            <h2>Setup and configure</h2>
             <ul>
                 <li>Create new database on SQL Server 2016 or Azure SQL.</li>
+                <li>If you are using Azure SQL make sure that firewall rules in Azure enable you to connect to applicaiton.</li>
                 <li>Execute setup.sql script to create Todo table and populate it with sample data</li>
-                <li>Open xproj file in Visual Studio 2015 and set connection string in Startup.cs file.</li>
-                <li>Run project and call REST api on /api/Todo URL.</li>
+                <li>Open xproj file in Visual Studio 2015 and set connection string in Startup.cs file:
+                <code>
+
+
+            public void ConfigureServices(IServiceCollection&nbsp;services)
+            {
+
+                    const string ConnString = "Server=SERVERNAME.database.windows.net;Database=DATABASENAME;User&nbsp;Id=USERNAME;Password=PASSWORD";
+
+            </code>
+                
+                </li>
             </ul>
         </div>
+
         <div class="section last">
-            <h2>Try REST Service</h2>
+            <h2>Run</h2>
             <ul>
-                <li>Open /api/Todo or /api/Todo/1 URLs to try GET methods.</li>
+                <li>Run the project and see results returned from /api/Todo URL.</li>
+                <li>Open /api/Todo/1 URL to try GET method that returns single Todo item.</li>
                 <li>Use some tool that send POST, PUT, PATCH, or DELETE requests to web server (e.g. Chrome Poster) to try other methods.</li>
             </ul>
-                 </div>
-
+        </div>
+        
         <div id="footer">
             <p>We would love to hear your feedback</p>
         </div>

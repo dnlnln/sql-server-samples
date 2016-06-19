@@ -1,3 +1,5 @@
-TodoApp.xproj.user
+TodoRestWebAPI.xproj.user
 .vs/*
+bin/*
+obj/*
 *.sln
