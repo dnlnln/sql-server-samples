@@ -68,8 +68,7 @@ You can easily modify this code to fit the architecture of your application.
 
 ## Related Links
 
-For more information, see this article:
-http://www.codeproject.com/Articles/1106622/Building-Web-API-REST-services-on-Azure-SQL-Databa
+For more information, see this [article](http://www.codeproject.com/Articles/1106622/Building-Web-API-REST-services-on-Azure-SQL-Databa).
 
 ## License
 These samples and templates are all licensed under the MIT license. See the license.txt file in the root.

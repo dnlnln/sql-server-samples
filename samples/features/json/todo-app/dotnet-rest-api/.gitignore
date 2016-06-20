@@ -3,3 +3,4 @@ TodoRestWebAPI.xproj.user
 bin/*
 obj/*
 *.sln
+*.log
