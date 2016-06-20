@@ -150,19 +150,19 @@
             <ul>
                 <li>Create new database on SQL Server 2016 or Azure SQL.</li>
                 <li>If you are using Azure SQL make sure that firewall rules in Azure enable you to make connections between your host and Azure SQL database.</li>
-                <li>Execute setup.sql script to create Todo table and populate it with sample data.</li>
-                <li>Open .xproj file in Visual Studio 2015 and set connection string in Startup.cs file:
-                <code>
+                <li>Execute <a href="setup/setup.sql" target="_blank">setup.sql</a> script to create Todo table and populate it with sample data.</li>
+                <li>Open .xproj file in Visual Studio 2015 and set connection string in <a href="Startup.cs" target="_blank">Startup.cs</a> file:
+    <code>
 
 
-            public void ConfigureServices(IServiceCollection&nbsp;services)
-            {
+        public void ConfigureServices(IServiceCollection&nbsp;services)
+        {
 
-                    const string ConnString = "Server=SERVERNAME.database.windows.net;Database=DATABASENAME;User&nbsp;Id=USERNAME;Password=PASSWORD";
+        const string ConnString = "Server=SERVERNAME.database.windows.net;Database=DATABASENAME;User&nbsp;Id=USERNAME;Password=PASSWORD";
 
-            </code>
-                
-                </li>
+    </code>
+
+</li>
             </ul>
         </div>
 
