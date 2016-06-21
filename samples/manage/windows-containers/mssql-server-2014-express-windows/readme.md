@@ -62,7 +62,7 @@ ldf']}]
 This example shows all parameters in action:	
 ```
 docker run -p 1433:1433 -v C:/temp/:C:/temp/ --env attach_dbs="[{'dbName':'MaxTest','dbFiles':['C:\\temp\\maxtest.mdf','C:\\temp\\maxtest_log.
-ldf']}]" sqlexpr
+ldf']}]" microsoft/mssql-server-2014-express-windows
 ```
 	
 <a name=sample-details></a>
