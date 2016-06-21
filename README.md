@@ -8,6 +8,9 @@ To work in GitHub, go to https://github.com/microsoft/sql-server-samples and for
 
 Each sample should be in its own folder with a README.md file that follows the [template](README_samples_template.md). Generated files (e.g., .exe or .bacpac) and user configuration settings (e.g., .user) should not be committed to GitHub.
 
+## Code of Conduct
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
 ## License
 These samples and templates are all licensed under the MIT license. See the license.txt file in the root.
 
