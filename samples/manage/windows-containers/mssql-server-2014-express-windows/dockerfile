@@ -12,6 +12,7 @@ MAINTAINER Perry Skountrianos
 # set environment variables
 ENV sql_express_download_url "https://download.microsoft.com/download/1/5/6/156992E6-F7C7-4E55-833D-249BD2348138/ENU/x64/SQLEXPR_x64_ENU.exe"
 ENV sa_password _
+ENV attach_dbs "[]"
 
 # make install files accessible
 COPY . /
@@ -22,9 +23,9 @@ RUN powershell -Command (New-Object System.Net.WebClient).DownloadFile('%sql_exp
 
 RUN powershell -Command \
         set-strictmode -version latest ; \
-        stop-service MSSQL`$%sqlinstance% ; \
+        stop-service MSSQL`$SQLEXPRESS ; \
         set-itemproperty -path 'HKLM:\software\microsoft\microsoft sql server\mssql12.SQLEXPRESS\mssqlserver\supersocketnetlib\tcp\ipall' -name tcpdynamicports -value '' ; \
         set-itemproperty -path 'HKLM:\software\microsoft\microsoft sql server\mssql12.SQLEXPRESS\mssqlserver\supersocketnetlib\tcp\ipall' -name tcpport -value 1433 ; \
         set-itemproperty -path 'HKLM:\software\microsoft\microsoft sql server\mssql12.SQLEXPRESS\mssqlserver\' -name LoginMode -value 2 ; 
 
-CMD powershell ./start %sa_password%
+CMD powershell ./start -sa_password %sa_password% -attach_dbs \"%attach_dbs%\"
