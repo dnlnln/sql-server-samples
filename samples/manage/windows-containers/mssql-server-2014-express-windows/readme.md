@@ -39,6 +39,10 @@ docker run -p 1433:1433 -v C:/temp/:C:/temp/ --env sa_password=<YOUR SA PASSWORD
 
   This can be used for saving database outside of the container.
 
+- **-it** can be used to show the verbose output of the SQL startup script.
+
+  Use this to debug the container in case of issues.
+
 <a name=run-this-sample></a>
 
 ## Run this sample
