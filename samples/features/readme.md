@@ -11,3 +11,7 @@ Master Data Services (MDS) is the SQL Server solution for master data management
 [R Services](features/r-services)
 
 SQL Server R Services brings R processing close to the data, allowing more scalable and more efficient predictive analytics.
+
+[JSON Support](features/json)
+
+Built-in JSON functions enable you to easily parse and query JSON data stored in database, transform relational data to JSON text, and vice versa.
