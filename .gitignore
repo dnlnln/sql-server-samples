@@ -25,3 +25,5 @@ samples/databases/wide-world-importers/sample-scripts/always-encrypted/PopulateA
 samples/features/in-memory/ticket-reservations/packages/CircularGauge.1.0.0/CreatePackageFile.bat
 samples/features/in-memory/ticket-reservations/TicketReservations/TicketReservations.dbmdl
 samples/databases/wide-world-importers/workload-drivers/vehicle-location-insert/MultithreadedInMemoryTableInsert/obj/Release/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
+*.dat
+*.sln
