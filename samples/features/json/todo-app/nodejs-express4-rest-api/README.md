@@ -46,16 +46,26 @@ To run this sample, you need the following prerequisites.
 3. From Visual Studio, open the **TodoApp.xproj** file from the root directory,
 
 4. Locate db.js file in the project, change database connection info in createConnection() method to reference your database. the following tokens should be replaced:
-4.1. SERVERNAME - name of the database server.
-4.2. DATABASE - Name of database where Todo table is stored.
-4.3. USERNAME - SQL Server login that can access table data and execute stored procedures.
-4.4. PASSWORD - Password associated to SQL Server login.
+ 1. SERVERNAME - name of the database server.
+ 2. DATABASE - Name of database where Todo table is stored.
+ 3. USERNAME - SQL Server login that can access table data and execute stored procedures.
+ 4. PASSWORD - Password associated to SQL Server login.
+
+```
+    var config = {
+        server  : "SERVER.database.windows.net",
+        userName: "USER",
+        password: "PASSWORD",
+        // If you're on Azure, you will need this:
+        options: { encrypt: true, database: 'DATABASE' }
+    };
+```
 
 5. Build project using Ctrl+Shift+B, right-click on project + Build, or Build/Build Solution from menu.
 
 6. Run sample app using F5 or Ctrl+F5. /todo Url will be opened with a list of all Todo items as a JSON array,
-6.1. Open /api/Todo/1 Url to get details about a single Todo item with id 1,
-6.2. Send POST, PUT, or DELETE Http requests to update content of Todo table.
+ 1. Open /api/Todo/1 Url to get details about a single Todo item with id 1,
+ 2. Send POST, PUT, or DELETE Http requests to update content of Todo table.
 
 <a name=sample-details></a>
 
