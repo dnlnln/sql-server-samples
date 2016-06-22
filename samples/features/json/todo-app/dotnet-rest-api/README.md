@@ -1,4 +1,4 @@
-# ASP.NET Core REST Web API that uses SQL/JSON functionalites 
+# ASP.NET Core REST Web API that uses SQL/JSON functionalities 
 
 This project contains an example implementation of ASP.NET Core REST API with CRUD operations on a simple Todo table. You can learn how to build REST API on the existing database schema using new JSON functionalities that are available in SQL Server 2016 (or higher) and Azure SQL Database.
 
@@ -61,7 +61,7 @@ Service uses built-in JSON functionalities that are available in SQL Server 2016
 <a name=disclaimers></a>
 
 ## Disclaimers
-The code included in this sample is not intended demonstrate some general guidances and arhitectural patterns for web development. It contains minimal code required to create REST API, and it does not use some patterns such as Repository. Sample uses built-in ASP.NET Core Dependency Injection mechanism; however, this is not prerequisite.
+The code included in this sample is not intended demonstrate some general guidance and architectural patterns for web development. It contains minimal code required to create REST API, and it does not use some patterns such as Repository. Sample uses built-in ASP.NET Core Dependency Injection mechanism; however, this is not prerequisite.
 You can easily modify this code to fit the architecture of your application.
 
 <a name=related-links></a>
@@ -70,8 +70,11 @@ You can easily modify this code to fit the architecture of your application.
 
 For more information, see this [article](http://www.codeproject.com/Articles/1106622/Building-Web-API-REST-services-on-Azure-SQL-Databa).
 
+## Code of Conduct
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
 ## License
 These samples and templates are all licensed under the MIT license. See the license.txt file in the root.
 
 ## Questions
-Email questions to: sqlserversamples@microsoft.com.
+Email questions to: [sqlserversamples@microsoft.com](mailto: sqlserversamples@microsoft.com).
