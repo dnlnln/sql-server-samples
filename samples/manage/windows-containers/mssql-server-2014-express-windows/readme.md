@@ -31,7 +31,7 @@ You can run the container with the following command.
 (Note the you'll need Windows Server Core TP5 v10.0.14300.1000.)
 
 ```` 
-docker run -p 1433:1433 -v C:/temp/:C:/temp/ --env sa_password=<YOUR SA PASSWORD> --env attach_dbs="<DB-JSON-CONFIG>" -v microsoft/mssql-server-2014-express-windows
+docker run -p 1433:1433 -v C:/temp/:C:/temp/ --env sa_password=<YOUR SA PASSWORD> --env attach_dbs="<DB-JSON-CONFIG>" microsoft/mssql-server-2014-express-windows
 ```` 
 
 - **-p HostPort:containerPort** is for port-mapping a container network port to a host port.
@@ -39,25 +39,44 @@ docker run -p 1433:1433 -v C:/temp/:C:/temp/ --env sa_password=<YOUR SA PASSWORD
 
   This can be used for saving database outside of the container.
 
+- **-it** can be used to show the verbose output of the SQL startup script.
+
+  Use this to debug the container in case of issues.
+
 <a name=run-this-sample></a>
 
 ## Run this sample
 
 The image provides two environment variables to optionally set: </br>
-- sa_password: Sets the sa password and enables the sa login
-- attach_dbs: The configuration for attaching custom DBs (.mdf, .ldf files).
+- **sa_password**: Sets the sa password and enables the sa login
+- **attach_dbs**: The configuration for attaching custom DBs (.mdf, .ldf files).
 
-  This should be a JSON string, formed like the following (note the SINGLE quotes and everything in one line):
+  This should be a JSON string, in the following format (note the use of SINGLE quotes!)
   ``` 
-[{'dbName':'MaxDb','dbFiles':['C:\\temp\\maxtest.mdf','C:\\temp\\maxtest_log.
-ldf']},{'dbName':'PerryDb','dbFiles':['C:\\temp\\perrytest.mdf','C:\\temp\\perrytest_log.
-ldf']}]
+  [
+	{
+		'dbName': 'MaxDb',
+		'dbFiles': ['C:\\temp\\maxtest.mdf',
+		'C:\\temp\\maxtest_log.ldf']
+	},
+	{
+		'dbName': 'PerryDb',
+		'dbFiles': ['C:\\temp\\perrytest.mdf',
+		'C:\\temp\\perrytest_log.ldf']
+	}
+  ]
   ``` 
-  There can be zero to many databases in the array.
-  - dbName: The name of the database
-  - dbFiles: An array of absolute paths to the .MDF and .LDF files.
 
-    Can be one or many, note that the path has double backslashes for escaping!
+  This is an array of databases, which can have zero to N databases.
+  
+  Each consisting of:
+  - **dbName**: The name of the database
+  - **dbFiles**: An array of one or many absolute paths to the .MDF and .LDF files.
+	
+	**Note:**
+	The path has double backslashes for escaping!
+	The path refers to files **within the container**. So make sure to include them in the image or mount them via **-v**!
+		
 
 This example shows all parameters in action:	
 ```

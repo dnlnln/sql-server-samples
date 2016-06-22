@@ -20,22 +20,26 @@ if($sa_password -ne "_"){
     Invoke-Sqlcmd -Query $sqlcmd -ServerInstance ".\SQLEXPRESS" 
 }
 
-$attach_dbs = $attach_dbs | ConvertFrom-Json
+$attach_dbs_cleaned = $attach_dbs.TrimStart('\\').TrimEnd('\\')
 
-if ($null -ne $attach_dbs){
-	Write-Verbose "Attaching database(s)"
-	Foreach($db in $attach_dbs)
+Write-Verbose "Attach Database configuration passed: $($attach_dbs_cleaned)"
+
+$dbs = $attach_dbs_cleaned | ConvertFrom-Json
+
+if ($null -ne $dbs -And $dbs.Length -gt 0){
+	Write-Verbose "Attaching $($dbs.Length) database(s)"
+	Foreach($db in $dbs)
 	{
 		$files = @();
 		Foreach($file in $db.dbFiles)
 		{
-			$files += "(FILENAME = 'N$($file)')";
+			$files += "(FILENAME = N'$($file)')";
 		}
 		
 		$files = $files -join ","
-		$sqlcmd = "sp_detach_db $($db.dbName);GO;CREATE DATABASE $($db.dbName) ON $($files) FOR ATTACH ;GO;"
+		$sqlcmd = "sp_detach_db $($db.dbName);CREATE DATABASE $($db.dbName) ON $($files) FOR ATTACH ;"
 
-		Write-Host Invoke-Sqlcmd -Query $($sqlcmd) -ServerInstance ".\SQLEXPRESS" 
+		Write-Verbose "Invoke-Sqlcmd -Query $($sqlcmd) -ServerInstance '.\SQLEXPRESS'"
 		Invoke-Sqlcmd -Query $sqlcmd -ServerInstance ".\SQLEXPRESS"
 	}
 }
