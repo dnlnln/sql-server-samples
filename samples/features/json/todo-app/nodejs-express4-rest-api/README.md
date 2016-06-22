@@ -1,6 +1,6 @@
-﻿# NodeJS Express4 REST API that uses SQL/JSON functionalites 
+﻿# NodeJS Express4 REST API that uses SQL/JSON functionalities 
 
-This project contains an example implementation of NodeJS REST API with CRUD operations on a simple Todo table. You can learn how to build REST API on the existing database schema using new JSON functionalities that are available in SQL Server 2016 (or higher) and Azure SQL Database.
+This project contains an example implementation of NodeJS REST API with CRUD operations on a simple Todo table. You can learn how to build REST API on the existing database schema using NodeJS, Express4, and new JSON functionalities that are available in SQL Server 2016 (or higher) and Azure SQL Database.
 
 ### Contents
 
@@ -39,18 +39,23 @@ To run this sample, you need the following prerequisites.
 
 ## Run this sample
 
-1. Navigate to the folder where you have downloaded sample and run **npm install** in command window. This command will install necessary npm packages defined in project.json.
+1. Navigate to the folder where you have downloaded sample and run **npm install** in command window, or run setup.bat if you are on Windows operating system. This command will install necessary npm packages defined in project.json.
 
-2. From SQL Server Management Studio or Sql Server Data Tools connect to your SQL Server 2016 or Azure SQL database and execute setup.sql script that will create and populate Todo table in the database.
+2. From SQL Server Management Studio or SQL Server Data Tools connect to your SQL Server 2016 or Azure SQL database and execute setup.sql script that will create and populate Todo table in the database.
 
 3. From Visual Studio, open the **TodoApp.xproj** file from the root directory,
 
-4. Locate db.js file in the project, change database connection info in createConnection() method to reference your database, and build solution using Ctrl+Shift+B, right-click on project + Build, or Build/Build Solution from menu.
+4. Locate db.js file in the project, change database connection info in createConnection() method to reference your database. the following tokens should be replaced:
+4.1. SERVERNAME - name of the database server.
+4.2. DATABASE - Name of database where Todo table is stored.
+4.3. USERNAME - SQL Server login that can access table data and execute stored procedures.
+4.4. PASSWORD - Password associated to SQL Server login.
 
-5. Run sample app using F5 or Ctrl+F5,
-4.1. Open /api/Todo Url to get all Todo items as a JSON array,
-4.2. Open /api/Todo/1 Url to get details about a single Todo item with id 1,
-4.3. Send POST, PUT, PATCH, or DELETE Http requests to update content of Todo table.
+5. Build project using Ctrl+Shift+B, right-click on project + Build, or Build/Build Solution from menu.
+
+6. Run sample app using F5 or Ctrl+F5. /todo Url will be opened with a list of all Todo items as a JSON array,
+6.1. Open /api/Todo/1 Url to get details about a single Todo item with id 1,
+6.2. Send POST, PUT, or DELETE Http requests to update content of Todo table.
 
 <a name=sample-details></a>
 
@@ -58,12 +63,16 @@ To run this sample, you need the following prerequisites.
 
 This sample application shows how to create simple REST API service that performs CRUD operations on a simple Todo table.
 NodeJS REST API is used to implement REST Service in the example.
-Service uses built-in JSON functionalities that are available in SQL Server 2016 and Azure SQL Database.
+1. app.js file that contains startup code.
+2. db.js file that contains functions that wrap Tedious library
+3. todo.js file that contains action that will be called on GET, POST, PUT, and DELETE Http requests.
+
+Service uses Tedious library for data access and built-in JSON functionalities that are available in SQL Server 2016 and Azure SQL Database.
 
 <a name=disclaimers></a>
 
 ## Disclaimers
-The code included in this sample is not intended demonstrate some general guidances and arhitectural patterns for web development.
+The code included in this sample is not intended demonstrate some general guidance and architectural patterns for web development.
 It contains minimal code required to create REST API.
 You can easily modify this code to fit the architecture of your application.
 
@@ -80,4 +89,4 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 These samples and templates are all licensed under the MIT license. See the license.txt file in the root.
 
 ## Questions
-Email questions to: sqlserversamples@microsoft.com.
+Email questions to: [sqlserversamples@microsoft.com](mailto: sqlserversamples@microsoft.com).
