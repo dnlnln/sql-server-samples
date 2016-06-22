@@ -45,11 +45,22 @@ To run this sample, you need the following prerequisites.
 
 3. From Visual Studio, open the **TodoApp.xproj** file from the root directory,
 
-4. Locate db.js file in the project, change database connection info in createConnection() method to reference your database. the following tokens should be replaced:
-4.1. SERVERNAME - name of the database server.
-4.2. DATABASE - Name of database where Todo table is stored.
-4.3. USERNAME - SQL Server login that can access table data and execute stored procedures.
-4.4. PASSWORD - Password associated to SQL Server login.
+4. Locate db.js file in the project, change database connection info in createConnection() method to reference your database. 
+
+```
+    var config = {
+        server  : "SERVER.database.windows.net",
+        userName: "USER",
+        password: "PASSWORD",
+        // If you're on Azure, you will need this:
+        options: { encrypt: true, database: 'DATABASE' }
+    };
+```
+The following tokens should be replaced:
+ 1. SERVERNAME - name of the database server.
+ 2. DATABASE - Name of database where Todo table is stored.
+ 3. USERNAME - SQL Server login that can access table data and execute stored procedures.
+ 4. PASSWORD - Password associated to SQL Server login.
 
 5. Build project using Ctrl+Shift+B, right-click on project + Build, or Build/Build Solution from menu.
 
