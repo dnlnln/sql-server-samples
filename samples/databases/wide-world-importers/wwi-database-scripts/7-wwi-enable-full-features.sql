@@ -5,6 +5,6 @@ GO
 
 SET NOCOUNT ON;
 
-EXECUTE Application.Configuration_ConfigureForEnterpriseEdition
+EXECUTE [Application].Configuration_ConfigureForEnterpriseEdition
 GO
 

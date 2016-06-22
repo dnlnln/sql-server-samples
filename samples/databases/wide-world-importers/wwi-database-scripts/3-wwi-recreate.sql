@@ -8,17 +8,48 @@ END;
 GO
  
 CREATE DATABASE WideWorldImporters
-
-COLLATE Latin1_General_100_CI_AS;
-GO
- 
-ALTER DATABASE WideWorldImporters SET RECOVERY SIMPLE;
+ON PRIMARY
+(
+    NAME = WWI_Primary,
+    FILENAME = 'D:\Data\WideWorldImporters.mdf',
+    SIZE = 1GB,
+    MAXSIZE = UNLIMITED,
+    FILEGROWTH = 64MB
+),
+FILEGROUP USERDATA DEFAULT
+(
+    NAME = WWI_UserData,
+    FILENAME = 'D:\Data\WideWorldImporters_UserData.ndf',
+    SIZE = 2GB,
+    MAXSIZE = UNLIMITED,
+    FILEGROWTH = 64MB
+)
+LOG ON
+(
+    NAME = WWI_Log,
+    FILENAME = 'E:\Log\WideWorldImporters.ldf',
+    SIZE = 100MB,
+    MAXSIZE = UNLIMITED,
+    FILEGROWTH = 64MB
+);
 GO
  
 ALTER AUTHORIZATION ON DATABASE::WideWorldImporters to sa;
 GO
  
-ALTER DATABASE WideWorldImporters
+USE WideWorldImporters;
+GO
+ 
+ALTER DATABASE CURRENT COLLATE Latin1_General_100_CI_AS;
+GO
+ 
+ALTER DATABASE CURRENT SET RECOVERY SIMPLE;
+GO
+ 
+ALTER DATABASE CURRENT SET AUTO_UPDATE_STATISTICS_ASYNC ON;
+GO
+ 
+ALTER DATABASE CURRENT
 SET QUERY_STORE
 (
     OPERATION_MODE = READ_WRITE,
@@ -30,9 +61,6 @@ SET QUERY_STORE
     QUERY_CAPTURE_MODE = AUTO,
     MAX_PLANS_PER_QUERY = 1000
 );
-GO
- 
-USE WideWorldImporters;
 GO
  
 CREATE SCHEMA [Application] AUTHORIZATION dbo;
@@ -148,6 +176,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Application].[People_Archive])
 );
+ALTER INDEX ix_People_Archive ON [Application].[People_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 CREATE INDEX [IX_Application_People_IsEmployee]
@@ -212,7 +241,14 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Warehouse].[ColdRoomTemperatures_Archive])
 );
+ALTER INDEX ix_ColdRoomTemperatures_Archive ON [Warehouse].[ColdRoomTemperatures_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
+ 
+CREATE INDEX [IX_Warehouse_ColdRoomTemperatures_ColdRoomSensorNumber]
+ON [Warehouse].[ColdRoomTemperatures]([ColdRoomSensorNumber]);
+GO
+ 
+EXEC sys.sp_addextendedproperty @name = N'Description', @value = 'Allows quickly locating sensors', @level0type = N'SCHEMA', @level0name = 'Warehouse', @level1type = N'TABLE',  @level1name = 'ColdRoomTemperatures', @level2type = N'INDEX', @level2name = 'IX_Warehouse_ColdRoomTemperatures_ColdRoomSensorNumber';
  
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = N'Regularly recorded temperatures of cold room chillers', @level0type = N'SCHEMA', @level0name = 'Warehouse', @level1type = N'TABLE',  @level1name = 'ColdRoomTemperatures';
  
@@ -277,6 +313,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Application].[Countries_Archive])
 );
+ALTER INDEX ix_Countries_Archive ON [Application].[Countries_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = N'Countries that contain the states or provinces (including geographic boundaries)', @level0type = N'SCHEMA', @level0name = 'Application', @level1type = N'TABLE',  @level1name = 'Countries';
@@ -313,6 +350,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Application].[DeliveryMethods_Archive])
 );
+ALTER INDEX ix_DeliveryMethods_Archive ON [Application].[DeliveryMethods_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = N'Ways that stock items can be delivered (ie: truck/van, post, pickup, courier, etc.', @level0type = N'SCHEMA', @level0name = 'Application', @level1type = N'TABLE',  @level1name = 'DeliveryMethods';
@@ -340,6 +378,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Application].[PaymentMethods_Archive])
 );
+ALTER INDEX ix_PaymentMethods_Archive ON [Application].[PaymentMethods_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = N'Ways that payments can be made (ie: cash, check, EFT, etc.', @level0type = N'SCHEMA', @level0name = 'Application', @level1type = N'TABLE',  @level1name = 'PaymentMethods';
@@ -367,6 +406,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Application].[TransactionTypes_Archive])
 );
+ALTER INDEX ix_TransactionTypes_Archive ON [Application].[TransactionTypes_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = N'Types of customer, supplier, or stock transactions (ie: invoice, credit note, etc.)', @level0type = N'SCHEMA', @level0name = 'Application', @level1type = N'TABLE',  @level1name = 'TransactionTypes';
@@ -394,6 +434,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Purchasing].[SupplierCategories_Archive])
 );
+ALTER INDEX ix_SupplierCategories_Archive ON [Purchasing].[SupplierCategories_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = N'Categories for suppliers (ie novelties, toys, clothing, packaging, etc.)', @level0type = N'SCHEMA', @level0name = 'Purchasing', @level1type = N'TABLE',  @level1name = 'SupplierCategories';
@@ -421,6 +462,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Sales].[BuyingGroups_Archive])
 );
+ALTER INDEX ix_BuyingGroups_Archive ON [Sales].[BuyingGroups_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = N'Customer organizations can be part of groups that exert greater buying power', @level0type = N'SCHEMA', @level0name = 'Sales', @level1type = N'TABLE',  @level1name = 'BuyingGroups';
@@ -448,6 +490,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Sales].[CustomerCategories_Archive])
 );
+ALTER INDEX ix_CustomerCategories_Archive ON [Sales].[CustomerCategories_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = N'Categories for customers (ie restaurants, cafes, supermarkets, etc.)', @level0type = N'SCHEMA', @level0name = 'Sales', @level1type = N'TABLE',  @level1name = 'CustomerCategories';
@@ -475,6 +518,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Warehouse].[Colors_Archive])
 );
+ALTER INDEX ix_Colors_Archive ON [Warehouse].[Colors_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = N'Stock items can (optionally) have colors', @level0type = N'SCHEMA', @level0name = 'Warehouse', @level1type = N'TABLE',  @level1name = 'Colors';
@@ -502,6 +546,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Warehouse].[PackageTypes_Archive])
 );
+ALTER INDEX ix_PackageTypes_Archive ON [Warehouse].[PackageTypes_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = N'Ways that stock items can be packaged (ie: each, box, carton, pallet, kg, etc.', @level0type = N'SCHEMA', @level0name = 'Warehouse', @level1type = N'TABLE',  @level1name = 'PackageTypes';
@@ -529,6 +574,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Warehouse].[StockGroups_Archive])
 );
+ALTER INDEX ix_StockGroups_Archive ON [Warehouse].[StockGroups_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = N'Groups for categorizing stock items (ie: novelties, toys, edible novelties, etc.)', @level0type = N'SCHEMA', @level0name = 'Warehouse', @level1type = N'TABLE',  @level1name = 'StockGroups';
@@ -563,6 +609,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Application].[StateProvinces_Archive])
 );
+ALTER INDEX ix_StateProvinces_Archive ON [Application].[StateProvinces_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 CREATE INDEX [FK_Application_StateProvinces_CountryID]
@@ -610,6 +657,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Application].[Cities_Archive])
 );
+ALTER INDEX ix_Cities_Archive ON [Application].[Cities_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 CREATE INDEX [FK_Application_Cities_StateProvinceID]
@@ -733,6 +781,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Purchasing].[Suppliers_Archive])
 );
+ALTER INDEX ix_Suppliers_Archive ON [Purchasing].[Suppliers_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 CREATE INDEX [FK_Purchasing_Suppliers_SupplierCategoryID]
@@ -866,6 +915,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Sales].[Customers_Archive])
 );
+ALTER INDEX ix_Customers_Archive ON [Sales].[Customers_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 CREATE INDEX [FK_Sales_Customers_CustomerCategoryID]
@@ -1102,6 +1152,7 @@ WITH
 (
     SYSTEM_VERSIONING = ON (HISTORY_TABLE = [Warehouse].[StockItems_Archive])
 );
+ALTER INDEX ix_StockItems_Archive ON [Warehouse].[StockItems_Archive] REBUILD PARTITION = ALL WITH (DATA_COMPRESSION = NONE);
 GO
  
 CREATE INDEX [FK_Warehouse_StockItems_SupplierID]

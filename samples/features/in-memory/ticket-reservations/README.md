@@ -1,8 +1,21 @@
-# In-Memory OLTP Performance Improvement Sample
+﻿# In-Memory OLTP Performance Improvement Sample
 
 This Windows Forms sample application built on .NET Framework 4.6  demonstrates the performance benefits of using SQL Server memory optimized tables and native compiled stored procedures. You can compare the performance before and after enabling In-Memory OLTP by observing the transactions/sec as well as the current CPU Usage and latches/sec.
 
-![Alt text](Screenshots/1.png "Ticket Reservations")
+
+<a name=about-this-sample></a>
+
+## About this sample
+
+<!-- Delete the ones that don't apply -->
+* **Latest release:** [in-memory-oltp-perf-demo-v1.0](https://github.com/Microsoft/sql-server-samples/releases/tag/in-memory-oltp-demo-v1.0)
+* **Applies to:** SQL Server 2014 (or higher), Azure SQL Database
+* **Key features:** In-Memory OLTP
+* **Workload:** OLTP
+* **Programming Language:** T-SQL, C#
+* **Authors:** Jos de Bruijn
+
+![Alt text](/media/in-memory-oltp-performance.png "Ticket Reservations")
 
 ## Running this sample
 1. Before you can run this sample, you must have the following perquisites:
