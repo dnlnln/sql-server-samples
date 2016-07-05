@@ -67,7 +67,7 @@ __[wwi-database-scripts] (wwi-database-scripts/)__
 
 T-SQL scripts to create the main WideWorldImporters database.
 
-__[wwi-dw-database-scripts] (wwi-database-scripts/)__
+__[wwi-dw-database-scripts] (wwi-dw-database-scripts/)__
 
 T-SQL scripts to create the analytics database WideWorldImportersDW.
 
