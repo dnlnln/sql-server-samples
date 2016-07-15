@@ -2926,7 +2926,9 @@ CREATE PROCEDURE DataLoadSimulation.DailyProcessToCreateHistory
 @SundayPercentageOfNormalWorkDay int,
 @UpdateCustomFields bit,
 @IsSilentMode bit,
-@AreDatesPrinted bit
+@AreDatesPrinted bit,
+-- @CommitBatchSize, the size of each commit batch, added by Shiyang Qiu, July 14, 2016
+@CommitBatchSize int = 10
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -2941,6 +2943,8 @@ BEGIN
     DECLARE @IsMonday bit;
     DECLARE @Weekday int;
     DECLARE @IsStaffOnly bit;
+	-- @TotalNumberCounter, used to count the number of record, added by Shiyang Qiu, July 14, 2016
+	DECLARE @TotalNumberCounter int = 1;
 
     SET DATEFIRST 7;  -- Week begins on Sunday
 
@@ -2948,6 +2952,9 @@ BEGIN
 
     WHILE @CurrentDateTime <= @EndDate
     BEGIN
+		--begin tran if there is no transaction
+		IF(@@TRANCOUNT=0) BEGIN TRAN
+
         IF @AreDatesPrinted <> 0 OR @IsSilentMode = 0
         BEGIN
             PRINT SUBSTRING(DATENAME(weekday, @CurrentDateTime), 1,3) + N'' '' + CONVERT(nvarchar(20), @CurrentDateTime, 107);
@@ -3088,7 +3095,17 @@ BEGIN
             PRINT N'' '';
         END;
 
-        SET @CurrentDateTime = DATEADD(day, 1, @CurrentDateTime);
+    --control the batch commit
+	--where there is  tran, and (meet the commit size or the final record)
+		IF(@@TRANCOUNT=1 and ((@TotalNumberCounter % @CommitBatchSize = 0) or @CurrentDateTime = @EndDate)) 
+		BEGIN 
+		    IF @AreDatesPrinted <> 0 OR @IsSilentMode = 0 print ''COMMIT''
+			COMMIT 
+		END
+	
+	-- increase the @CurrentDateTime and the @TotalNumberCounter	
+		SET @CurrentDateTime = DATEADD(day, 1, @CurrentDateTime);
+		SET @TotalNumberCounter = @TotalNumberCounter + 1;
     END; -- of processing each day
 
     IF @UpdateCustomFields <> 0
