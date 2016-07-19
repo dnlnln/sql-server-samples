@@ -2,9 +2,9 @@ var Connection = require('tedious').Connection;
 var config = {
     userName: 'yourusername',
     password: 'yourpassword',
-    server: 'yourserver.database.windows.net',
-    // When you connect to Azure SQL Database, you need these next options.
-    options: {encrypt: true, database: 'AdventureWorks'}
+    server: 'yourserver',
+
+    options: {encrypt: true, database: 'yourdatabase'}
 };
 var connection = new Connection(config);
 connection.on('connect', function(err) {

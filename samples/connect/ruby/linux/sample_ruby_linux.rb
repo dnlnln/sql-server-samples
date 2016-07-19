@@ -4,10 +4,9 @@ require 'date'
 
 #Connect to your database.
 #Replace server name, username, and password with your credentials
-#Code is dependent on AdventureWorks database
-client = TinyTds::Client.new username: 'yourusername@yourserver', password: 'yourpassword',
-host: 'yourserver.database.windows.net', port: 1433,
-database: 'AdventureWorks', azure:true
+client = TinyTds::Client.new username: 'username@servername', password: 'password',
+host: 'servername', port: 1433,
+database: 'databasename'
 
 #SELECT
 #Execute a simple select statement.
@@ -39,5 +38,5 @@ results = client.execute("INSERT SalesLT.Product (Name, ProductNumber, StandardC
 
 #Print the ID of the inserted row.
 results.each do |row|
-    puts ro
+    puts row
 end

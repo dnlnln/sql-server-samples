@@ -8,13 +8,12 @@ import com.microsoft.sqlserver.jdbc.*;
 		// Replace server name, username, and password with your credentials
 		public static void main(String[] args) {
 			String connectionString =
-				"jdbc:sqlserver://your_servername.database.windows.net:1433;"
-				+ "database=AdventureWorks;"
-				+ "user=your_username@your_servername;"
-				+ "password=your_password;"
+				"jdbc:<your_servername>;"
+				+ "database=<your_databasename>;"
+				+ "user=<your_username@your_servername>;"
+				+ "password=<your_password>;"
 				+ "encrypt=true;"
 				+ "trustServerCertificate=false;"
-				+ "hostNameInCertificate=*.database.windows.net;"
 				+ "loginTimeout=30;";
 
 			// Declare the JDBC objects.

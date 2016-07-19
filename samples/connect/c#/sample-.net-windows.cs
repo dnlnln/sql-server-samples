@@ -5,7 +5,7 @@ class Sample
 {
     static void Main()
     {
-        string connectionString = "Server=tcp:yourserver.database.windows.net,1433;Database=yourdatabase;User ID=yourlogin@yourserver;Password={your_password_here};Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        string connectionString = "Server=tcp:yourserver;Database=yourdatabase;User ID=yourlogin@yourserver;Password={your_password_here};Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         using (var conn = new SqlConnection(connectionString))
         {

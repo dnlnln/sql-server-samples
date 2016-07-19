@@ -5,8 +5,8 @@ require 'date'
 #Connect to your database.
 #Replace server name, username, and password with your credentials
 client = TinyTds::Client.new username: 'username@servername', password: 'password',
-host: 'servername.database.windows.net', port: 1433,
-database: 'AdventureWorks', azure:true
+host: 'servername', port: 1433,
+database: 'databasename'
 
 #SELECT
 #Execute a simple select statement.
