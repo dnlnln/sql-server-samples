@@ -18,6 +18,7 @@ GO
  
 ALTER DATABASE CURRENT SET AUTO_UPDATE_STATISTICS_ASYNC ON;
 GO
+-- Dynamic SQL must be used in the following query due to limitations in the TSqlDom script parser
 EXEC(' 
 ALTER DATABASE CURRENT
 SET QUERY_STORE
