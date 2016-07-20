@@ -27,3 +27,9 @@ samples/features/in-memory/ticket-reservations/TicketReservations/TicketReservat
 samples/databases/wide-world-importers/workload-drivers/vehicle-location-insert/MultithreadedInMemoryTableInsert/obj/Release/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
 *.dat
 *.sln
+*.user
+*.dbmdl
+[Bb]in
+[Dd]ebug*/
+obj/
+[Rr]elease*/
