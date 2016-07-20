@@ -1,4 +1,6 @@
-﻿IF OBJECT_ID('[Application].[DetermineCustomerAccess]') IS NOT NULL
+﻿DROP SECURITY POLICY IF EXISTS [Application].FilterCustomersBySalesTerritoryRole;
+
+IF OBJECT_ID('[Application].[DetermineCustomerAccess]') IS NOT NULL
 	DROP FUNCTION [Application].[DetermineCustomerAccess];
 
 GO
