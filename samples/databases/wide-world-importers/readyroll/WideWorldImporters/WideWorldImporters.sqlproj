@@ -1,0 +1,460 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>WideWorldImporters</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{4bb3f54e-776c-40e5-9be3-64b54d1a3ed6}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>WideWorldImporters</RootNamespace>
+    <AssemblyName>WideWorldImporters</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <GenerateCreateScript>False</GenerateCreateScript>
+    <IncludeSchemaNameInFileName>True</IncludeSchemaNameInFileName>
+    <IsReadyRollProject>True</IsReadyRollProject>
+    <ReadyRollToolsVersion>1.12</ReadyRollToolsVersion>
+    <DeployOnceSubFolder>Migrations</DeployOnceSubFolder>
+    <DeployChangesSubFolder>Programmable Objects</DeployChangesSubFolder>
+    <DeployChangesImportSchemaFolders>True</DeployChangesImportSchemaFolders>
+    <PreDeploymentSubFolder>Pre-Deployment</PreDeploymentSubFolder>
+    <PostDeploymentSubFolder>Post-Deployment</PostDeploymentSubFolder>
+    <SyncToOfflineSchemaModel>True</SyncToOfflineSchemaModel>
+    <SyncToOfflineSchemaModelBySchema>True</SyncToOfflineSchemaModelBySchema>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <ExcludeObjectsFromSync>
+Function=[DataLoadSimulation].[GetAreaCode];
+StoredProcedure=[DataLoadSimulation].[RecordInvoiceDeliveries];
+StoredProcedure=[DataLoadSimulation].[RecordDeliveryVanTemperatures];
+StoredProcedure=[DataLoadSimulation].[RecordColdRoomTemperatures];
+StoredProcedure=[DataLoadSimulation].[ReceivePurchaseOrders];
+StoredProcedure=[DataLoadSimulation].[ProcessCustomerPayments];
+StoredProcedure=[DataLoadSimulation].[PlaceSupplierOrders];
+StoredProcedure=[DataLoadSimulation].[PickStockForCustomerOrders];
+StoredProcedure=[DataLoadSimulation].[PerformStocktake];
+StoredProcedure=[DataLoadSimulation].[PaySuppliers];
+StoredProcedure=[DataLoadSimulation].[MakeTemporalChanges];
+StoredProcedure=[DataLoadSimulation].[InvoicePickedOrders];
+StoredProcedure=[DataLoadSimulation].[DailyProcessToCreateHistory];
+StoredProcedure=[DataLoadSimulation].[CreateCustomerOrders];
+StoredProcedure=[DataLoadSimulation].[ChangePasswords];
+StoredProcedure=[DataLoadSimulation].[AddStockItems];
+StoredProcedure=[DataLoadSimulation].[AddSpecialDeals];
+StoredProcedure=[DataLoadSimulation].[AddCustomers];
+StoredProcedure=[DataLoadSimulation].[UpdateCustomFields];
+StoredProcedure=[DataLoadSimulation].[ActivateWebsiteLogons];
+FullTextCatalog=[dbo].[FTCatalog];
+Sequence=[Sequences].[CityID];
+Sequence=[Sequences].[BuyingGroupID];
+Sequence=[Sequences].[TransactionTypeID];
+Sequence=[Sequences].[ColorID];
+Sequence=[Sequences].[CountryID];
+Sequence=[Sequences].[DeliveryMethodID];
+Sequence=[Sequences].[PackageTypeID];
+Sequence=[Sequences].[PaymentMethodID];
+Sequence=[Sequences].[SupplierID];
+Sequence=[Sequences].[SupplierCategoryID];
+Sequence=[Sequences].[StockItemStockGroupID];
+Sequence=[Sequences].[SystemParameterID];
+Sequence=[Sequences].[StockGroupID];
+Sequence=[Sequences].[StateProvinceID];
+Sequence=[Sequences].[StockItemID];
+StoredProcedure=[Application].[Configuration_EnableInMemory];
+Data=[Sales].[Customers];
+</ExcludeObjectsFromSync>
+    <IncludeObjectsInDataSync>
+Table=[Sales].[BuyingGroups_Archive];
+Table=[Purchasing].[Suppliers_Archive];
+Table=[Application].[TransactionTypes_Archive];
+Table=[Sales].[CustomerCategories_Archive];
+Table=[Purchasing].[SupplierCategories_Archive];
+Table=[Sales].[BuyingGroups];
+Table=[Application].[SystemParameters];
+Table=[Application].[StateProvinces_Archive];
+Table=[Application].[People_Archive];
+Table=[Application].[PaymentMethods_Archive];
+Table=[Application].[PaymentMethods];
+Table=[Application].[DeliveryMethods_Archive];
+Table=[Application].[Cities_Archive];
+Table=[Application].[Countries_Archive];
+Table=[Application].[TransactionTypes];
+Table=[Warehouse].[StockItemStockGroups];
+Table=[Warehouse].[VehicleTemperatures];
+Table=[Warehouse].[StockItems_Archive];
+Table=[Sales].[Customers_Archive];
+Table=[Warehouse].[StockGroups_Archive];
+Table=[Warehouse].[StockGroups];
+Table=[Warehouse].[PackageTypes_Archive];
+Table=[Warehouse].[Colors_Archive];
+Table=[Warehouse].[PackageTypes];
+Table=[Warehouse].[ColdRoomTemperatures];
+Table=[Warehouse].[ColdRoomTemperatures_Archive];
+Table=[Warehouse].[Colors];
+Table=[Sales].[SpecialDeals];
+</IncludeObjectsInDataSync>
+    <DeployChangesInitialImportDone>True</DeployChangesInitialImportDone>
+    <DeployChangesForProgrammableObjects>True</DeployChangesForProgrammableObjects>
+    <DeployOnceUseSemver>True</DeployOnceUseSemver>
+  </PropertyGroup>
+  <!-- READYROLL OFFLINE SCHEMA MODEL OPTIONS -->
+  <PropertyGroup>
+    <!--
+    <SyncToOfflineSchemaModel>True</SyncToOfflineSchemaModel>
+    <SyncToOfflineSchemaModelBySchema>False</SyncToOfflineSchemaModelBySchema>
+    <SyncToOfflineSchemaModelObjectTypes>Table;Assembly;Contract;Credential;Default;EventNotification;FileGroup;FullTextCatalog;FullTextIndex;FullTextIndexColumn;FullTextStopList;FullTextStopListStopWord;MessageType;PartitionFunction;PartitionScheme;Queue;RemoteServiceBinding;Role;Route;Rule;Schema;SearchPropertyList;Sequence;Service;Synonym;Users;UserDefinedDataType;XmlSchemaCollection</SyncToOfflineSchemaModelObjectTypes>
+    <SchemaModelSubFolder>Schema-Model</SchemaModelSubFolder>
+    -->
+  </PropertyGroup>
+  <!-- READYROLL DEPLOY-CHANGE MIGRATION OPTIONS -->
+  <PropertyGroup>
+    <!--
+    <DeployChangesForProgrammableObjects>True</DeployChangesForProgrammableObjects>
+    <DeployChangesInitialImportDone>False</DeployChangesInitialImportDone>
+    <DeployChangesImportObjectTypes>StoredProcedure;UserDefinedFunction;View;Trigger;DatabaseDdlTrigger</DeployChangesImportObjectTypes>
+    <DeployChangesSubFolder>Deploy-Changes</DeployChangesSubFolder>
+    -->
+  </PropertyGroup>
+  <!-- READYROLL SCRIPT GENERATION OPTIONS -->
+  <PropertyGroup>
+    <!-- These properties might be set by the Developer -->
+    <!--
+    <SyncOptionIncludeDependentObjects>False</SyncOptionIncludeDependentObjects>
+    <SyncOptionIncludeExistenceChecks>False</SyncOptionIncludeExistenceChecks>
+    <SyncOptionUseDropCreateInsteadOfAlter>False</SyncOptionUseDropCreateInsteadOfAlter>
+    <SyncOptionDisableDdlTriggers>True</SyncOptionDisableDdlTriggers>
+
+    <SyncOptionIgnoreExtendedProperties>False</SyncOptionIgnoreExtendedProperties>
+    <SyncOptionIgnoreCommentsInBodies>False</SyncOptionIgnoreCommentsInBodies>
+    <SyncOptionIgnoreAnsiOptions>False</SyncOptionIgnoreAnsiOptions>
+    <SyncOptionIgnoreCollations>True</SyncOptionIgnoreCollations>
+    <SyncOptionIgnoreColumnsOrder>True</SyncOptionIgnoreColumnsOrder>
+    <SyncOptionIgnoreSynonymDatabaseAndServerName>True</SyncOptionIgnoreSynonymDatabaseAndServerName>
+    <SyncOptionIgnoretSQLt>False</SyncOptionIgnoretSQLt>
+    -->
+    <!-- These properties might be set by the DBA -->
+    <!--
+    <SyncOptionIgnoreDataspaces>False</SyncOptionIgnoreDataspaces>
+    <SyncOptionIgnoreConstraintNotForReplicationAttribute>True</SyncOptionIgnoreConstraintNotForReplicationAttribute>
+    <SyncOptionIgnoreIndexSortOrder>False</SyncOptionIgnoreIndexSortOrder>
+    <SyncOptionIgnoreFillFactor>True</SyncOptionIgnoreFillFactor>
+    <SyncOptionIgnoreIndexLockAttributes>False</SyncOptionIgnoreIndexLockAttributes>
+    <SyncOptionIgnoreIndexSecondaryAttributes>False</SyncOptionIgnoreIndexSecondaryAttributes>
+    <SyncOptionIgnoreStatistics>True</SyncOptionIgnoreStatistics>
+    <SyncOptionIgnoreDataCompression>True</SyncOptionIgnoreDataCompression>
+    <SyncOptionIgnoreFullTextIndexing>False</SyncOptionIgnoreFullTextIndexing>
+    -->
+    <!-- Shared Developer/DBA options -->
+    <!--
+    <SyncOptionIgnoreIndexes>False</SyncOptionIgnoreIndexes>
+    <SyncOptionIgnoreSystemObjects>True</SyncOptionIgnoreSystemObjects>
+    <SyncOptionIgnorePermissions>False</SyncOptionIgnorePermissions>
+    <SyncOptionIgnoreConstraintWithNoCheckAttribute>True</SyncOptionIgnoreConstraintWithNoCheckAttribute>
+    <SyncOptionIgnoreIdentitySeedAndIncrement>False</SyncOptionIgnoreIdentitySeedAndIncrement>
+    -->
+    <!-- Exclude specific objects from being scripted, by object type & object name (using regular expression for name) -->
+    <!--
+    <ExcludeObjectsFromImport>
+      Assembly=\[myschemaname\];
+      Credential=\[mycredential\];
+      DatabaseDdlTrigger=\[ddltriggername\];
+      Default=\[dbautil\]\.\[(.*?)\];
+      PartitionFunction=\[mypartitionfunction\];
+      PartitionScheme=\[mypartitionfunction\];
+      Role=\[myrole\];
+      Rule=\[dbautil\]\.\[(.*?)\];
+      Schema=\[dbautil\];
+      Sequence=\[dbautil\]\.\[(.*?)\];
+      StoredProcedure=\[dbautil\]\.\[(.*?)\];
+      Synonym=\[dbautil\]\.\[(.*?)\];
+      Table=\[dbautil\]\.\[(.*?)\];
+      Trigger=\[dbautil\]\.\[(.*?)\];
+      User=\[myusername\];
+      UserDefinedDataType=\[dbautil\]\.\[(.*?)\];
+      UserDefinedFunction=\[dbautil\]\.\[(.*?)\];
+      View=\[dbautil\]\.\[(.*?)\];
+      XmlSchemaCollection=\[dbautil\]\.\[(.*?)\];
+
+      Contract=\[myservicebrokercontract\];
+      EventNotification=\[myservicebrokereventnotification\];
+      MessageType=\[myservicebrokermessagetype\];
+      Queue=\[myservicebrokerqueue\];
+      RemoteServiceBinding=\[myservicebrokerremotebinding\];
+      Route=\[myservicebrokerroute\];
+      Service=\[myservicebrokerservice\];
+
+    </ExcludeObjectsFromImport>
+    -->
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!--Import the settings-->
+  <PropertyGroup>
+    <AppDataPath>$(LOCALAPPDATA)</AppDataPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(AppDataPath)==''">
+    <AppDataPath>$(APPDATA)</AppDataPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ReadyRollTargetsPath>$(AppDataPath)\Microsoft\VisualStudio\12.0Exp\Extensions\ReadyRoll\ReadyRoll SQL Server Database Projects\1.0\ReadyRoll.Data.Schema.SSDT.targets</ReadyRollTargetsPath>
+  </PropertyGroup>
+  <Import Condition="Exists('$(ReadyRollTargetsPath)')" Project="$(ReadyRollTargetsPath)" />
+  <Import Condition="!Exists('$(ReadyRollTargetsPath)')" Project="$(MSBuildExtensionsPath)\ReadyRoll\ReadyRoll.Data.Schema.SSDT.targets" />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+    <Folder Include="Pre-Deployment\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Post-Deployment\" />
+    <Folder Include="Schema-Model\" />
+    <Folder Include="Schema-Model\Application\" />
+    <Folder Include="Schema-Model\Application\Tables\" />
+    <Folder Include="Schema-Model\Purchasing\" />
+    <Folder Include="Schema-Model\Purchasing\Tables\" />
+    <Folder Include="Schema-Model\Sales\" />
+    <Folder Include="Schema-Model\Sales\Tables\" />
+    <Folder Include="Schema-Model\Security\" />
+    <Folder Include="Schema-Model\Security\Roles\" />
+    <Folder Include="Schema-Model\Security\Schemas\" />
+    <Folder Include="Schema-Model\Sequences\" />
+    <Folder Include="Schema-Model\Sequences\Sequences\" />
+    <Folder Include="Schema-Model\Warehouse\" />
+    <Folder Include="Schema-Model\Warehouse\Tables\" />
+    <Folder Include="Schema-Model\Website\" />
+    <Folder Include="Schema-Model\Website\Types\" />
+    <Folder Include="Schema-Model\Website\Types\User-defined Data Types\" />
+    <Folder Include="Schema-Model\Storage\" />
+    <Folder Include="Schema-Model\Storage\Full Text Catalogs\" />
+    <Folder Include="Programmable Objects\" />
+    <Folder Include="Programmable Objects\Application\" />
+    <Folder Include="Programmable Objects\Application\Functions\" />
+    <Folder Include="Programmable Objects\Application\Stored Procedures\" />
+    <Folder Include="Programmable Objects\DataLoadSimulation\" />
+    <Folder Include="Programmable Objects\DataLoadSimulation\Stored Procedures\" />
+    <Folder Include="Programmable Objects\Integration\" />
+    <Folder Include="Programmable Objects\Integration\Stored Procedures\" />
+    <Folder Include="Programmable Objects\Sequences\" />
+    <Folder Include="Programmable Objects\Sequences\Stored Procedures\" />
+    <Folder Include="Programmable Objects\Website\" />
+    <Folder Include="Programmable Objects\Website\Functions\" />
+    <Folder Include="Programmable Objects\Website\Stored Procedures\" />
+    <Folder Include="Programmable Objects\Website\Views\" />
+    <Folder Include="Migrations\1.0.0-Baseline" />
+    <Folder Include="Migrations\1.1.0-NewChanges" />
+    <Folder Include="Unused" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Schema-Model\Application\Tables\Cities.sql" />
+    <None Include="Schema-Model\Application\Tables\Cities_Archive.sql" />
+    <None Include="Schema-Model\Application\Tables\Countries.sql" />
+    <None Include="Schema-Model\Application\Tables\Countries_Archive.sql" />
+    <None Include="Schema-Model\Application\Tables\DeliveryMethods.sql" />
+    <None Include="Schema-Model\Application\Tables\DeliveryMethods_Archive.sql" />
+    <None Include="Schema-Model\Application\Tables\PaymentMethods.sql" />
+    <None Include="Schema-Model\Application\Tables\PaymentMethods_Archive.sql" />
+    <None Include="Schema-Model\Application\Tables\People.sql" />
+    <None Include="Schema-Model\Application\Tables\People_Archive.sql" />
+    <None Include="Schema-Model\Application\Tables\StateProvinces.sql" />
+    <None Include="Schema-Model\Application\Tables\StateProvinces_Archive.sql" />
+    <None Include="Schema-Model\Application\Tables\SystemParameters.sql" />
+    <None Include="Schema-Model\Application\Tables\TransactionTypes.sql" />
+    <None Include="Schema-Model\Application\Tables\TransactionTypes_Archive.sql" />
+    <None Include="Schema-Model\Purchasing\Tables\PurchaseOrderLines.sql" />
+    <None Include="Schema-Model\Purchasing\Tables\PurchaseOrders.sql" />
+    <None Include="Schema-Model\Purchasing\Tables\SupplierCategories.sql" />
+    <None Include="Schema-Model\Purchasing\Tables\SupplierCategories_Archive.sql" />
+    <None Include="Schema-Model\Purchasing\Tables\Suppliers.sql" />
+    <None Include="Schema-Model\Purchasing\Tables\Suppliers_Archive.sql" />
+    <None Include="Schema-Model\Purchasing\Tables\SupplierTransactions.sql" />
+    <None Include="Schema-Model\Sales\Tables\BuyingGroups.sql" />
+    <None Include="Schema-Model\Sales\Tables\BuyingGroups_Archive.sql" />
+    <None Include="Schema-Model\Sales\Tables\CustomerCategories.sql" />
+    <None Include="Schema-Model\Sales\Tables\CustomerCategories_Archive.sql" />
+    <None Include="Schema-Model\Sales\Tables\Customers.sql" />
+    <None Include="Schema-Model\Sales\Tables\Customers_Archive.sql" />
+    <None Include="Schema-Model\Sales\Tables\CustomerTransactions.sql" />
+    <None Include="Schema-Model\Sales\Tables\InvoiceLines.sql" />
+    <None Include="Schema-Model\Sales\Tables\Invoices.sql" />
+    <None Include="Schema-Model\Sales\Tables\OrderLines.sql" />
+    <None Include="Schema-Model\Sales\Tables\Orders.sql" />
+    <None Include="Schema-Model\Sales\Tables\SpecialDeals.sql" />
+    <None Include="Schema-Model\Security\Roles\External Sales.sql" />
+    <None Include="Schema-Model\Security\Roles\Far West Sales.sql" />
+    <None Include="Schema-Model\Security\Roles\Great Lakes Sales.sql" />
+    <None Include="Schema-Model\Security\Roles\Mideast Sales.sql" />
+    <None Include="Schema-Model\Security\Roles\New England Sales.sql" />
+    <None Include="Schema-Model\Security\Roles\Plains Sales.sql" />
+    <None Include="Schema-Model\Security\Roles\Rocky Mountain Sales.sql" />
+    <None Include="Schema-Model\Security\Roles\Southeast Sales.sql" />
+    <None Include="Schema-Model\Security\Roles\Southwest Sales.sql" />
+    <None Include="Schema-Model\Security\Schemas\Application.sql" />
+    <None Include="Schema-Model\Security\Schemas\DataLoadSimulation.sql" />
+    <None Include="Schema-Model\Security\Schemas\Integration.sql" />
+    <None Include="Schema-Model\Security\Schemas\PowerBI.sql" />
+    <None Include="Schema-Model\Security\Schemas\Purchasing.sql" />
+    <None Include="Schema-Model\Security\Schemas\Reports.sql" />
+    <None Include="Schema-Model\Security\Schemas\Sales.sql" />
+    <None Include="Schema-Model\Security\Schemas\Sequences.sql" />
+    <None Include="Schema-Model\Security\Schemas\Warehouse.sql" />
+    <None Include="Schema-Model\Security\Schemas\Website.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\BuyingGroupID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\CityID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\ColorID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\CountryID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\CustomerCategoryID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\CustomerID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\DeliveryMethodID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\InvoiceID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\InvoiceLineID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\OrderID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\OrderLineID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\PackageTypeID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\PaymentMethodID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\PersonID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\PurchaseOrderID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\PurchaseOrderLineID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\SpecialDealID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\StateProvinceID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\StockGroupID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\StockItemID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\StockItemStockGroupID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\SupplierCategoryID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\SupplierID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\SystemParameterID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\TransactionID.sql" />
+    <None Include="Schema-Model\Sequences\Sequences\TransactionTypeID.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\ColdRoomTemperatures.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\ColdRoomTemperatures_Archive.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\Colors.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\Colors_Archive.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\PackageTypes.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\PackageTypes_Archive.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\StockGroups.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\StockGroups_Archive.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\StockItemHoldings.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\StockItems.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\StockItemStockGroups.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\StockItems_Archive.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\StockItemTransactions.sql" />
+    <None Include="Schema-Model\Warehouse\Tables\VehicleTemperatures.sql" />
+    <None Include="Schema-Model\Website\Types\User-defined Data Types\OrderIDList.sql" />
+    <None Include="Schema-Model\Website\Types\User-defined Data Types\OrderLineList.sql" />
+    <None Include="Schema-Model\Website\Types\User-defined Data Types\OrderList.sql" />
+    <None Include="Schema-Model\Website\Types\User-defined Data Types\SensorDataList.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Pre-Deployment\1_wwi-recreate-part1-database.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Schema-Model\Storage\Full Text Catalogs\FTCatalog.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Programmable Objects\Application\Stored Procedures\AddRoleMemberIfNonexistent.sql" />
+    <None Include="Programmable Objects\Application\Stored Procedures\Configuration_ApplyAuditing.sql" />
+    <None Include="Programmable Objects\Application\Stored Procedures\Configuration_ApplyColumnstoreIndexing.sql" />
+    <None Include="Programmable Objects\Application\Stored Procedures\Configuration_ApplyFullTextIndexing.sql" />
+    <None Include="Programmable Objects\Application\Stored Procedures\Configuration_ApplyPartitioning.sql" />
+    <None Include="Programmable Objects\Application\Stored Procedures\Configuration_ApplyRowLevelSecurity.sql" />
+    <None Include="Programmable Objects\Application\Stored Procedures\Configuration_ConfigureForEnterpriseEdition.sql" />
+    <None Include="Programmable Objects\Application\Stored Procedures\Configuration_EnableInMemory.sql" />
+    <None Include="Programmable Objects\Application\Stored Procedures\Configuration_RemoveAuditing.sql" />
+    <None Include="Programmable Objects\Application\Stored Procedures\Configuration_RemoveRowLevelSecurity.sql" />
+    <None Include="Programmable Objects\Application\Stored Procedures\CreateRoleIfNonexistent.sql" />
+    <None Include="Programmable Objects\DataLoadSimulation\Stored Procedures\Configuration_ApplyDataLoadSimulationProcedures.sql" />
+    <None Include="Programmable Objects\DataLoadSimulation\Stored Procedures\Configuration_RemoveDataLoadSimulationProcedures.sql" />
+    <None Include="Programmable Objects\DataLoadSimulation\Stored Procedures\DeactivateTemporalTablesBeforeDataLoad.sql" />
+    <None Include="Programmable Objects\DataLoadSimulation\Stored Procedures\PopulateDataToCurrentDate.sql" />
+    <None Include="Programmable Objects\DataLoadSimulation\Stored Procedures\ReactivateTemporalTablesAfterDataLoad.sql" />
+    <None Include="Programmable Objects\Integration\Stored Procedures\GetCityUpdates.sql" />
+    <None Include="Programmable Objects\Integration\Stored Procedures\GetCustomerUpdates.sql" />
+    <None Include="Programmable Objects\Integration\Stored Procedures\GetEmployeeUpdates.sql" />
+    <None Include="Programmable Objects\Integration\Stored Procedures\GetMovementUpdates.sql" />
+    <None Include="Programmable Objects\Integration\Stored Procedures\GetOrderUpdates.sql" />
+    <None Include="Programmable Objects\Integration\Stored Procedures\GetPaymentMethodUpdates.sql" />
+    <None Include="Programmable Objects\Integration\Stored Procedures\GetPurchaseUpdates.sql" />
+    <None Include="Programmable Objects\Integration\Stored Procedures\GetSaleUpdates.sql" />
+    <None Include="Programmable Objects\Integration\Stored Procedures\GetStockHoldingUpdates.sql" />
+    <None Include="Programmable Objects\Integration\Stored Procedures\GetStockItemUpdates.sql" />
+    <None Include="Programmable Objects\Integration\Stored Procedures\GetSupplierUpdates.sql" />
+    <None Include="Programmable Objects\Integration\Stored Procedures\GetTransactionTypeUpdates.sql" />
+    <None Include="Programmable Objects\Integration\Stored Procedures\GetTransactionUpdates.sql" />
+    <None Include="Programmable Objects\Sequences\Stored Procedures\ReseedAllSequences.sql" />
+    <None Include="Programmable Objects\Sequences\Stored Procedures\ReseedSequenceBeyondTableValues.sql" />
+    <None Include="Programmable Objects\Website\Functions\CalculateCustomerPrice.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\ActivateWebsiteLogon.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\ChangePassword.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\InsertCustomerOrders.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\InvoiceCustomerOrders.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\RecordColdRoomTemperatures.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\RecordVehicleTemperature.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\SearchForCustomers.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\SearchForPeople.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\SearchForStockItems.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\SearchForStockItemsByTags.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\SearchForSuppliers.sql" />
+    <None Include="Programmable Objects\Website\Views\Customers.sql" />
+    <None Include="Programmable Objects\Website\Views\Suppliers.sql" />
+    <None Include="Programmable Objects\Website\Views\VehicleTemperatures.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Programmable Objects\Application\Functions\DetermineCustomerAccess.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\1.0.0-Baseline\1_wwi-recreate-part2-querystore.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\1.0.0-Baseline\2_wwi-recreate-part3-objects.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\1.0.0-Baseline\3_wwi-configure-required-database-objects.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\1.0.0-Baseline\5_wwi-data-simulation.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\1.0.0-Baseline\6_wwi-enable-full-features.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Unused\1_wwi-metadata-population.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Unused\2_wwi-construct-database-from-metadata-tables.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\1.0.0-Baseline\4_wwi-load-seed-data.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Unused\8-wwi-backup.sql" />
+    <None Include="Unused\9-wwi-restore.sql" />
+  </ItemGroup>
+</Project>
