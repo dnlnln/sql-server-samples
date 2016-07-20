@@ -1,7 +1,9 @@
-﻿-- Run data simulation to populate the database.
+﻿-- <Migration ID="9adeb340-2b1b-4a86-9185-e46ef42f274a" TransactionHandling="Custom" />
+GO
+-- Run data simulation to populate the database.
 -- Runtime: ~15 minutes from 20130101 to 20151219
 
-USE WideWorldImporters;
+USE [$(DatabaseName)];
 GO
 
 SET NOCOUNT ON;

@@ -1,7 +1,9 @@
-﻿-- Configure required database objects
+﻿-- <Migration ID="def89e9a-5a3a-4fea-89c9-d07130b50968" />
+GO
+-- Configure required database objects
 --
 
-USE WideWorldImporters;
+USE [$(DatabaseName)];
 GO
 
 DROP PROCEDURE IF EXISTS [Application].CreateRoleIfNonexistent;
