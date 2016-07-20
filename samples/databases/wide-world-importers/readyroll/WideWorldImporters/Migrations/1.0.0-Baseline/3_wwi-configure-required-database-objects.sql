@@ -3935,7 +3935,7 @@ BEGIN
 			IF CAST(SERVERPROPERTY(N'EngineEdition') AS int) <> 5   -- Not an Azure SQL DB
 			BEGIN
 				DECLARE @SQLDataFolder nvarchar(max) = CAST(SERVERPROPERTY('InstanceDefaultDataPath') AS nvarchar(max));
-				DECLARE @MemoryOptimizedFilegroupFolder nvarchar(max) = @SQLDataFolder + N'WideWorldImporters_InMemory_Data_1';
+				DECLARE @MemoryOptimizedFilegroupFolder nvarchar(max) = @SQLDataFolder + DB_NAME() + N'_InMemory_Data_1';
 
 				IF NOT EXISTS (SELECT 1 FROM sys.filegroups WHERE name = N'WWI_InMemory_Data')
 				BEGIN
