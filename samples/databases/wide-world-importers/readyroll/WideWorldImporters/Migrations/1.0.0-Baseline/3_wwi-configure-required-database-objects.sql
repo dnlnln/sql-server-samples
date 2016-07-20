@@ -3,9 +3,6 @@ GO
 -- Configure required database objects
 --
 
-USE [$(DatabaseName)];
-GO
-
 DROP PROCEDURE IF EXISTS [Application].CreateRoleIfNonexistent;
 GO
 

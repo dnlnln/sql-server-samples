@@ -3,9 +3,6 @@ GO
 -- Run data simulation to populate the database.
 -- Runtime: ~15 minutes from 20130101 to 20151219
 
-USE [$(DatabaseName)];
-GO
-
 IF NOT DB_NAME() LIKE '%_SHADOW'
 BEGIN
 	SET NOCOUNT ON;

@@ -2,9 +2,6 @@
 GO
 -- Enable Enterprise Edition features (also available in Evaluation/Developer Edition) 
 
-USE [$(DatabaseName)];
-GO
-
 SET NOCOUNT ON;
 
 EXECUTE [Application].Configuration_ConfigureForEnterpriseEdition
