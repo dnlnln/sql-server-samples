@@ -16,10 +16,8 @@ CREATE TABLE [Purchasing].[SupplierTransactions]
 [LastEditedBy] [int] NOT NULL,
 [LastEditedWhen] [datetime2] NOT NULL CONSTRAINT [DF_Purchasing_SupplierTransactions_LastEditedWhen] DEFAULT (sysdatetime())
 )
-CREATE CLUSTERED INDEX [CX_Purchasing_SupplierTransactions] ON [Purchasing].[SupplierTransactions] ([TransactionDate])
-
-ALTER TABLE [Purchasing].[SupplierTransactions] ADD CONSTRAINT [PK_Purchasing_SupplierTransactions] PRIMARY KEY NONCLUSTERED  ([SupplierTransactionID])
-
+GO
+ALTER TABLE [Purchasing].[SupplierTransactions] ADD CONSTRAINT [PK_Purchasing_SupplierTransactions] PRIMARY KEY CLUSTERED  ([SupplierTransactionID])
 GO
 CREATE NONCLUSTERED INDEX [IX_Purchasing_SupplierTransactions_IsFinalized] ON [Purchasing].[SupplierTransactions] ([IsFinalized])
 GO

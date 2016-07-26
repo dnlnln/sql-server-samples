@@ -272,6 +272,20 @@ Table=[Sales].[SpecialDeals];
     <Folder Include="Migrations\1.0.0-Baseline" />
     <Folder Include="Migrations\1.1.0-NewChanges" />
     <Folder Include="Unused" />
+    <Folder Include="Draft" />
+    <Folder Include="Optional Migrations" />
+    <Folder Include="Optional Migrations\Data Simulation" />
+    <Folder Include="Optional Migrations\Enterprise Features" />
+    <Folder Include="Optional Migrations\Enterprise Features\Migrations" />
+    <Folder Include="Optional Migrations\Data Simulation\Migrations" />
+    <Folder Include="Optional Migrations\Enterprise Features\Programmable Objects" />
+    <Folder Include="Optional Migrations\Enterprise Features\Programmable Objects\Website" />
+    <Folder Include="Optional Migrations\Enterprise Features\Programmable Objects\Website\Stored Procedures" />
+    <Folder Include="Optional Migrations\Data Population" />
+    <Folder Include="Optional Migrations\Data Population\Migrations" />
+    <Folder Include="Optional Migrations\Data Simulation\Migrations\1.0.0-Baseline" />
+    <Folder Include="Optional Migrations\Enterprise Features\Migrations\1.0.0-Baseline" />
+    <Folder Include="Optional Migrations\Data Population\Migrations\1.0.0-Baseline" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema-Model\Application\Tables\Cities.sql" />
@@ -371,6 +385,7 @@ Table=[Sales].[SpecialDeals];
     <None Include="Schema-Model\Website\Types\User-defined Data Types\OrderLineList.sql" />
     <None Include="Schema-Model\Website\Types\User-defined Data Types\OrderList.sql" />
     <None Include="Schema-Model\Website\Types\User-defined Data Types\SensorDataList.sql" />
+    <None Include="Optional Migrations\README.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Pre-Deployment\1_wwi-recreate-part1-database.sql" />
@@ -415,13 +430,7 @@ Table=[Sales].[SpecialDeals];
     <None Include="Programmable Objects\Website\Stored Procedures\ChangePassword.sql" />
     <None Include="Programmable Objects\Website\Stored Procedures\InsertCustomerOrders.sql" />
     <None Include="Programmable Objects\Website\Stored Procedures\InvoiceCustomerOrders.sql" />
-    <None Include="Programmable Objects\Website\Stored Procedures\RecordColdRoomTemperatures.sql" />
     <None Include="Programmable Objects\Website\Stored Procedures\RecordVehicleTemperature.sql" />
-    <None Include="Programmable Objects\Website\Stored Procedures\SearchForCustomers.sql" />
-    <None Include="Programmable Objects\Website\Stored Procedures\SearchForPeople.sql" />
-    <None Include="Programmable Objects\Website\Stored Procedures\SearchForStockItems.sql" />
-    <None Include="Programmable Objects\Website\Stored Procedures\SearchForStockItemsByTags.sql" />
-    <None Include="Programmable Objects\Website\Stored Procedures\SearchForSuppliers.sql" />
     <None Include="Programmable Objects\Website\Views\Customers.sql" />
     <None Include="Programmable Objects\Website\Views\Suppliers.sql" />
     <None Include="Programmable Objects\Website\Views\VehicleTemperatures.sql" />
@@ -439,22 +448,51 @@ Table=[Sales].[SpecialDeals];
     <None Include="Migrations\1.0.0-Baseline\3_wwi-configure-required-database-objects.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\1.0.0-Baseline\5_wwi-data-simulation.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Migrations\1.0.0-Baseline\6_wwi-enable-full-features.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Unused\1_wwi-metadata-population.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Unused\2_wwi-construct-database-from-metadata-tables.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\1.0.0-Baseline\4_wwi-load-seed-data.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Unused\8-wwi-backup.sql" />
     <None Include="Unused\9-wwi-restore.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Programmable Objects\Website\Stored Procedures\RecordColdRoomTemperatures.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\SearchForCustomers.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\SearchForPeople.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\SearchForStockItems.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\SearchForStockItemsByTags.sql" />
+    <None Include="Programmable Objects\Website\Stored Procedures\SearchForSuppliers.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Optional Migrations\Enterprise Features\Programmable Objects\Website\Stored Procedures\RecordColdRoomTemperatures.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Optional Migrations\Enterprise Features\Programmable Objects\Website\Stored Procedures\SearchForCustomers.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Optional Migrations\Enterprise Features\Programmable Objects\Website\Stored Procedures\SearchForPeople.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Optional Migrations\Enterprise Features\Programmable Objects\Website\Stored Procedures\SearchForStockItems.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Optional Migrations\Enterprise Features\Programmable Objects\Website\Stored Procedures\SearchForStockItemsByTags.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Optional Migrations\Enterprise Features\Programmable Objects\Website\Stored Procedures\SearchForSuppliers.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Optional Migrations\Data Simulation\Migrations\1.0.0-Baseline\5_wwi-data-simulation.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Optional Migrations\Enterprise Features\Migrations\1.0.0-Baseline\6_wwi-enable-full-features.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Optional Migrations\Data Population\Migrations\1.0.0-Baseline\4_wwi-load-seed-data.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Migrations\1.0.0-Baseline\4_wwi-load-static-data.sql" />
   </ItemGroup>
 </Project>

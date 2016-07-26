@@ -17,21 +17,11 @@ CREATE TABLE [Application].[People]
 [EmailAddress] [nvarchar] (256) NULL,
 [Photo] [varbinary] (max) NULL,
 [CustomFields] [nvarchar] (max) NULL,
-[OtherLanguages] AS ([json_query]([CustomFields],N'$.OtherLanguages')),
+[OtherLanguages] AS (json_query([CustomFields],N'$.OtherLanguages')),
 [LastEditedBy] [int] NOT NULL,
 [ValidFrom] [datetime2] NOT NULL,
 [ValidTo] [datetime2] NOT NULL
 )
-GO
-CREATE FULLTEXT INDEX ON [Application].[People] KEY INDEX [PK_Application_People] ON [FTCatalog]
-GO
-CREATE FULLTEXT INDEX ON [Application].[People] KEY INDEX [PK_Application_People] ON [FTCatalog]
-GO
-ALTER FULLTEXT INDEX ON [Application].[People] ADD ([SearchName] LANGUAGE 1033)
-GO
-ALTER FULLTEXT INDEX ON [Application].[People] ADD ([CustomFields] LANGUAGE 1033)
-GO
-ALTER FULLTEXT INDEX ON [Application].[People] ADD ([OtherLanguages] LANGUAGE 1033)
 GO
 ALTER TABLE [Application].[People] ADD CONSTRAINT [PK_Application_People] PRIMARY KEY CLUSTERED  ([PersonID])
 GO
@@ -90,4 +80,6 @@ GO
 EXEC sp_addextendedproperty N'Description', 'Allows quickly locating salespeople', 'SCHEMA', N'Application', 'TABLE', N'People', 'INDEX', N'IX_Application_People_IsSalesperson'
 GO
 EXEC sp_addextendedproperty N'Description', 'Improves performance of order picking and invoicing', 'SCHEMA', N'Application', 'TABLE', N'People', 'INDEX', N'IX_Application_People_Perf_20160301_05'
+GO
+CREATE FULLTEXT INDEX ON [Application].[People] KEY INDEX [PK_Application_People] ON [FTCatalog]
 GO

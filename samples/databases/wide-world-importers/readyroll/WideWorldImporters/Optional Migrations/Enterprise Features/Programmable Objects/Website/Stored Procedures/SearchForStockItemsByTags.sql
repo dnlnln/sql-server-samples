@@ -13,12 +13,12 @@ CREATE PROCEDURE [Website].[SearchForStockItemsByTags]
 WITH EXECUTE AS OWNER
 AS
 BEGIN
-    SELECT TOP(@MaximumRowsToReturn)
-           si.StockItemID,
+    SELECT si.StockItemID,
            si.StockItemName
     FROM Warehouse.StockItems AS si
-    WHERE si.Tags LIKE N'%' + @SearchText + N'%'
-    ORDER BY si.StockItemName
+    INNER JOIN FREETEXTTABLE(Warehouse.StockItems, Tags, @SearchText, @MaximumRowsToReturn) AS ft
+    ON si.StockItemID = ft.[KEY]
+    ORDER BY ft.[RANK]
     FOR JSON AUTO, ROOT(N'StockItems');
 END;
 GO

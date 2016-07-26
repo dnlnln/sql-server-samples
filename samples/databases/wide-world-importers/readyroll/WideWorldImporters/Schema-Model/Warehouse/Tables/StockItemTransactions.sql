@@ -12,10 +12,8 @@ CREATE TABLE [Warehouse].[StockItemTransactions]
 [LastEditedBy] [int] NOT NULL,
 [LastEditedWhen] [datetime2] NOT NULL CONSTRAINT [DF_Warehouse_StockItemTransactions_LastEditedWhen] DEFAULT (sysdatetime())
 )
-CREATE CLUSTERED COLUMNSTORE INDEX [CCX_Warehouse_StockItemTransactions] ON [Warehouse].[StockItemTransactions]
-
-ALTER TABLE [Warehouse].[StockItemTransactions] ADD CONSTRAINT [PK_Warehouse_StockItemTransactions] PRIMARY KEY NONCLUSTERED  ([StockItemTransactionID])
-
+GO
+ALTER TABLE [Warehouse].[StockItemTransactions] ADD CONSTRAINT [PK_Warehouse_StockItemTransactions] PRIMARY KEY CLUSTERED  ([StockItemTransactionID])
 GO
 CREATE NONCLUSTERED INDEX [FK_Warehouse_StockItemTransactions_CustomerID] ON [Warehouse].[StockItemTransactions] ([CustomerID])
 GO

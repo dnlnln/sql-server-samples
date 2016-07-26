@@ -13,8 +13,6 @@ CREATE TABLE [Sales].[OrderLines]
 [LastEditedBy] [int] NOT NULL,
 [LastEditedWhen] [datetime2] NOT NULL CONSTRAINT [DF_Sales_OrderLines_LastEditedWhen] DEFAULT (sysdatetime())
 )
-CREATE NONCLUSTERED COLUMNSTORE INDEX [NCCX_Sales_OrderLines] ON [Sales].[OrderLines] ([OrderID], [StockItemID], [Description], [Quantity], [UnitPrice], [PickedQuantity])
-
 GO
 ALTER TABLE [Sales].[OrderLines] ADD CONSTRAINT [PK_Sales_OrderLines] PRIMARY KEY CLUSTERED  ([OrderLineID])
 GO

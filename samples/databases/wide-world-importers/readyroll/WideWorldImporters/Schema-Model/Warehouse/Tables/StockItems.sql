@@ -20,22 +20,12 @@ CREATE TABLE [Warehouse].[StockItems]
 [InternalComments] [nvarchar] (max) NULL,
 [Photo] [varbinary] (max) NULL,
 [CustomFields] [nvarchar] (max) NULL,
-[Tags] AS ([json_query]([CustomFields],N'$.Tags')),
+[Tags] AS (json_query([CustomFields],N'$.Tags')),
 [SearchDetails] AS (concat([StockItemName],N' ',[MarketingComments])),
 [LastEditedBy] [int] NOT NULL,
 [ValidFrom] [datetime2] NOT NULL,
 [ValidTo] [datetime2] NOT NULL
 )
-GO
-CREATE FULLTEXT INDEX ON [Warehouse].[StockItems] KEY INDEX [PK_Warehouse_StockItems] ON [FTCatalog]
-GO
-CREATE FULLTEXT INDEX ON [Warehouse].[StockItems] KEY INDEX [PK_Warehouse_StockItems] ON [FTCatalog]
-GO
-ALTER FULLTEXT INDEX ON [Warehouse].[StockItems] ADD ([CustomFields] LANGUAGE 1033)
-GO
-ALTER FULLTEXT INDEX ON [Warehouse].[StockItems] ADD ([Tags] LANGUAGE 1033)
-GO
-ALTER FULLTEXT INDEX ON [Warehouse].[StockItems] ADD ([SearchDetails] LANGUAGE 1033)
 GO
 ALTER TABLE [Warehouse].[StockItems] ADD CONSTRAINT [PK_Warehouse_StockItems] PRIMARY KEY CLUSTERED  ([StockItemID])
 GO
@@ -112,4 +102,6 @@ GO
 EXEC sp_addextendedproperty N'Description', 'Auto-created to support a foreign key', 'SCHEMA', N'Warehouse', 'TABLE', N'StockItems', 'INDEX', N'FK_Warehouse_StockItems_SupplierID'
 GO
 EXEC sp_addextendedproperty N'Description', 'Auto-created to support a foreign key', 'SCHEMA', N'Warehouse', 'TABLE', N'StockItems', 'INDEX', N'FK_Warehouse_StockItems_UnitPackageID'
+GO
+CREATE FULLTEXT INDEX ON [Warehouse].[StockItems] KEY INDEX [PK_Warehouse_StockItems] ON [FTCatalog]
 GO

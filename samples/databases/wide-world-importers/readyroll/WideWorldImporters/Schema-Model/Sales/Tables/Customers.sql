@@ -33,15 +33,6 @@ CREATE TABLE [Sales].[Customers]
 [ValidTo] [datetime2] NOT NULL
 )
 GO
-CREATE FULLTEXT INDEX ON [Sales].[Customers] KEY INDEX [PK_Sales_Customers] ON [FTCatalog]
-GO
-ALTER TABLE [Sales].[Customers] ADD CONSTRAINT [UQ_Sales_Customers_CustomerName] UNIQUE NONCLUSTERED  ([CustomerName])
-
-GO
-CREATE FULLTEXT INDEX ON [Sales].[Customers] KEY INDEX [PK_Sales_Customers] ON [FTCatalog]
-GO
-ALTER FULLTEXT INDEX ON [Sales].[Customers] ADD ([CustomerName] LANGUAGE 1033)
-GO
 ALTER TABLE [Sales].[Customers] ADD CONSTRAINT [PK_Sales_Customers] PRIMARY KEY CLUSTERED  ([CustomerID])
 GO
 CREATE NONCLUSTERED INDEX [FK_Sales_Customers_AlternateContactPersonID] ON [Sales].[Customers] ([AlternateContactPersonID])
@@ -49,6 +40,8 @@ GO
 CREATE NONCLUSTERED INDEX [FK_Sales_Customers_BuyingGroupID] ON [Sales].[Customers] ([BuyingGroupID])
 GO
 CREATE NONCLUSTERED INDEX [FK_Sales_Customers_CustomerCategoryID] ON [Sales].[Customers] ([CustomerCategoryID])
+GO
+ALTER TABLE [Sales].[Customers] ADD CONSTRAINT [UQ_Sales_Customers_CustomerName] UNIQUE NONCLUSTERED  ([CustomerName])
 GO
 CREATE NONCLUSTERED INDEX [FK_Sales_Customers_DeliveryCityID] ON [Sales].[Customers] ([DeliveryCityID])
 GO
@@ -151,4 +144,6 @@ GO
 EXEC sp_addextendedproperty N'Description', 'Auto-created to support a foreign key', 'SCHEMA', N'Sales', 'TABLE', N'Customers', 'INDEX', N'FK_Sales_Customers_PrimaryContactPersonID'
 GO
 EXEC sp_addextendedproperty N'Description', 'Improves performance of order picking and invoicing', 'SCHEMA', N'Sales', 'TABLE', N'Customers', 'INDEX', N'IX_Sales_Customers_Perf_20160301_06'
+GO
+CREATE FULLTEXT INDEX ON [Sales].[Customers] KEY INDEX [PK_Sales_Customers] ON [FTCatalog]
 GO

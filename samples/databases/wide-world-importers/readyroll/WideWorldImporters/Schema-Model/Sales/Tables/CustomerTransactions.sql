@@ -15,10 +15,8 @@ CREATE TABLE [Sales].[CustomerTransactions]
 [LastEditedBy] [int] NOT NULL,
 [LastEditedWhen] [datetime2] NOT NULL CONSTRAINT [DF_Sales_CustomerTransactions_LastEditedWhen] DEFAULT (sysdatetime())
 )
-CREATE CLUSTERED INDEX [CX_Sales_CustomerTransactions] ON [Sales].[CustomerTransactions] ([TransactionDate])
-
-ALTER TABLE [Sales].[CustomerTransactions] ADD CONSTRAINT [PK_Sales_CustomerTransactions] PRIMARY KEY NONCLUSTERED  ([CustomerTransactionID])
-
+GO
+ALTER TABLE [Sales].[CustomerTransactions] ADD CONSTRAINT [PK_Sales_CustomerTransactions] PRIMARY KEY CLUSTERED  ([CustomerTransactionID])
 GO
 CREATE NONCLUSTERED INDEX [FK_Sales_CustomerTransactions_CustomerID] ON [Sales].[CustomerTransactions] ([CustomerID])
 GO

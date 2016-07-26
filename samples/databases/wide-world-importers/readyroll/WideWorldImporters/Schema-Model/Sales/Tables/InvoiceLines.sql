@@ -14,8 +14,6 @@ CREATE TABLE [Sales].[InvoiceLines]
 [LastEditedBy] [int] NOT NULL,
 [LastEditedWhen] [datetime2] NOT NULL CONSTRAINT [DF_Sales_InvoiceLines_LastEditedWhen] DEFAULT (sysdatetime())
 )
-CREATE NONCLUSTERED COLUMNSTORE INDEX [NCCX_Sales_InvoiceLines] ON [Sales].[InvoiceLines] ([InvoiceID], [StockItemID], [Quantity], [UnitPrice], [LineProfit], [LastEditedWhen])
-
 GO
 ALTER TABLE [Sales].[InvoiceLines] ADD CONSTRAINT [PK_Sales_InvoiceLines] PRIMARY KEY CLUSTERED  ([InvoiceLineID])
 GO

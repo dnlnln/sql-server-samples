@@ -11,14 +11,14 @@ GO
 
 CREATE PROCEDURE [Website].[RecordColdRoomTemperatures]
 @SensorReadings Website.SensorDataList READONLY
-WITH EXECUTE AS OWNER
+WITH NATIVE_COMPILATION, SCHEMABINDING, EXECUTE AS OWNER
 AS
-BEGIN
-    SET XACT_ABORT ON;
-
+BEGIN ATOMIC WITH
+(
+	TRANSACTION ISOLATION LEVEL = SNAPSHOT,
+	LANGUAGE = N'English'
+)
     BEGIN TRY
-
-        BEGIN TRAN;
 
 		DECLARE @NumberOfReadings int = (SELECT MAX(SensorDataListID) FROM @SensorReadings);
 		DECLARE @Counter int = (SELECT MIN(SensorDataListID) FROM @SensorReadings);
@@ -52,13 +52,9 @@ BEGIN
 			SET @Counter += 1;
 		END;
 
-        COMMIT;
-
     END TRY
     BEGIN CATCH
         THROW 51000, N'Unable to apply the sensor data', 2;
-
-        IF XACT_STATE() <> 0 ROLLBACK TRAN;
 
         RETURN 1;
     END CATCH;

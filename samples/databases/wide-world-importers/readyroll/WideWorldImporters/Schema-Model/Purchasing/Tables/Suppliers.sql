@@ -31,15 +31,6 @@ CREATE TABLE [Purchasing].[Suppliers]
 [ValidTo] [datetime2] NOT NULL
 )
 GO
-CREATE FULLTEXT INDEX ON [Purchasing].[Suppliers] KEY INDEX [PK_Purchasing_Suppliers] ON [FTCatalog]
-GO
-ALTER TABLE [Purchasing].[Suppliers] ADD CONSTRAINT [UQ_Purchasing_Suppliers_SupplierName] UNIQUE NONCLUSTERED  ([SupplierName])
-
-GO
-CREATE FULLTEXT INDEX ON [Purchasing].[Suppliers] KEY INDEX [PK_Purchasing_Suppliers] ON [FTCatalog]
-GO
-ALTER FULLTEXT INDEX ON [Purchasing].[Suppliers] ADD ([SupplierName] LANGUAGE 1033)
-GO
 ALTER TABLE [Purchasing].[Suppliers] ADD CONSTRAINT [PK_Purchasing_Suppliers] PRIMARY KEY CLUSTERED  ([SupplierID])
 GO
 CREATE NONCLUSTERED INDEX [FK_Purchasing_Suppliers_AlternateContactPersonID] ON [Purchasing].[Suppliers] ([AlternateContactPersonID])
@@ -53,6 +44,8 @@ GO
 CREATE NONCLUSTERED INDEX [FK_Purchasing_Suppliers_PrimaryContactPersonID] ON [Purchasing].[Suppliers] ([PrimaryContactPersonID])
 GO
 CREATE NONCLUSTERED INDEX [FK_Purchasing_Suppliers_SupplierCategoryID] ON [Purchasing].[Suppliers] ([SupplierCategoryID])
+GO
+ALTER TABLE [Purchasing].[Suppliers] ADD CONSTRAINT [UQ_Purchasing_Suppliers_SupplierName] UNIQUE NONCLUSTERED  ([SupplierName])
 GO
 ALTER TABLE [Purchasing].[Suppliers] ADD CONSTRAINT [FK_Purchasing_Suppliers_AlternateContactPersonID_Application_People] FOREIGN KEY ([AlternateContactPersonID]) REFERENCES [Application].[People] ([PersonID])
 GO
@@ -133,4 +126,6 @@ GO
 EXEC sp_addextendedproperty N'Description', 'Auto-created to support a foreign key', 'SCHEMA', N'Purchasing', 'TABLE', N'Suppliers', 'INDEX', N'FK_Purchasing_Suppliers_PrimaryContactPersonID'
 GO
 EXEC sp_addextendedproperty N'Description', 'Auto-created to support a foreign key', 'SCHEMA', N'Purchasing', 'TABLE', N'Suppliers', 'INDEX', N'FK_Purchasing_Suppliers_SupplierCategoryID'
+GO
+CREATE FULLTEXT INDEX ON [Purchasing].[Suppliers] KEY INDEX [PK_Purchasing_Suppliers] ON [FTCatalog]
 GO
