@@ -485,7 +485,7 @@ Table=[Purchasing].[SupplierCategories];
     <None Include="Optional Migrations\Data Simulation\Migrations\1.0.0-Baseline\6_wwi-data-simulation.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Optional Migrations\Enterprise Features\Migrations\1.0.0-Baseline\6_wwi-enable-full-features.sql" />
+    <None Include="Optional Migrations\Enterprise Features\Migrations\1.0.0-Baseline\7_wwi-enable-full-features.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Migrations\1.0.0-Baseline\4_wwi-load-static-data.sql" />
