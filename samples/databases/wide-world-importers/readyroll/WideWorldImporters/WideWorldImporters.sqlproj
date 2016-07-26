@@ -81,7 +81,6 @@ Table=[Sales].[CustomerCategories_Archive];
 Table=[Purchasing].[SupplierCategories_Archive];
 Table=[Sales].[BuyingGroups];
 Table=[Application].[SystemParameters];
-Table=[Application].[StateProvinces_Archive];
 Table=[Application].[People_Archive];
 Table=[Application].[PaymentMethods_Archive];
 Table=[Application].[PaymentMethods];
@@ -89,8 +88,6 @@ Table=[Application].[DeliveryMethods_Archive];
 Table=[Application].[Cities_Archive];
 Table=[Application].[Countries_Archive];
 Table=[Application].[TransactionTypes];
-Table=[Warehouse].[StockItemStockGroups];
-Table=[Warehouse].[VehicleTemperatures];
 Table=[Warehouse].[StockItems_Archive];
 Table=[Sales].[Customers_Archive];
 Table=[Warehouse].[StockGroups_Archive];
@@ -98,10 +95,11 @@ Table=[Warehouse].[StockGroups];
 Table=[Warehouse].[PackageTypes_Archive];
 Table=[Warehouse].[Colors_Archive];
 Table=[Warehouse].[PackageTypes];
-Table=[Warehouse].[ColdRoomTemperatures];
 Table=[Warehouse].[ColdRoomTemperatures_Archive];
 Table=[Warehouse].[Colors];
-Table=[Sales].[SpecialDeals];
+Table=[Application].[DeliveryMethods];
+Table=[Sales].[CustomerCategories];
+Table=[Purchasing].[SupplierCategories];
 </IncludeObjectsInDataSync>
     <DeployChangesInitialImportDone>True</DeployChangesInitialImportDone>
     <DeployChangesForProgrammableObjects>True</DeployChangesForProgrammableObjects>
@@ -484,15 +482,15 @@ Table=[Sales].[SpecialDeals];
     <None Include="Optional Migrations\Enterprise Features\Programmable Objects\Website\Stored Procedures\SearchForSuppliers.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Optional Migrations\Data Simulation\Migrations\1.0.0-Baseline\5_wwi-data-simulation.sql" />
+    <None Include="Optional Migrations\Data Simulation\Migrations\1.0.0-Baseline\6_wwi-data-simulation.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Optional Migrations\Enterprise Features\Migrations\1.0.0-Baseline\6_wwi-enable-full-features.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Optional Migrations\Data Population\Migrations\1.0.0-Baseline\4_wwi-load-seed-data.sql" />
+    <None Include="Migrations\1.0.0-Baseline\4_wwi-load-static-data.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Migrations\1.0.0-Baseline\4_wwi-load-static-data.sql" />
+    <None Include="Optional Migrations\Data Population\Migrations\1.0.0-Baseline\5_wwi-load-seed-data.sql" />
   </ItemGroup>
 </Project>
