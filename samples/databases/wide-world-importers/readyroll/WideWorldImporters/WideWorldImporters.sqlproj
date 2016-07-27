@@ -279,11 +279,8 @@ Table=[Purchasing].[SupplierCategories];
     <Folder Include="Optional Migrations\Enterprise Features\Programmable Objects" />
     <Folder Include="Optional Migrations\Enterprise Features\Programmable Objects\Website" />
     <Folder Include="Optional Migrations\Enterprise Features\Programmable Objects\Website\Stored Procedures" />
-    <Folder Include="Optional Migrations\Data Population" />
-    <Folder Include="Optional Migrations\Data Population\Migrations" />
     <Folder Include="Optional Migrations\Data Simulation\Migrations\1.0.0-Baseline" />
     <Folder Include="Optional Migrations\Enterprise Features\Migrations\1.0.0-Baseline" />
-    <Folder Include="Optional Migrations\Data Population\Migrations\1.0.0-Baseline" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema-Model\Application\Tables\Cities.sql" />
