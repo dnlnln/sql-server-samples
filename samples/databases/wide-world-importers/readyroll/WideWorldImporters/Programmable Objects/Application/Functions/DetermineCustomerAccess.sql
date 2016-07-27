@@ -29,9 +29,18 @@ RETURN (SELECT 1 AS AccessResult
 				        AND sp.SalesTerritory = SESSION_CONTEXT(N'SalesTerritory'))));
 GO
 
+DECLARE @SQL nvarchar(max);
+
+SET @SQL = N'
 CREATE SECURITY POLICY [Application].FilterCustomersBySalesTerritoryRole
 ADD FILTER PREDICATE [Application].DetermineCustomerAccess(DeliveryCityID)
 ON Sales.Customers,
 ADD BLOCK PREDICATE [Application].DetermineCustomerAccess(DeliveryCityID)
 ON Sales.Customers AFTER UPDATE;
+';
+
+IF ((SELECT CAST(SERVERPROPERTY('edition') AS nvarchar(max))) NOT LIKE N'Express Edition%')
+BEGIN
+	EXECUTE (@SQL);
+END
 GO

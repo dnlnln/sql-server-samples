@@ -735,26 +735,30 @@ ON [Purchasing].[Suppliers] ([DeliveryCityID]);
 CREATE INDEX [FK_Purchasing_Suppliers_PostalCityID]
 ON [Purchasing].[Suppliers] ([PostalCityID]);
 GO
+
+DECLARE @SQL nvarchar(max);
+
+SET @SQL = N'
+ALTER TABLE [Purchasing].[Suppliers]
+    ALTER COLUMN [BankAccountName] ADD MASKED WITH (FUNCTION = ''default()'');
  
 ALTER TABLE [Purchasing].[Suppliers]
-    ALTER COLUMN [BankAccountName] ADD MASKED WITH (FUNCTION = 'default()');
-GO
+    ALTER COLUMN [BankAccountBranch] ADD MASKED WITH (FUNCTION = ''default()'');
  
 ALTER TABLE [Purchasing].[Suppliers]
-    ALTER COLUMN [BankAccountBranch] ADD MASKED WITH (FUNCTION = 'default()');
-GO
+    ALTER COLUMN [BankAccountCode] ADD MASKED WITH (FUNCTION = ''default()'');
  
 ALTER TABLE [Purchasing].[Suppliers]
-    ALTER COLUMN [BankAccountCode] ADD MASKED WITH (FUNCTION = 'default()');
-GO
+    ALTER COLUMN [BankAccountNumber] ADD MASKED WITH (FUNCTION = ''default()'');
  
 ALTER TABLE [Purchasing].[Suppliers]
-    ALTER COLUMN [BankAccountNumber] ADD MASKED WITH (FUNCTION = 'default()');
-GO
- 
-ALTER TABLE [Purchasing].[Suppliers]
-    ALTER COLUMN [BankInternationalCode] ADD MASKED WITH (FUNCTION = 'default()');
-GO
+    ALTER COLUMN [BankInternationalCode] ADD MASKED WITH (FUNCTION = ''default()'');
+';
+
+IF ((SELECT CAST(SERVERPROPERTY('edition') AS nvarchar(max))) NOT LIKE N'Express Edition%')
+BEGIN
+	EXECUTE (@SQL);
+END
  
 EXEC sys.sp_addextendedproperty @name = N'Description', @value = N'Main entity table for suppliers (organizations)', @level0type = N'SCHEMA', @level0name = 'Purchasing', @level1type = N'TABLE',  @level1name = 'Suppliers';
  
