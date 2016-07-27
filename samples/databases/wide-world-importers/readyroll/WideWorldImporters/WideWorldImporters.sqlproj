@@ -270,7 +270,6 @@ Table=[Purchasing].[SupplierCategories];
     <Folder Include="Migrations\1.0.0-Baseline" />
     <Folder Include="Migrations\1.1.0-NewChanges" />
     <Folder Include="Unused" />
-    <Folder Include="Draft" />
     <Folder Include="Optional Migrations" />
     <Folder Include="Optional Migrations\Data Simulation" />
     <Folder Include="Optional Migrations\Enterprise Features" />
