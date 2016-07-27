@@ -51,7 +51,11 @@ ADD FILTER PREDICATE [Application].DetermineCustomerAccess(DeliveryCityID)
 ON Sales.Customers,
 ADD BLOCK PREDICATE [Application].DetermineCustomerAccess(DeliveryCityID)
 ON Sales.Customers AFTER UPDATE;';
-        EXECUTE (@SQL);
+
+		IF ((SELECT CAST(SERVERPROPERTY('edition') AS nvarchar(max))) NOT LIKE N'Express Edition%')
+		BEGIN
+	        EXECUTE (@SQL);
+		END
 
         PRINT N'Successfully applied row level security';
     END TRY
