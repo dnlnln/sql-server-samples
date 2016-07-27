@@ -491,6 +491,6 @@ Table=[Purchasing].[SupplierCategories];
     <None Include="Migrations\1.0.0-Baseline\4_wwi-load-static-data.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Optional Migrations\Data Population\Migrations\1.0.0-Baseline\5_wwi-load-seed-data.sql" />
+    <None Include="Migrations\1.0.0-Baseline\5_wwi-load-seed-data.sql" />
   </ItemGroup>
 </Project>
