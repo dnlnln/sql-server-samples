@@ -489,4 +489,7 @@ Table=[Purchasing].[SupplierCategories];
   <ItemGroup>
     <None Include="Migrations\1.0.0-Baseline\5_wwi-load-seed-data.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Post-Deployment\01_Finalize_Deployment.sql" />
+  </ItemGroup>
 </Project>
